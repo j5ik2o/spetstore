@@ -3,7 +3,7 @@
 - DDDに準拠した設計方針
 - REST like API
 
-##エンティティ(集約)
+## エンティティ(集約)と値オブジェクト
 - [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/domain/account/Account.scala)
     - AccountStatus
     - AccountProfile
