@@ -1,4 +1,3 @@
-
 # Scala Pet Store API
 - Scala 2.10.x
 - DDDに準拠した設計方針
@@ -18,7 +17,7 @@
 - [JDBC版](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)
 - [メモリ版](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)
 - キャッシュマネジメント版(TODO)
-TODO
 
+## TODO
 - アプリケーション層の実装
     - コントローラとアプリケーションサービスの実装
