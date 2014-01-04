@@ -20,6 +20,7 @@
 
 ## リポジトリ
 - [JDBC版](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)
+    - ScalikeJDBCで実装
 - [メモリ版](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)
 - キャッシュマネジメント版(TODO)
 
