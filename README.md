@@ -1,4 +1,4 @@
-# Scala Pet Store API
+# Scala Pet Store API (開発中)
 - Scala 2.10.x
 - DDDに準拠した設計方針
 - REST like API
