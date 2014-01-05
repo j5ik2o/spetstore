@@ -1,5 +1,7 @@
 # Scala Pet Store API (開発中)
 
+[![Build Status](https://travis-ci.org/j5ik2o/spetstore.png?branch=master)](https://travis-ci.org/j5ik2o/spetstore)
+
 ## 目的
 DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので具体的な実装方式は複数あり得ますが、私が考える最良の実装という意味)。
 
@@ -12,8 +14,9 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 
 ## 対象ドメイン
 - ペットストア
-- 原典は [Java Pet Store](http://www.oracle.com/technetwork/java/petstore1-3-1-02-139690.html)
-- 参考にした実装は [mybatis/jpetstore-6)](https://github.com/mybatis/jpetstore-6)
+- 原典は [Java Pet Store](http://www.oracle.com/technetwork/java/petstore1-3-1-02-139690.html)ですが、独自にアレンジしている部分があります。
+- 参考にした実装は [mybatis/jpetstore-6](https://github.com/mybatis/jpetstore-6)
+
 
 ## レイヤー構造
 
