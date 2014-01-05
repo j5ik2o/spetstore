@@ -1,6 +1,9 @@
 language: scala
-scala:
- - 2.10.3
-
+env:
+  - PLAY_VERSION=2.2.1
+before_script:
+  - wget http://downloads.typesafe.com/play/${PLAY_VERSION}/play-${PLAY_VERSION}.zip
+  - unzip -q play-${PLAY_VERSION}.zip
 script:
- - "sbt ++$TRAVIS_SCALA_VERSION test"
+  - ./play-${PLAY_VERSION}/play test
+
