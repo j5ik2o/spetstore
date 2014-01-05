@@ -85,3 +85,11 @@ A  = 集約
 - nscala-time
 - specs2
 - mockito
+
+## 参考にしたコード
+- https://github.com/mybatis/jpetstore-6
+- https://github.com/scalikejdbc/hello-scalikejdbc
+- https://github.com/tototoshi/play-json4s
+- https://github.com/tototoshi/play-flyway
+- http://qiita.com/opengl-8080/items/6fb69cd2493e149cac3a
+
