@@ -38,9 +38,9 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/Entity.scala)
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/Repository.scala)
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
-    JDBCに対応したリポジトリの骨格実装。ScalikeJDBCで実装。
+    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。
     - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
-    メモリに対応したリポジトリの骨格実装。
+    メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。
     - RepositoryOnMemcached(TODO)  
     Memcachedに対応したリポジトリの骨格実装。
     - CacheManagementRepository(TODO)  
