@@ -6,7 +6,14 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 ## 特徴
 - Scala 2.10.x
 - DDDに準拠した設計方針
-- REST like API
+- 対象ドメインはペットストア
+- アプリケーションとしては REST like API
+
+
+## 対象ドメイン
+- ペットストア
+- 原典は [Java Pet Store](http://www.oracle.com/technetwork/java/petstore1-3-1-02-139690.html)
+- 参考にした実装は [mybatis/jpetstore-6)](https://github.com/mybatis/jpetstore-6)
 
 ## レイヤー構造
 
@@ -15,6 +22,7 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 - インフラストラクチャ層
 
 もっとも重要なのは、メンタルモデルを反映したドメイン層です。
+このドメイン層を、非ドメイン層の知識から侵蝕されることを防ぐために、隔離します。
 
 ## ドメイン層
 
