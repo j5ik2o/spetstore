@@ -11,8 +11,6 @@ private[item]
 class CategoryRepositoryOnMemory(entities: Map[CategoryId, Category])
   extends RepositoryOnMemory[CategoryId, Category](entities) with CategoryRepository {
 
-  type This = CategoryRepository
-
   protected def createInstance(entities: Map[CategoryId, Category]): This =
     new CategoryRepositoryOnMemory(entities)
 

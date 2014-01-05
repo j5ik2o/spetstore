@@ -11,8 +11,6 @@ private[item]
 class ItemTypeRepositoryOnMemory(entities: Map[ItemTypeId, ItemType])
   extends RepositoryOnMemory[ItemTypeId, ItemType](entities) with ItemTypeRepository {
 
-  type This = ItemTypeRepository
-
   protected def createInstance(entities: Map[ItemTypeId, ItemType]): This =
     new ItemTypeRepositoryOnMemory(entities)
 
