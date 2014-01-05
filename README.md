@@ -11,14 +11,13 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 - 対象ドメインはペットストア
 - アプリケーションとしては REST like API
 
-
 ## 対象ドメイン
 - ペットストア
 - 原典は [Java Pet Store](http://www.oracle.com/technetwork/java/petstore1-3-1-02-139690.html)ですが、独自にアレンジしている部分があります。
 - 参考にした実装は [mybatis/jpetstore-6](https://github.com/mybatis/jpetstore-6)
 
-
 ## レイヤー構造
+DDDのレイヤー化アーキテクチャに従い、次のとおりのレイヤーに分割します。
 
 - アプリケーション層
 - ドメイン層
@@ -30,22 +29,22 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 ## ドメイン層
 
 ### エンティティ(集約)と値オブジェクト
-- [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala)
+- [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala) = ペットストアの顧客
     - AccountStatus
     - AccountProfile
     - AccountConfig
-- [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala)
-- [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala)
-- [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala)
-- [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala)
-    - CartItem
-- [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala)
-    - OrderItem
+- [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala) = 商品区分のカテゴリ(ex. 犬)
+- [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala) = 商品区分(ex. 柴犬)
+- [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala) = 商品(ex. ぽち)
+- [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) = ショッピングカート
+    - CartItem = カート内の商品と数量
+- [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) = 注文
+    - OrderItem = 注文する商品と数量
 
 [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
 
-
 ### DDD基盤コード
+わかりやすくするために、特別なライブラリを用意せず、簡単な基盤コードを含めています。
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala)
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala)
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
