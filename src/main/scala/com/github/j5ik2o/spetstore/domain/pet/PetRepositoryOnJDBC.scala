@@ -1,14 +1,14 @@
-package com.github.j5ik2o.spetstore.domain.item
+package com.github.j5ik2o.spetstore.domain.pet
 
 import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.WrappedResultSet
 import java.util.UUID
 
-private[item]
-class ItemRepositoryOnJDBC
-  extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
+private[pet]
+class PetRepositoryOnJDBC
+  extends RepositoryOnJDBC[PetId, Pet] with PetRepository {
 
-  override def tableName: String = "item"
+  override def tableName: String = "pet"
 
   override def columnNames: Seq[String] = Seq(
     "id",
@@ -19,19 +19,19 @@ class ItemRepositoryOnJDBC
     "quantity"
   )
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Item =
-    Item(
-      id = ItemId(UUID.fromString(resultSet.string("id"))),
-      itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("item_type_id"))),
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Pet =
+    Pet(
+      id = PetId(UUID.fromString(resultSet.string("id"))),
+      petTypeId = PetTypeId(UUID.fromString(resultSet.string("item_type_id"))),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description"),
       price = resultSet.long("price"),
       quantity = resultSet.int("quantity")
     )
 
-  protected def convertEntityToValues(entity: Item): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Pet): Seq[Any] = Seq(
     entity.id,
-    entity.itemTypeId.value.toString,
+    entity.petTypeId.value.toString,
     entity.name,
     entity.description,
     entity.price,

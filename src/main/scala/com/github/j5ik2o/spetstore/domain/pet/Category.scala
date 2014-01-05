@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.item
+package com.github.j5ik2o.spetstore.domain.pet
 
 import com.github.j5ik2o.spetstore.infrastructure.support.Entity
 

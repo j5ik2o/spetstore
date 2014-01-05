@@ -1,20 +1,20 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
-import com.github.j5ik2o.spetstore.domain.item.Item
+import com.github.j5ik2o.spetstore.domain.pet.Pet
 
 /**
  * 注文する商品を表す値オブジェクト。
  *
- * @param item [[com.github.j5ik2o.spetstore.domain.item.Item]]
+ * @param pet [[com.github.j5ik2o.spetstore.domain.pet.Pet]]
  * @param quantity 数量
  * @param inStock 後で購入する場合true
  */
-case class CartItem(item: Item, quantity: Int, inStock: Boolean) {
+case class CartItem(pet: Pet, quantity: Int, inStock: Boolean) {
 
   /**
    * 小計。
    */
-  lazy val subTotalPrice: BigDecimal = item.price * quantity
+  lazy val subTotalPrice: BigDecimal = pet.price * quantity
 
   /**
    * 数量をインクリメントする。

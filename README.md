@@ -35,9 +35,9 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
         - [AccountProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountProfile.scala)
         - [AccountConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountConfig.scala)
 - Item Module = 商品モジュール
-    - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala) = 商品区分のカテゴリ(ex. 犬)
-    - [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala) = 商品区分(ex. 柴犬)
-    - [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala) = 商品(ex. ぽち)
+    - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Category.scala) = 商品区分のカテゴリ(ex. 犬)
+    - [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/ItemType.scala) = 商品区分(ex. 柴犬)
+    - [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Item.scala) = 商品(ex. ぽち)
 - Purchase Module = 購買モジュール
     - [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) = ショッピングカート
         - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala) = カート内の商品と数量

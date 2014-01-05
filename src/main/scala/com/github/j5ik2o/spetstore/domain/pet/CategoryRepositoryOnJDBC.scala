@@ -1,10 +1,10 @@
-package com.github.j5ik2o.spetstore.domain.item
+package com.github.j5ik2o.spetstore.domain.pet
 
 import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.WrappedResultSet
 import java.util.UUID
 
-private[item]
+private[pet]
 class CategoryRepositoryOnJDBC
 extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
 

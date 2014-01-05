@@ -5,9 +5,9 @@ import com.github.j5ik2o.spetstore.domain.address.Contact
 import com.github.j5ik2o.spetstore.domain.address.PostalAddress
 import com.github.j5ik2o.spetstore.domain.address.Pref
 import com.github.j5ik2o.spetstore.domain.address.ZipCode
-import com.github.j5ik2o.spetstore.domain.item.Item
-import com.github.j5ik2o.spetstore.domain.item.ItemId
-import com.github.j5ik2o.spetstore.domain.item.ItemTypeId
+import com.github.j5ik2o.spetstore.domain.pet.Pet
+import com.github.j5ik2o.spetstore.domain.pet.PetId
+import com.github.j5ik2o.spetstore.domain.pet.PetTypeId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemory
@@ -15,9 +15,9 @@ import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemor
 class OrderSpec extends Specification {
 
   "order" should {
-    val item = Item(
-      id = ItemId(),
-      itemTypeId = ItemTypeId(),
+    val pet = Pet(
+      id = PetId(),
+      petTypeId = PetTypeId(),
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
@@ -35,14 +35,14 @@ class OrderSpec extends Specification {
         ),
         orderItems = List.empty
       )
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(pet, 1)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(pet, 1)
       val order = Order(
         orderDate = DateTime.now,
         userName = "Junichi Kato",
@@ -60,7 +60,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(pet, 1)
       val order = Order(
         orderDate = DateTime.now,
         userName = "Junichi Kato",
@@ -78,7 +78,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(pet, 1)
       val order = Order(
         orderDate = DateTime.now,
         userName = "Junichi Kato",
@@ -115,13 +115,13 @@ class OrderSpec extends Specification {
         id = CartId(),
         accountId = account.id,
         cartItems = List(
-          CartItem(item, 1, false)
+          CartItem(pet, 1, false)
         )
       )
       implicit val ar = AccountRepository.ofMemory(Map(account.id -> account))
       implicit val ctx = EntityIOContextOnMemory
       val order = Order.fromCart(cart).get
-      order.orderItems.exists(e => e.item == item && e.quantity == 1) must beTrue
+      order.orderItems.exists(e => e.pet == pet && e.quantity == 1) must beTrue
     }
 
   }

@@ -5,7 +5,7 @@ import com.github.j5ik2o.spetstore.domain.address.Contact
 import com.github.j5ik2o.spetstore.domain.address.PostalAddress
 import com.github.j5ik2o.spetstore.domain.address.Pref
 import com.github.j5ik2o.spetstore.domain.address.ZipCode
-import com.github.j5ik2o.spetstore.domain.item.{ItemTypeId, ItemId, Item}
+import com.github.j5ik2o.spetstore.domain.pet.{PetTypeId, PetId, Pet}
 import org.specs2.mutable.Specification
 import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemory
 
@@ -30,9 +30,9 @@ class CartSpec extends Specification {
         favoriteCategoryId = None
       )
     )
-    val item = Item(
-      id = ItemId(),
-      itemTypeId = ItemTypeId(),
+    val pet = Pet(
+      id = PetId(),
+      petTypeId = PetTypeId(),
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
@@ -44,27 +44,27 @@ class CartSpec extends Specification {
         accountId = account.id,
         cartItems = List.empty
       )
-      val cartItem = CartItem(item, 1, false)
+      val cartItem = CartItem(pet, 1, false)
       val newCart = cart.addCartItem(cartItem)
       newCart must_== cart
       newCart.cartItems.contains(cartItem) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 1
     }
-    "add cartItem as item" in {
+    "add cartItem as pet" in {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
         cartItems = List.empty
       )
-      val newCart = cart.addCartItem(item, 1, false)
+      val newCart = cart.addCartItem(pet, 1, false)
       newCart must_== cart
-      newCart.cartItems.contains(CartItem(item, 1, false)) must beTrue
+      newCart.cartItems.contains(CartItem(pet, 1, false)) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 1
     }
     "add cartItem if contains cartItem" in {
-      val cartItem = CartItem(item, 2, false)
+      val cartItem = CartItem(pet, 2, false)
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
@@ -72,7 +72,7 @@ class CartSpec extends Specification {
       )
       val newCart = cart.addCartItem(cartItem)
       newCart must_== cart
-      newCart.cartItems.contains(CartItem(item, 4, false)) must beTrue
+      newCart.cartItems.contains(CartItem(pet, 4, false)) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 4
     }
@@ -80,11 +80,11 @@ class CartSpec extends Specification {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
-      val newCart = cart.removeItemById(item.id)
+      val newCart = cart.removeItemById(pet.id)
       newCart must_== cart
-      newCart.cartItems.exists(e => e.item == item && e.quantity == 1) must beFalse
+      newCart.cartItems.exists(e => e.pet == pet && e.quantity == 1) must beFalse
       newCart.sizeOfCartItems must_== 0
       newCart.quantityOfCartItems must_== 0
     }
@@ -92,11 +92,11 @@ class CartSpec extends Specification {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
-      val newCart = cart.incrementQuantityByItemId(item.id)
+      val newCart = cart.incrementQuantityByItemId(pet.id)
       newCart must_== cart
-      newCart.cartItems.exists(e => e.item == item && e.quantity == 2) must beTrue
+      newCart.cartItems.exists(e => e.pet == pet && e.quantity == 2) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 2
     }
@@ -104,27 +104,27 @@ class CartSpec extends Specification {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
-      val newCart = cart.updateQuantityByItemId(item.id, 2)
+      val newCart = cart.updateQuantityByItemId(pet.id, 2)
       newCart must_== cart
-      newCart.cartItems.exists(e => e.item == item && e.quantity == 2) must beTrue
+      newCart.cartItems.exists(e => e.pet == pet && e.quantity == 2) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 2
     }
-    "contains item" in {
+    "contains pet" in {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
-      cart.containsItemId(item.id) must beTrue
+      cart.containsItemId(pet.id) must beTrue
     }
     "get totalPrice" in {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
       cart.totalPrice must_== BigDecimal(100)
     }
@@ -132,7 +132,7 @@ class CartSpec extends Specification {
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
-        cartItems = List(CartItem(item, 1, false))
+        cartItems = List(CartItem(pet, 1, false))
       )
       implicit val ar = AccountRepository.ofMemory(Map(account.id -> account))
       implicit val ctx = EntityIOContextOnMemory

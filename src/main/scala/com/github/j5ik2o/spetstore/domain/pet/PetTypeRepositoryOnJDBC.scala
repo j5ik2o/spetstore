@@ -1,12 +1,12 @@
-package com.github.j5ik2o.spetstore.domain.item
+package com.github.j5ik2o.spetstore.domain.pet
 
 import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.WrappedResultSet
 import java.util.UUID
 
-private[item]
-class ItemTypeRepositoryOnJDBC
-extends RepositoryOnJDBC[ItemTypeId, ItemType] with ItemTypeRepository {
+private[pet]
+class PetTypeRepositoryOnJDBC
+extends RepositoryOnJDBC[PetTypeId, PetType] with PetTypeRepository {
 
   override def tableName: String = "item_type"
 
@@ -17,15 +17,15 @@ extends RepositoryOnJDBC[ItemTypeId, ItemType] with ItemTypeRepository {
     "description"
   )
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): ItemType =
-    ItemType(
-      id = ItemTypeId(UUID.fromString(resultSet.string("id"))),
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): PetType =
+    PetType(
+      id = PetTypeId(UUID.fromString(resultSet.string("id"))),
       categoryId = CategoryId(UUID.fromString("category_id")),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description")
     )
 
-  protected def convertEntityToValues(entity: ItemType): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: PetType): Seq[Any] = Seq(
     entity.id,
     entity.categoryId.value.toString,
     entity.name,

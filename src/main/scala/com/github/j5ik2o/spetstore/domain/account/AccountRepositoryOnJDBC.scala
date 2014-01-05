@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.account
 
 import com.github.j5ik2o.spetstore.domain.address.{Contact, Pref, ZipCode, PostalAddress}
-import com.github.j5ik2o.spetstore.domain.item.CategoryId
+import com.github.j5ik2o.spetstore.domain.pet.CategoryId
 import com.github.j5ik2o.spetstore.infrastructure.support.{EntityNotFoundException, EntityIOContext, RepositoryOnJDBC}
 import java.util.UUID
 import scalikejdbc.WrappedResultSet
