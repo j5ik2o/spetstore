@@ -1,7 +1,15 @@
 package com.github.j5ik2o.spetstore.infrastructure.support
 
-trait Identifier[A]{
+/**
+ * [[com.github.j5ik2o.spetstore.infrastructure.support.Entity]]の識別子を表すトレイト。
+ *
+ * @tparam A 識別子の値型
+ */
+trait Identifier[+A] {
 
+  /**
+   * 識別子の値。
+   */
   val value: A
 
   override def equals(obj: Any) = obj match {
@@ -11,9 +19,6 @@ trait Identifier[A]{
   }
 
   override def hashCode = 31 * value.##
-
-  override def toString = s"Identifier($value)"
-
 
 }
 
