@@ -2,9 +2,10 @@ package com.github.j5ik2o.spetstore.domain.account
 
 import com.github.j5ik2o.spetstore.domain.address.{Contact, Pref, ZipCode, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.item.CategoryId
-import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.infrastructure.support.{EntityNotFoundException, EntityIOContext, RepositoryOnJDBC}
 import java.util.UUID
 import scalikejdbc.WrappedResultSet
+import scala.util.Try
 
 private[account]
 class AccountRepositoryOnJDBC
@@ -66,5 +67,11 @@ class AccountRepositoryOnJDBC
           map(e => CategoryId(UUID.fromString(e)))
       )
     )
+
+  def resolveByName(name: String)(implicit ctx: EntityIOContext): Try[Account] = Try {
+    implicit val dbSession = getDBSession(ctx)
+    sql"select * from $table where name = ?".bind(name).map(convertResultSetToEntity).
+      single().apply().getOrElse(throw EntityNotFoundException(s"name = $name"))
+  }
 
 }

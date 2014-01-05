@@ -1,6 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.account
 
-import com.github.j5ik2o.spetstore.infrastructure.support.Repository
+import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Repository}
+import scala.util.Try
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.account.Account]]のためのリポジトリ責務。
@@ -8,6 +9,8 @@ import com.github.j5ik2o.spetstore.infrastructure.support.Repository
 trait AccountRepository extends Repository[AccountId, Account] {
 
   type This = AccountRepository
+
+  def resolveByName(name: String)(implicit ctx: EntityIOContext): Try[Account]
 
 }
 

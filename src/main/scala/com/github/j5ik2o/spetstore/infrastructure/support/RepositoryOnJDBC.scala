@@ -43,7 +43,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
   protected def convertEntityToKeyValues(entity: E): Map[String, Any] =
     columnNames.zip(convertEntityToValues(entity)).toMap
 
-  private def getDBSession(ctx: EntityIOContext): DBSession = ctx match {
+  protected def getDBSession(ctx: EntityIOContext): DBSession = ctx match {
     case EntityIOContextOnJDBC(dbSession) => dbSession
     case _ => throw new IllegalArgumentException(s"ctx is $ctx")
   }
