@@ -45,9 +45,9 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
     - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala)<GE/A> = 注文
         - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala)<VO> = 注文する商品と数量
 
-GE = グローバルな識別子を持つエンティティ
-VO = 値オブジェクト
-A  = 集約
+GE = グローバルな識別子を持つエンティティ  
+VO = 値オブジェクト  
+A  = 集約  
 
 ### Specs
 とりあえず、重要なところだけSpecを書いています。
