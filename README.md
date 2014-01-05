@@ -23,23 +23,23 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
     - AccountStatus
     - AccountProfile
     - AccountConfig
-- [Category](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala)
-- [ItemType](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala)
-- [Item](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala)
-- [Cart](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala)
+- [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala)
+- [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala)
+- [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala)
+- [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala)
     - CartItem
-- [Order](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala)
+- [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala)
     - OrderItem
 
-[CartSpec](https://github.com/github/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/github/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
+[CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
 
 
 ### DDD基盤コード
-- [Entity](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala)
-- [Repository](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala)
-    - [RepositoryOnJDBC](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
+- [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala)
+- [Repository](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala)
+    - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
     JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。
-    - [RepositoryOnMemory](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
+    - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
     メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。
     - RepositoryOnMemcached(TODO)  
     Memcachedに対応したリポジトリの骨格実装。
