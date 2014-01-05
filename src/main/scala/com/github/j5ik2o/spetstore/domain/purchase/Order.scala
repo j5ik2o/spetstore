@@ -58,15 +58,21 @@ case class Order
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.purchase.Order]]
    */
   def removeOrderItem(orderItem: OrderItem): Order =
-    copy(orderItems = orderItems.filterNot(_ == orderItem))
+    if (orderItems.exists(_ == orderItem)){
+      copy(orderItems = orderItems.filterNot(_ == orderItem))
+    } else {
+      this
+    }
 
   /**
-   * この注文から指定したインデックスの[[com.github.j5ik2o.spetstore.domain.purchase.OrderItem]]を削除する。
+   * この注文から指定したインデックスの
+   * [[com.github.j5ik2o.spetstore.domain.purchase.OrderItem]]を削除する。
    *
    * @param index インデックス
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.purchase.Order]]
    */
   def removeOrderItemByIndex(index: Int): Order = {
+    require(orderItems.size > index)
     val lb = ListBuffer(orderItems: _*)
     lb.remove(index)
     copy(orderItems = lb.result())
