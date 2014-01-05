@@ -22,7 +22,7 @@ object CartRepository {
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.CartRepository]]
    */
-  def ofMemory(entities: Map[CartId, Cart]): CartRepository =
+  def ofMemory(entities: Map[CartId, Cart] = Map.empty): CartRepository =
     new CartRepositoryOnMemory(entities)
 
   /**

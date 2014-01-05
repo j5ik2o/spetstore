@@ -22,7 +22,7 @@ object CategoryRepository {
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.pet.CategoryRepository]]
    */
-  def ofMemory(entities: Map[CategoryId, Category]): CategoryRepository =
+  def ofMemory(entities: Map[CategoryId, Category] = Map.empty): CategoryRepository =
     new CategoryRepositoryOnMemory(entities)
 
   /**

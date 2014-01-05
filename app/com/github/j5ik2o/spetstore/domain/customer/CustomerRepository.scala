@@ -32,7 +32,7 @@ object CustomerRepository {
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.customer.CustomerRepository]]
    */
-  def ofMemory(entities: Map[CustomerId, Customer]): CustomerRepository =
+  def ofMemory(entities: Map[CustomerId, Customer] = Map.empty): CustomerRepository =
     new CustomerRepositoryOnMemory(entities)
 
   /**

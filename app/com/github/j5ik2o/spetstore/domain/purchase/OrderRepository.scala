@@ -22,7 +22,7 @@ object OrderRepository {
    * @param entities エンティティのマップ
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.OrderRepository]]
    */
-  def ofMemory(entities: Map[OrderId, Order]): OrderRepository =
+  def ofMemory(entities: Map[OrderId, Order] = Map.empty): OrderRepository =
     new OrderRepositoryOnMemory(entities)
 
   /**

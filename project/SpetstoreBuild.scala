@@ -21,7 +21,12 @@ object SpetstoreBuild extends Build {
         "org.scalikejdbc"         %% "scalikejdbc-play-plugin"    % "[1.7,)",
         "com.h2database"          %  "h2"                         % "[1.3,)",
         "ch.qos.logback"          %  "logback-classic"            % "[1.0,)",
-        "org.json4s"              %% "json4s-jackson"             % "3.2.6"
+        "org.json4s"              %% "json4s-ext"                 % "3.2.4",
+        "org.json4s"              %% "json4s-jackson"             % "3.2.4",
+        "com.github.tototoshi"    %% "play-json4s-jackson"        % "0.2.0",
+        "com.github.tototoshi"    %% "play-json4s-test-jackson"   % "0.2.0" % "test",
+        "com.github.tototoshi"    %% "play-json4s-native"         % "0.1.0",
+        "com.github.tototoshi"    %% "play-flyway"                % "0.1.4"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
