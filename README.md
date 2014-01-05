@@ -19,7 +19,7 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 ## ドメイン層
 
 ### エンティティ(集約)と値オブジェクト
-- [Account](https://github.com/github/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala)
+- [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala)
     - AccountStatus
     - AccountProfile
     - AccountConfig
