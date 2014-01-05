@@ -31,7 +31,7 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 ### ドメインモデル
 
 - [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer) = 顧客モジュール
-    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) (GE,A)= ペットストアの顧客
+    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) (GE,A) = ペットストアの顧客
         - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala) (VO)
         - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala) (VO)
         - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala) (VO)
