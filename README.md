@@ -44,7 +44,8 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 - Spec  
 [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
 
-ここで重要なのは、モデルの表現にユビキタス言語以外の言葉を利用しないことです。実装技術の言葉は、ドメイン層に含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため)。それは他の層です。
+ここで重要なのは、モデルの表現にユビキタス言語以外の言葉を利用しないことです。そして、クラス名、属性名、振る舞いの名前(引数・戻り値も)はユビキタス言語と対応づける必要があります。  
+これらの要素に、実装技術の言葉は、ドメイン層に含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため。ただし、StringやIntなどのデータ型や、ListやMap, Try, Option, Futureなどのコンテナ型は例外とする)。それは他の層です。
 
 ### DDD基盤コード
 わかりやすくするために、特別なライブラリを用意せず、簡単な基盤コードを含めています。
