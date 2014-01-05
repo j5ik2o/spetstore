@@ -6,7 +6,7 @@
 DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので具体的な実装方式は複数あり得ますが、私が考える最良の実装という意味)。
 
 ## 特徴
-- Scala 2.10.x
+- Scala 2.10対応
 - DDDに準拠した設計方針
 - 対象ドメインはペットストア
 - アプリケーションとしては REST like API
@@ -28,7 +28,7 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 ## ドメイン層
 
-### エンティティ(集約)と値オブジェクト
+### ドメインモデル
 - Account Module = 顧客モジュール
     - [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala) = ペットストアの顧客
         - [AccountStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountStatus.scala)
@@ -44,17 +44,18 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
     - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) = 注文
         - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala) = 注文する商品と数量
 
+### Specs
+とりあえず、重要なところだけSpecを書いています。
+- [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala)
+- [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)
+
+ここで重要なのは、モデルの表現(クラス名、属性名、振る舞いの名前(引数・戻り値も))にユビキタス言語以外の言葉を利用しないことです。  
+これらの要素に、実装技術の言葉は、ドメイン層に含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため。ただし、StringやIntなどのデータ型や、ListやMap, Try, Option, Futureなどのコンテナ型は例外とする)。実装技術に関する知識は、アプリケーション層かインフラストラクチャ層に対応づけましょう。
+
 - TODO
     - 顧客とAccountの概念が合ってない気がする。s/Account/Customer/とした方がよいかもしれない。もしくは、CustomerとAccountを分離させるか。
 
-
-
-- Spec  
-[CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
-
-ここで重要なのは、モデルの表現にユビキタス言語以外の言葉を利用しないことです。そして、クラス名、属性名、振る舞いの名前(引数・戻り値も)はユビキタス言語と対応づける必要があります。  
-これらの要素に、実装技術の言葉は、ドメイン層に含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため。ただし、StringやIntなどのデータ型や、ListやMap, Try, Option, Futureなどのコンテナ型は例外とする)。それは他の層です。
-
+## インフラストラクチャ層
 ### DDD基盤コード
 わかりやすくするために、特別なライブラリを用意せず、簡単な基盤コードを含めています。
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
