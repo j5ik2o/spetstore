@@ -5,6 +5,8 @@ import scala.util.Try
 
 /**
  * 商品を表すエンティティ。
+ *
+ * TODO 商品と在庫の概念を分ける
  * 
  * @param id 識別子
  * @param itemTypeId [[com.github.j5ik2o.spetstore.domain.item.ItemTypeId]]
@@ -22,12 +24,15 @@ case class Item
  quantity: Int = 1)
   extends Entity[ItemId] {
 
+  /**
+   * [[com.github.j5ik2o.spetstore.domain.item.ItemType]]を取得する。
+   *
+   * @param itr [[com.github.j5ik2o.spetstore.domain.item.ItemTypeRepository]]
+   * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
+   * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.item.ItemType]]
+   */
   def itemType(implicit itr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =
     itr.resolve(itemTypeId)
-
-  def total: BigDecimal = price * quantity
-
-
 
 }
 

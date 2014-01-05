@@ -19,7 +19,7 @@ class ItemRepositoryOnJDBC
     "quantity"
   )
 
-  protected def convertToEntity(resultSet: WrappedResultSet): Item =
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Item =
     Item(
       id = ItemId(UUID.fromString(resultSet.string("id"))),
       itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("item_type_id"))),
@@ -29,7 +29,7 @@ class ItemRepositoryOnJDBC
       quantity = resultSet.int("quantity")
     )
 
-  protected def convertToValues(entity: Item): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Item): Seq[Any] = Seq(
     entity.id,
     entity.itemTypeId.value.toString,
     entity.name,

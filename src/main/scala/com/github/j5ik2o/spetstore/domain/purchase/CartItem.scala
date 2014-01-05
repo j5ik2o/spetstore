@@ -14,7 +14,7 @@ case class CartItem(item: Item, quantity: Int, inStock: Boolean) {
   /**
    * 小計。
    */
-  lazy val subTotal: BigDecimal = item.price * quantity
+  lazy val subTotalPrice: BigDecimal = item.price * quantity
 
   /**
    * 数量をインクリメントする。

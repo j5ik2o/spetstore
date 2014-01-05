@@ -17,7 +17,7 @@ extends RepositoryOnJDBC[ItemTypeId, ItemType] with ItemTypeRepository {
     "description"
   )
 
-  protected def convertToEntity(resultSet: WrappedResultSet): ItemType =
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): ItemType =
     ItemType(
       id = ItemTypeId(UUID.fromString(resultSet.string("id"))),
       categoryId = CategoryId(UUID.fromString("category_id")),
@@ -25,7 +25,7 @@ extends RepositoryOnJDBC[ItemTypeId, ItemType] with ItemTypeRepository {
       description = resultSet.stringOpt("description")
     )
 
-  protected def convertToValues(entity: ItemType): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: ItemType): Seq[Any] = Seq(
     entity.id,
     entity.categoryId.value.toString,
     entity.name,

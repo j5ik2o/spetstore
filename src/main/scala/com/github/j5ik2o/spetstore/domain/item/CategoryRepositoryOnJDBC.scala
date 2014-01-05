@@ -17,14 +17,14 @@ extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
     "description"
   )
 
-  protected def convertToEntity(resultSet: WrappedResultSet): Category =
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Category =
     Category(
       id = CategoryId(UUID.fromString(resultSet.string("id"))),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description")
     )
 
-  protected def convertToValues(entity: Category): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Category): Seq[Any] = Seq(
     entity.id,
     entity.name,
     entity.description

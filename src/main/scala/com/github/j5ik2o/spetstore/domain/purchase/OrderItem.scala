@@ -13,14 +13,24 @@ case class OrderItem(item: Item, quantity: Int) {
   /**
    * 小計。
    */
-  val subTotal: BigDecimal = item.price * quantity
+  val subTotalPrice: BigDecimal = item.price * quantity
 
 }
 
+/**
+ * コンパニオンオブジェクト。
+ */
 object OrderItem {
 
-  def fromCartItem(cartItem: CartItem): OrderItem = {
+  /**
+   * [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]から
+   * [[com.github.j5ik2o.spetstore.domain.purchase.OrderItem]]を
+   * 生成する。
+   *
+   * @param cartItem [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]
+   * @return [[com.github.j5ik2o.spetstore.domain.purchase.OrderItem]]
+   */
+  def fromCartItem(cartItem: CartItem): OrderItem =
     OrderItem(cartItem.item, cartItem.quantity)
-  }
 
 }

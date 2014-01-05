@@ -72,14 +72,14 @@ class CartRepositoryOnJDBC
   }
 
 
-  protected def convertToEntity(resultSet: WrappedResultSet): Cart =
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Cart =
     Cart(
       id = CartId(UUID.fromString(resultSet.string("id"))),
       accountId = AccountId(UUID.fromString(resultSet.string("account_id"))),
       cartItems = parse(resultSet.string("cart_items")).as[List[CartItem]]
     )
 
-  protected def convertToValues(entity: Cart): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Cart): Seq[Any] = Seq(
     entity.id,
     entity.accountId.value.toString,
     entity.cartItems.toArray.asJValue

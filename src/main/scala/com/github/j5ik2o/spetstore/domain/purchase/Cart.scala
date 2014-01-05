@@ -6,7 +6,7 @@ import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Enti
 import scala.util.Try
 
 /**
- * ショッピングカートを表す値オブジェクト。
+ * ショッピングカートを表すエンティティ。
  *
  * @param cartItems [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]のリスト
  */
@@ -37,7 +37,7 @@ case class Cart
   /**
    * 合計金額。
    */
-  lazy val totalPrice = cartItems.foldLeft(BigDecimal(0))(_ + _.subTotal)
+  lazy val totalPrice = cartItems.foldLeft(BigDecimal(0))(_ + _.subTotalPrice)
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.item.ItemId]]が含まれるかを検証する。

@@ -3,17 +3,45 @@ package com.github.j5ik2o.spetstore.infrastructure.support
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
 
+/**
+ * JDBC用[[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]。
+ *
+ * @param session DBセッション
+ */
 case class EntityIOContextOnJDBC(session: DBSession) extends EntityIOContext
 
+/**
+ * JDBC用リポジトリのための骨格実装。
+ */
 abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
   extends Repository[ID, E] with SQLSyntaxSupport[E]{
 
-  protected def convertToEntity(resultSet: WrappedResultSet): E
+  /**
+   * `WrappedResultSet`をエンティティに変換する。
+   *
+   * @param resultSet `WrappedResultSet`
+   * @return エンティティ　
+   */
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): E
 
-  protected def convertToValues(entity: E): Seq[Any]
+  /**
+   * エンティティをINSERT SQLで利用される、値の列に変換する。
+   *
+   * `columnNames`の順序に対応する必要がある。
+   *
+   * @param entity エンティティ
+   * @return 値の列。
+   */
+  protected def convertEntityToValues(entity: E): Seq[Any]
 
-  protected def convertToKeyValues(entity: E): Map[String, Any] =
-    columnNames.zip(convertToValues(entity)).toMap
+  /**
+   * エンティティをUPDATE SQLで利用される、キーと値のマップに変換する。
+   *
+   * @param entity エンティティ
+   * @return キーと値のマップ
+   */
+  protected def convertEntityToKeyValues(entity: E): Map[String, Any] =
+    columnNames.zip(convertEntityToValues(entity)).toMap
 
   private def getDBSession(ctx: EntityIOContext): DBSession = ctx match {
     case EntityIOContextOnJDBC(dbSession) => dbSession
@@ -32,7 +60,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
     implicit val dbSession = getDBSession(ctx)
     sql"select * from $table where id = ?".
       bind(identifier.value.toString).
-      map(convertToEntity).single().apply().
+      map(convertResultSetToEntity).single().apply().
       getOrElse(throw EntityNotFoundException(identifier))
   }
 
@@ -40,7 +68,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
     implicit val dbSession = getDBSession(ctx)
     def update(entity: E) = {
       val usb = new UpdateSQLBuilder(sqls"update $table")
-      val kv = convertToKeyValues(entity).map {
+      val kv = convertEntityToKeyValues(entity).map {
         case (k, v) => (column.column(k), v)
       }
       usb.set(kv.toList: _*).toSQL.update().apply()
@@ -48,7 +76,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
     def insert(entity: E) = {
       val isb = new InsertSQLBuilder(sqls"insert into $table")
       val columns = columnNames.map(column.column)
-      isb.columns(columns.toList: _*).values(convertToValues(entity): _*).toSQL.update().apply()
+      isb.columns(columns.toList: _*).values(convertEntityToValues(entity): _*).toSQL.update().apply()
     }
     if (update(entity) > 0) {
       (this.asInstanceOf[This], entity)

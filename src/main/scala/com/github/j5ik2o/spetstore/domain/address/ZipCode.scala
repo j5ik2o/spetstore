@@ -12,10 +12,21 @@ case class ZipCode(areaCode: String, cityCode: String) {
   def asString = s"$areaCode-$cityCode"
 }
 
+/**
+ * コンパニオンオブジェクト。
+ */
 object ZipCode {
 
+  /**
+   * 000-0000形式の郵便番号文字列から
+   * [[com.github.j5ik2o.spetstore.domain.address.ZipCode]]
+   * を生成する。
+   *
+   * @param zipCode 000-0000形式の郵便番号文字列
+   * @return [[com.github.j5ik2o.spetstore.domain.address.ZipCode]]
+   */
   def apply(zipCode: String): ZipCode = {
-    val splits = zipCode.split("-")
+    val splits = zipCode.split("-").ensuring(_.size == 2)
     ZipCode(splits(0), splits(1))
   }
 

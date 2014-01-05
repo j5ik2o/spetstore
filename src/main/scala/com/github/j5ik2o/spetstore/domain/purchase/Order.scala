@@ -40,7 +40,7 @@ case class Order
    * @return 合計
    */
   lazy val totalPrice: BigDecimal =
-    orderItems.map(_.subTotal).reduceLeft(_ + _)
+    orderItems.map(_.subTotalPrice).reduceLeft(_ + _)
 
   /**
    * この注文に[[com.github.j5ik2o.spetstore.domain.purchase.OrderItem]]を追加する。
@@ -80,7 +80,9 @@ case class Order
 object Order {
 
   /**
-   * [[com.github.j5ik2o.spetstore.domain.purchase.Cart]]から[[com.github.j5ik2o.spetstore.domain.purchase.Order]]を生成する。
+   * [[com.github.j5ik2o.spetstore.domain.purchase.Cart]]から
+   * [[com.github.j5ik2o.spetstore.domain.purchase.Order]]を
+   * 生成する。
    *
    * @param cart [[com.github.j5ik2o.spetstore.domain.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.Order]]

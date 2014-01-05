@@ -2,12 +2,28 @@ package com.github.j5ik2o.spetstore.infrastructure.support
 
 import scala.util.{Success, Try}
 
+/**
+ * メモリ用[[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]。
+ */
 case object EntityIOContextOnMemory extends EntityIOContext
 
+/**
+ * メモリ用リポジトリのための骨格実装。
+ *
+ * @param entities エンティティのマップ
+ * @tparam ID 識別子の型
+ * @tparam E エンティティの型
+ */
 abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
 (entities: Map[ID, E])
   extends Repository[ID, E] {
 
+  /**
+   * 新しいインスタンスを生成する。
+   *
+   * @param entities エンティティのマップ
+   * @return 新しいインスタンス
+   */
   protected def createInstance(entities: Map[ID, E]): This
 
   def contains(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] =

@@ -6,6 +6,10 @@ package com.github.j5ik2o.spetstore.infrastructure.support
  * @tparam ID [[com.github.j5ik2o.spetstore.infrastructure.support.Identifier]]
  */
 trait Entity[ID <: Identifier[_]] {
+
+  /**
+   * 識別子。
+   */
   val id: ID
 
   override def equals(obj: Any): Boolean = this match {

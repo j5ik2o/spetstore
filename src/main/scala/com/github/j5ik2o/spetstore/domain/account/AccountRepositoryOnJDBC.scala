@@ -27,7 +27,7 @@ class AccountRepositoryOnJDBC
     "favorite_category_id"
   )
 
-  protected def convertToValues(entity: Account): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Account): Seq[Any] = Seq(
     entity.id.value.toString,
     entity.name,
     entity.status.id,
@@ -42,7 +42,7 @@ class AccountRepositoryOnJDBC
     entity.config.favoriteCategoryId.map(_.value.toString)
   )
 
-  protected def convertToEntity(resultSet: WrappedResultSet): Account =
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Account =
     Account(
       id = AccountId(UUID.fromString(resultSet.string("id"))),
       name = resultSet.string("name"),

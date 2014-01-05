@@ -14,7 +14,14 @@ case class AccountConfig
 (password: String,
  favoriteCategoryId: Option[CategoryId] = None) {
 
-  def favariteCategory(implicit cr: CategoryRepository, ctx: EntityIOContext): Try[Category] =
+  /**
+   * お気に入りのカテゴリを取得する。
+   *
+   * @param cr [[com.github.j5ik2o.spetstore.domain.item.CategoryRepository]]
+   * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
+   * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.item.Category]]
+   */
+  def favoriteCategory(implicit cr: CategoryRepository, ctx: EntityIOContext): Try[Category] =
     Try(favoriteCategoryId.get).flatMap(cr.resolve)
 
 }

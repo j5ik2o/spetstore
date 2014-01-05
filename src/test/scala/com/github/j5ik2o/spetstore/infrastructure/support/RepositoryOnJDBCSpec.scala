@@ -17,14 +17,14 @@ class RepositoryOnJDBCSpec extends Specification {
 
     override val columnNames = Seq("id", "first_name", "last_name")
 
-    protected def convertToEntity(resultSet: WrappedResultSet): Person =
+    protected def convertResultSetToEntity(resultSet: WrappedResultSet): Person =
       Person(
         id = PersonId(UUID.fromString(resultSet.string("id"))),
         firstName = resultSet.string("first_name"),
         lastName = resultSet.string("last_name")
       )
 
-    protected def convertToValues(entity: Person): Seq[Any] =
+    protected def convertEntityToValues(entity: Person): Seq[Any] =
       Seq(entity.id.value.toString, entity.firstName, entity.lastName)
 
   }
