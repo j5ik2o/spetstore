@@ -26,6 +26,7 @@ class CartSpec extends Specification {
         contact = Contact("hoge@hoge.com", "00-0000-0000")
       ),
       config = CustomerConfig(
+        loginName = "fugafuga",
         password = "hogehoge",
         favoriteCategoryId = None
       )

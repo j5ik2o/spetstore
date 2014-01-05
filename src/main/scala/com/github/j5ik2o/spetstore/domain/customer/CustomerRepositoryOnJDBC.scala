@@ -24,6 +24,7 @@ class CustomerRepositoryOnJDBC
     "building_name",
     "email",
     "phone",
+    "login_name",
     "password",
     "favorite_category_id"
   )
@@ -39,6 +40,7 @@ class CustomerRepositoryOnJDBC
     entity.profile.postalAddress.buildingName,
     entity.profile.contact.email,
     entity.profile.contact.phone,
+    entity.config.loginName,
     entity.config.password,
     entity.config.favoriteCategoryId.map(_.value.toString)
   )
@@ -62,16 +64,17 @@ class CustomerRepositoryOnJDBC
         )
       ),
       config = CustomerConfig(
+        loginName = resultSet.string("login_name"),
         password = resultSet.string("password"),
         favoriteCategoryId = resultSet.stringOpt("favorite_category_id").
           map(e => CategoryId(UUID.fromString(e)))
       )
     )
 
-  def resolveByName(name: String)(implicit ctx: EntityIOContext): Try[Customer] = Try {
+  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Customer] = Try {
     implicit val dbSession = getDBSession(ctx)
-    sql"select * from $table where name = ?".bind(name).map(convertResultSetToEntity).
-      single().apply().getOrElse(throw EntityNotFoundException(s"name = $name"))
+    sql"select * from $table where login_name = ?".bind(loginName).map(convertResultSetToEntity).
+      single().apply().getOrElse(throw EntityNotFoundException(s"loginName = $loginName"))
   }
 
 }

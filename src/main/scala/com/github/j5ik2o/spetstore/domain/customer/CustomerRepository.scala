@@ -10,7 +10,14 @@ trait CustomerRepository extends Repository[CustomerId, Customer] {
 
   type This = CustomerRepository
 
-  def resolveByName(name: String)(implicit ctx: EntityIOContext): Try[Customer]
+  /**
+   * 指定したログイン名に該当する顧客を解決する。
+   *
+   * @param loginName ログイン名
+   * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
+   * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.customer.Customer]]
+   */
+  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Customer]
 
 }
 
