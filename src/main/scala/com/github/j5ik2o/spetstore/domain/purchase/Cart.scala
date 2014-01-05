@@ -59,8 +59,9 @@ case class Cart
   def addCartItem(cartItem: CartItem): Cart = {
     require(cartItem.quantity > 0)
     cartItems.find(_.item == cartItem.item).map {
-      e =>
-        copy(cartItems = e.incrementQuantity :: cartItems.filterNot(_.item == cartItem.item))
+      currentItem =>
+        val newCartItem = currentItem.addQuantity(cartItem.quantity).ensuring(_.quantity > 0)
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.item == cartItem.item))
     }.getOrElse {
       copy(cartItems = cartItem :: cartItems)
     }

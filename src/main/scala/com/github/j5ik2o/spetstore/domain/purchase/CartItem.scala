@@ -21,7 +21,14 @@ case class CartItem(item: Item, quantity: Int, inStock: Boolean) {
    *
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]
    */
-  def incrementQuantity: CartItem = copy(quantity = quantity + 1)
+  def incrementQuantity: CartItem = addQuantity(1)
+
+  /**
+   * 数量を追加する。
+   *
+   * @return [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]
+   */
+  def addQuantity(otherQuantity: Int): CartItem = copy(quantity = quantity + otherQuantity)
 
   /**
    * 数量を更新する。

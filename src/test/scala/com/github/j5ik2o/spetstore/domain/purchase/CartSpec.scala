@@ -64,7 +64,7 @@ class CartSpec extends Specification {
       newCart.quantityOfCartItems must_== 1
     }
     "add cartItem if contains cartItem" in {
-      val cartItem = CartItem(item, 1, false)
+      val cartItem = CartItem(item, 2, false)
       val cart = Cart(
         id = CartId(),
         accountId = account.id,
@@ -72,9 +72,9 @@ class CartSpec extends Specification {
       )
       val newCart = cart.addCartItem(cartItem)
       newCart must_== cart
-      newCart.cartItems.contains(CartItem(item, 2, false)) must beTrue
+      newCart.cartItems.contains(CartItem(item, 4, false)) must beTrue
       newCart.sizeOfCartItems must_== 1
-      newCart.quantityOfCartItems must_== 2
+      newCart.quantityOfCartItems must_== 4
     }
     "remove cartItem by itemId" in {
       val cart = Cart(
