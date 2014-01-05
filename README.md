@@ -30,16 +30,16 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 ### エンティティ(集約)と値オブジェクト
 - [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala) = ペットストアの顧客
-    - AccountStatus
-    - AccountProfile
-    - AccountConfig
+    - [AccountStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountStatus.scala)
+    - [AccountProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountProfile.scala)
+    - [AccountConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountConfig.scala)
 - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Category.scala) = 商品区分のカテゴリ(ex. 犬)
 - [ItemType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/ItemType.scala) = 商品区分(ex. 柴犬)
 - [Item](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/item/Item.scala) = 商品(ex. ぽち)
 - [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) = ショッピングカート
-    - CartItem = カート内の商品と数量
+    - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala) = カート内の商品と数量
 - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) = 注文
-    - OrderItem = 注文する商品と数量
+    - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala) = 注文する商品と数量
 
 [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
 
