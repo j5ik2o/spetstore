@@ -61,9 +61,9 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala) = DDDにおけるリポジトリの責務
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
-    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。
+    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBCSpec.scala)
     - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
-    メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。
+    メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemorySpec.scala)
     - RepositoryOnMemcached(TODO)  
     Memcachedに対応したリポジトリの骨格実装。
     - CacheManagementRepository(TODO)  
