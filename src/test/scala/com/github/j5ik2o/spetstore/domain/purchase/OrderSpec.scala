@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
-import com.github.j5ik2o.spetstore.domain.account._
+import com.github.j5ik2o.spetstore.domain.customer._
 import com.github.j5ik2o.spetstore.domain.address.Contact
 import com.github.j5ik2o.spetstore.domain.address.PostalAddress
 import com.github.j5ik2o.spetstore.domain.address.Pref
@@ -93,11 +93,11 @@ class OrderSpec extends Specification {
       order.totalPrice must_== BigDecimal(100)
     }
     "apply from cart" in {
-      val account = Account(
-        id = AccountId(),
-        status = AccountStatus.Enabled,
+      val customer = Customer(
+        id = CustomerId(),
+        status = CustomerStatus.Enabled,
         name = "Junichi Kato",
-        profile = AccountProfile(
+        profile = CustomerProfile(
           postalAddress = PostalAddress(
             ZipCode("100", "1000"),
             Pref.東京都,
@@ -106,19 +106,19 @@ class OrderSpec extends Specification {
           ),
           contact = Contact("hoge@hoge.com", "00-0000-0000")
         ),
-        config = AccountConfig(
+        config = CustomerConfig(
           password = "hogehoge",
           favoriteCategoryId = None
         )
       )
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(
           CartItem(pet, 1, false)
         )
       )
-      implicit val ar = AccountRepository.ofMemory(Map(account.id -> account))
+      implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
       val order = Order.fromCart(cart).get
       order.orderItems.exists(e => e.pet == pet && e.quantity == 1) must beTrue

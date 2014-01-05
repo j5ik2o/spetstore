@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
 import com.github.nscala_time.time.Imports._
-import com.github.j5ik2o.spetstore.domain.account.AccountRepository
+import com.github.j5ik2o.spetstore.domain.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.address.PostalAddress
 import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Entity}
 import scala.collection.mutable.ListBuffer
@@ -93,10 +93,10 @@ object Order {
    * @param cart [[com.github.j5ik2o.spetstore.domain.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.Order]]
    */
-  def fromCart(cart: Cart)(implicit ar: AccountRepository, ctx: EntityIOContext): Try[Order] = Try {
-    val account = cart.account.get
+  def fromCart(cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
+    val customer = cart.customer.get
     val orderItems = cart.cartItems.map(OrderItem.fromCartItem)
-    Order(OrderId(), DateTime.now, account.name, account.profile.postalAddress, orderItems)
+    Order(OrderId(), DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
   }
 
 }

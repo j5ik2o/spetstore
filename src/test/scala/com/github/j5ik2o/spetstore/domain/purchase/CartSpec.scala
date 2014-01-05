@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
-import com.github.j5ik2o.spetstore.domain.account._
+import com.github.j5ik2o.spetstore.domain.customer._
 import com.github.j5ik2o.spetstore.domain.address.Contact
 import com.github.j5ik2o.spetstore.domain.address.PostalAddress
 import com.github.j5ik2o.spetstore.domain.address.Pref
@@ -12,11 +12,11 @@ import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemor
 class CartSpec extends Specification {
 
   "cart" should {
-    val account = Account(
-      id = AccountId(),
-      status = AccountStatus.Enabled,
+    val customer = Customer(
+      id = CustomerId(),
+      status = CustomerStatus.Enabled,
       name = "Junichi Kato",
-      profile = AccountProfile(
+      profile = CustomerProfile(
         postalAddress = PostalAddress(
           ZipCode("100", "1000"),
           Pref.東京都,
@@ -25,7 +25,7 @@ class CartSpec extends Specification {
         ),
         contact = Contact("hoge@hoge.com", "00-0000-0000")
       ),
-      config = AccountConfig(
+      config = CustomerConfig(
         password = "hogehoge",
         favoriteCategoryId = None
       )
@@ -41,7 +41,7 @@ class CartSpec extends Specification {
     "add cartItem" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List.empty
       )
       val cartItem = CartItem(pet, 1, false)
@@ -54,7 +54,7 @@ class CartSpec extends Specification {
     "add cartItem as pet" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List.empty
       )
       val newCart = cart.addCartItem(pet, 1, false)
@@ -67,7 +67,7 @@ class CartSpec extends Specification {
       val cartItem = CartItem(pet, 2, false)
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(cartItem)
       )
       val newCart = cart.addCartItem(cartItem)
@@ -79,7 +79,7 @@ class CartSpec extends Specification {
     "remove cartItem by itemId" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
       val newCart = cart.removeItemById(pet.id)
@@ -91,7 +91,7 @@ class CartSpec extends Specification {
     "increment quantity by itemId" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
       val newCart = cart.incrementQuantityByItemId(pet.id)
@@ -103,7 +103,7 @@ class CartSpec extends Specification {
     "update quantity by itemId" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
       val newCart = cart.updateQuantityByItemId(pet.id, 2)
@@ -115,7 +115,7 @@ class CartSpec extends Specification {
     "contains pet" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
       cart.containsItemId(pet.id) must beTrue
@@ -123,20 +123,20 @@ class CartSpec extends Specification {
     "get totalPrice" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
       cart.totalPrice must_== BigDecimal(100)
     }
-    "get account" in {
+    "get customer" in {
       val cart = Cart(
         id = CartId(),
-        accountId = account.id,
+        customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
-      implicit val ar = AccountRepository.ofMemory(Map(account.id -> account))
+      implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
-      cart.account.get must_== account
+      cart.customer.get must_== customer
     }
   }
 

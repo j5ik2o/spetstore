@@ -29,11 +29,11 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 ## ドメイン層
 
 ### ドメインモデル
-- Account Module = 顧客モジュール
-    - [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/Account.scala) = ペットストアの顧客
-        - [AccountStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountStatus.scala)
-        - [AccountProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountProfile.scala)
-        - [AccountConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/account/AccountConfig.scala)
+- Customer Module = 顧客モジュール
+    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) = ペットストアの顧客
+        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala)
+        - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala)
+        - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala)
 - Pet Module = ペットモジュール
     - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Category.scala) = ペットのカテゴリ(ex. 犬)
     - [PetType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/PetType.scala) = ペットの品種(ex. 柴犬)
@@ -51,9 +51,6 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 ここで重要なのは、モデルの表現(クラス名、属性名、振る舞いの名前(引数・戻り値も))にユビキタス言語以外の言葉を利用しないことです。  
 これらの要素に、実装技術の言葉は、ドメイン層に含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため。ただし、StringやIntなどのデータ型や、ListやMap, Try, Option, Futureなどのコンテナ型は例外とする)。実装技術に関する知識は、アプリケーション層かインフラストラクチャ層に対応づけましょう。
-
-- TODO
-    - 顧客とAccountの概念が合ってない気がする。s/Account/Customer/とした方がよいかもしれない。もしくは、CustomerとAccountを分離させるか。
 
 ## インフラストラクチャ層
 ### DDD基盤コード

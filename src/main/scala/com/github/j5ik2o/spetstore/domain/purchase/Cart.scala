@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
-import com.github.j5ik2o.spetstore.domain.account.{Account, AccountRepository, AccountId}
+import com.github.j5ik2o.spetstore.domain.customer.{Customer, CustomerRepository, CustomerId}
 import com.github.j5ik2o.spetstore.domain.pet.{PetId, Pet}
 import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Entity}
 import scala.util.Try
@@ -12,17 +12,17 @@ import scala.util.Try
  */
 case class Cart
 (id: CartId = CartId(),
- accountId: AccountId,
+ customerId: CustomerId,
  cartItems: List[CartItem]) extends Entity[CartId] {
 
   /**
-   * [[com.github.j5ik2o.spetstore.domain.account.Account]]を取得する。
+   * [[com.github.j5ik2o.spetstore.domain.customer.Customer]]を取得する。
    *
-   * @param ar [[com.github.j5ik2o.spetstore.domain.account.AccountRepository]]
-   * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.account.Account]]
+   * @param cr [[com.github.j5ik2o.spetstore.domain.customer.CustomerRepository]]
+   * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.customer.Customer]]
    */
-  def account(implicit ar: AccountRepository, ctx: EntityIOContext): Try[Account] =
-    ar.resolve(accountId)
+  def customer(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Customer] =
+    cr.resolve(customerId)
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]の個数。
