@@ -32,14 +32,14 @@ case class Order
   /**
    * [[com.j5ik2o.spetstore.domain.purchase.OrderItem]]の総数。
    */
-  val quantityOfOrderItems = orderItems.foldLeft(0)(_ + _.quantity)
+  lazy val quantityOfOrderItems = orderItems.foldLeft(0)(_ + _.quantity)
 
   /**
    * 合計を取得する。
    *
    * @return 合計
    */
-  def totalPrice: BigDecimal =
+  lazy val totalPrice: BigDecimal =
     orderItems.map(_.subTotal).reduceLeft(_ + _)
 
   /**
