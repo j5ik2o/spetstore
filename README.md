@@ -1,10 +1,24 @@
 # Scala Pet Store API (開発中)
+
+## 目的
+DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので具体的な実装方式は複数あり得ますが、私が考える最良の実装という意味)。
+
+## 特徴
 - Scala 2.10.x
 - DDDに準拠した設計方針
 - REST like API
 
+## レイヤー構造
 
-## エンティティ(集約)と値オブジェクト
+- アプリケーション層
+- ドメイン層
+- インフラストラクチャ層
+
+もっとも重要なのは、メンタルモデルを反映したドメイン層です。
+
+## ドメイン層
+
+### エンティティ(集約)と値オブジェクト
 - [Account](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/domain/account/Account.scala)
     - AccountStatus
     - AccountProfile
@@ -20,7 +34,7 @@
 [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/j5ik2o/spetstore/domain/purchase/CartSpec.scala), [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/src/test/scala/com/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)あたりがみどころ。
 
 
-## DDD基盤コード
+### DDD基盤コード
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/Entity.scala)
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/Repository.scala)
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
@@ -32,6 +46,6 @@
     - CacheManagementRepository(TODO)  
     キャッシュのマネジメントを行うリポジトリ実装。
 
-## アプリケーション層の実装
-- コントローラ
-- アプリケーションサービス
+## アプリケーション層
+- コントローラ(TODO)
+- アプリケーションサービス(TODO)
