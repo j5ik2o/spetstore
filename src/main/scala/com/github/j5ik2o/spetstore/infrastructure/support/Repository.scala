@@ -10,6 +10,9 @@ import scala.util.Try
  */
 trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
 
+  /**
+   * リポジトリの派生型。
+   */
   type This <: Repository[ID, E]
 
   /**
@@ -18,6 +21,8 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
    * @param identifier [[com.github.j5ik2o.spetstore.infrastructure.support.Identifier]]
    * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
    * @return `Try`でラップされたBoolean。存在する場合はtrue
+   * @throws EntityNotFoundException エンティティが見つからない場合
+   * @throws RepositoryIOException I/Oエラー
    */
   def contains(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean]
 
@@ -27,6 +32,8 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
    * @param identifier [[com.github.j5ik2o.spetstore.infrastructure.support.Identifier]]
    * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
    * @return `Try`でラップされたエンティティ
+   * @throws EntityNotFoundException エンティティが見つからない場合
+   * @throws RepositoryIOException I/Oエラー
    */
   def resolve(identifier: ID)(implicit ctx: EntityIOContext): Try[E]
 
@@ -39,6 +46,7 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
    * @param entity エンティティ
    * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
    * @return `Try`でラップされたタプル。
+   * @throws RepositoryIOException I/Oエラー
    */
   def store(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)]
 
@@ -51,6 +59,7 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
    * @param identifier 識別子
    * @param ctx [[com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContext]]
    * @return `Try`でラップされたタプル。
+   * @throws RepositoryIOException I/Oエラー
    */
   def delete(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)]
 
