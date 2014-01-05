@@ -29,16 +29,16 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 ## ドメイン層
 
 ### ドメインモデル
-- Customer Module = 顧客モジュール
+- [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer) = 顧客モジュール
     - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) = ペットストアの顧客
         - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala)
         - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala)
         - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala)
-- Pet Module = ペットモジュール
+- [Pet Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet) = ペットモジュール
     - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Category.scala) = ペットのカテゴリ(ex. 犬)
     - [PetType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/PetType.scala) = ペットの品種(ex. 柴犬)
     - [Pet](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Pet.scala) = ペット(ex. ぽち)
-- Purchase Module = 購買モジュール
+- [Purchase Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase) = 購買モジュール
     - [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) = ショッピングカート
         - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala) = カート内の商品と数量
     - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) = 注文
