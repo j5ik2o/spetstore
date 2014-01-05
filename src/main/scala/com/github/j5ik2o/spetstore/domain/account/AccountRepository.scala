@@ -17,7 +17,7 @@ trait AccountRepository extends Repository[AccountId, Account] {
 object AccountRepository {
 
   /**
-   * オンメモリリポジトリを生成する。
+   * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.account.AccountRepository]]

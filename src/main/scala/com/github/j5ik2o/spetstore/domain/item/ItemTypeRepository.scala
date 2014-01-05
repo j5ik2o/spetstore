@@ -17,9 +17,9 @@ trait ItemTypeRepository extends Repository[ItemTypeId, ItemType] {
 object ItemTypeRepository {
 
   /**
-   * オンメモリ版リポジトリを生成する。
+   * メモリ用リポジトリを生成する。
    *
-   * @param entities エンティティの集合
+   * @param entities エンティティのマップ
    * @return [[com.github.j5ik2o.spetstore.domain.item.ItemTypeRepository]]
    */
   def ofMemory(entities: Map[ItemTypeId, ItemType] = Map.empty): ItemTypeRepository =

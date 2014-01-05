@@ -17,12 +17,19 @@ trait CartRepository extends Repository[CartId, Cart] {
 object CartRepository {
 
   /**
-   * オンメモリリポジトリを生成する。
+   * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.purchase.CartRepository]]
    */
   def ofMemory(entities: Map[CartId, Cart]): CartRepository =
     new CartRepositoryOnMemory(entities)
+
+  /**
+   * JDBC用リポジトリを生成する。
+   *
+   * @return [[com.github.j5ik2o.spetstore.domain.purchase.CartRepository]]
+   */
+  def ofJDBC: CartRepository = new CartRepositoryOnJDBC
 
 }

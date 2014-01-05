@@ -17,7 +17,7 @@ trait CategoryRepository extends Repository[CategoryId, Category] {
 object CategoryRepository {
 
   /**
-   * オンメモリ版リポジトリを生成する。
+   * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.item.CategoryRepository]]
