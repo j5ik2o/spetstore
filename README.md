@@ -31,19 +31,19 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 ### ドメインモデル
 
 - [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer) = 顧客モジュール
-    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala)<GE/A> = ペットストアの顧客
-        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala)<VO>
-        - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala)<VO>
-        - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala)<VO>
+    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) (GE,A)= ペットストアの顧客
+        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala) (VO)
+        - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala) (VO)
+        - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala) (VO)
 - [Pet Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet) = ペットモジュール
-    - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Category.scala)<GE/A> = ペットのカテゴリ(ex. 犬)
-    - [PetType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/PetType.scala)<GE/A> = ペットの品種(ex. 柴犬)
-    - [Pet](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Pet.scala)<GE/A> = ペット(ex. ぽち)
+    - [Category](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Category.scala) (GE,A) = ペットのカテゴリ(ex. 犬)
+    - [PetType](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/PetType.scala) (GE,A) = ペットの品種(ex. 柴犬)
+    - [Pet](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/pet/Pet.scala) (GE,A) = ペット(ex. ぽち)
 - [Purchase Module](https://github.com/j5ik2o/spetstore/tree/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase) = 購買モジュール
-    - [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala)<GE/A> = ショッピングカート
-        - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala)<VO> = カート内の商品と数量
-    - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala)<GE/A> = 注文
-        - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala)<VO> = 注文する商品と数量
+    - [Cart](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) (GE,A) = ショッピングカート
+        - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala) (VO) = カート内の商品と数量
+    - [Order](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) (GE,A) = 注文
+        - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/src/main/scala/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala) (VO) = 注文する商品と数量
 
 GE = グローバルな識別子を持つエンティティ  
 VO = 値オブジェクト  
