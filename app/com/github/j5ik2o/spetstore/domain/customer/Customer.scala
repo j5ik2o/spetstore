@@ -1,6 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.customer
 
-import com.github.j5ik2o.spetstore.infrastructure.support.Entity
+import com.github.j5ik2o.spetstore.domain.purchase.{Order, Cart, CartItem}
+import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Entity}
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.pet.PetId
 
 /**
  * ペットストアの顧客を表すエンティティ。
@@ -17,7 +20,19 @@ case class Customer
  name: String,
  profile: CustomerProfile,
  config: CustomerConfig)
-  extends Entity[CustomerId]
+  extends Entity[CustomerId] {
+
+  def addCartItem(cart: Cart, cartItem: CartItem): Cart =
+    cart.addCartItem(cartItem)
+
+  def removeCartItemByPetId(cart: Cart, petId: PetId): Cart =
+    cart.removeCartItemByPetId(petId)
+  
+  def newOrderFromCart(cart: Cart)
+                      (implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] =
+    Order.fromCart(cart)
+
+}
 
 
 

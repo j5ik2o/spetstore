@@ -83,7 +83,7 @@ class CartSpec extends Specification {
         customerId = customer.id,
         cartItems = List(CartItem(pet, 1, false))
       )
-      val newCart = cart.removeItemById(pet.id)
+      val newCart = cart.removeCartItemByPetId(pet.id)
       newCart must_== cart
       newCart.cartItems.exists(e => e.pet == pet && e.quantity == 1) must beFalse
       newCart.sizeOfCartItems must_== 0

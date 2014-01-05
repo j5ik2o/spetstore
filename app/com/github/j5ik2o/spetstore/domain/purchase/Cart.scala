@@ -86,7 +86,7 @@ case class Cart
    * @param petId [[com.github.j5ik2o.spetstore.domain.pet.PetId]]
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.purchase.Cart]]
    */
-  def removeItemById(petId: PetId): Cart =
+  def removeCartItemByPetId(petId: PetId): Cart =
     cartItems.find(_.pet.id == petId).map {
       e =>
         copy(cartItems = cartItems.filterNot(_.pet.id == petId))
