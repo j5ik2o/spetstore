@@ -74,3 +74,14 @@ A  = 集約
 ## アプリケーション層
 - コントローラ(TODO)
 - アプリケーションサービス(TODO)
+
+
+## 利用している主なフレームワーク/ライブラリ
+
+- Play Framework 2.2.1
+- Google Guice
+- ScalikeJDBC
+- json4s
+- nscala-time
+- specs2
+- mockito
