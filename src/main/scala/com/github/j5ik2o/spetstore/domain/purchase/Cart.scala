@@ -78,31 +78,32 @@ case class Cart
     addCartItem(CartItem(item, quantity, isInStock))
 
   /**
-   * [[com.github.j5ik2o.spetstore.domain.item.ItemId]]を使って[[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]を削除する。
+   * [[com.github.j5ik2o.spetstore.domain.item.ItemId]]を使って
+   * [[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]を
+   * 削除する。
    *
    * @param itemId [[com.github.j5ik2o.spetstore.domain.item.ItemId]]
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.purchase.Cart]]
    */
-  def removeItemById(itemId: ItemId): Cart = {
+  def removeItemById(itemId: ItemId): Cart =
     cartItems.find(_.item.id == itemId).map {
       e =>
         copy(cartItems = cartItems.filterNot(_.item.id == itemId))
     }.getOrElse(this)
-  }
 
   /**
-   * 特定の[[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]の数量をインクリメントする。
+   * 特定の[[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]の数量を
+   * インクリメントする。
    *
    * @param itemId [[com.github.j5ik2o.spetstore.domain.item.ItemId]]
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.purchase.Cart]]
    */
-  def incrementQuantityByItemId(itemId: ItemId): Cart = {
+  def incrementQuantityByItemId(itemId: ItemId): Cart =
     cartItems.find(_.item.id == itemId).map {
-      e =>
-        val cartItem = e.incrementQuantity.ensuring(_.quantity > 0)
-        copy(cartItems = cartItem :: cartItems.filterNot(_.item.id == itemId))
+      cartItem =>
+        val newCartItem = cartItem.incrementQuantity.ensuring(_.quantity > 0)
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.item.id == itemId))
     }.getOrElse(this)
-  }
 
   /**
    * 特定の[[com.github.j5ik2o.spetstore.domain.purchase.CartItem]]の数量を更新する。
@@ -114,8 +115,9 @@ case class Cart
   def updateQuantityByItemId(itemId: ItemId, quantity: Int): Cart = {
     require(quantity > 0)
     cartItems.find(_.item.id == itemId).map {
-      e =>
-        copy(cartItems = e.withQuantity(quantity) :: cartItems.filterNot(_.item.id == itemId))
+      cartItem =>
+        val newCartItem = cartItem.withQuantity(quantity).ensuring(_.quantity > 0)
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.item.id == itemId))
     }.getOrElse(this)
   }
 
