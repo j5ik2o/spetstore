@@ -29,7 +29,8 @@ object SpetstoreBuild extends Build {
         "org.scalikejdbc"         %% "scalikejdbc"                % "[1.7,)",
         "org.scalikejdbc"         %% "scalikejdbc-interpolation"  % "[1.7,)",
         "com.h2database"          %  "h2"                         % "[1.3,)",
-        "ch.qos.logback"          %  "logback-classic"            % "[1.0,)"
+        "ch.qos.logback"          %  "logback-classic"            % "[1.0,)",
+        "org.json4s"              %% "json4s-jackson"             % "3.2.6"
       )
     )
   )
