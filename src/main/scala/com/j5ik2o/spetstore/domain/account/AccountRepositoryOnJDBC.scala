@@ -10,8 +10,6 @@ private[account]
 class AccountRepositoryOnJDBC
   extends RepositoryOnJDBC[AccountId, Account] with AccountRepository {
 
-  type This = AccountRepository
-
   override val tableName = "account"
 
   override val columnNames = Seq(

@@ -5,7 +5,11 @@ import com.j5ik2o.spetstore.infrastructure.support.Repository
 /**
  * [[com.j5ik2o.spetstore.domain.purchase.Cart]]のためのリポジトリ責務。
  */
-trait CartRepository extends Repository[CartId, Cart]
+trait CartRepository extends Repository[CartId, Cart] {
+
+  type This = CartRepository
+
+}
 
 /**
  * コンパニオンオブジェクト。

@@ -11,8 +11,6 @@ private[purchase]
 class CartRepositoryOnMemory(entities: Map[CartId, Cart])
 extends RepositoryOnMemory[CartId, Cart](entities) with CartRepository {
 
-  type This = CartRepository
-
   protected def createInstance(entities: Map[CartId, Cart]): This =
     new CartRepositoryOnMemory(entities)
 

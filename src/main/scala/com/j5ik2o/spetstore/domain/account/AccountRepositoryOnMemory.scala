@@ -11,8 +11,6 @@ private[account]
 class AccountRepositoryOnMemory(entities: Map[AccountId, Account])
 extends RepositoryOnMemory[AccountId, Account](entities) with AccountRepository {
 
-  type This = AccountRepository
-
   protected def createInstance(entities: Map[AccountId, Account]): This =
     new AccountRepositoryOnMemory(entities)
 

@@ -8,7 +8,7 @@ import com.j5ik2o.spetstore.infrastructure.support.Repository
 trait ItemRepository extends Repository[ItemId, Item] {
 
   type This = ItemRepository
-  
+
 }
 
 /**

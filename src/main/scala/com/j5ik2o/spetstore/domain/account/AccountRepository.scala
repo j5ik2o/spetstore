@@ -5,7 +5,11 @@ import com.j5ik2o.spetstore.infrastructure.support.Repository
 /**
  * [[com.j5ik2o.spetstore.domain.account.Account]]のためのリポジトリ責務。
  */
-trait AccountRepository extends Repository[AccountId, Account]
+trait AccountRepository extends Repository[AccountId, Account] {
+
+  type This = AccountRepository
+
+}
 
 /**
  * コンパニオンオブジェクト。
