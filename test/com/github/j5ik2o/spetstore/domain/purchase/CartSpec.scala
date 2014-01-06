@@ -1,13 +1,19 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
 import com.github.j5ik2o.spetstore.domain.customer._
-import com.github.j5ik2o.spetstore.domain.basic.Contact
-import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.basic.Pref
-import com.github.j5ik2o.spetstore.domain.basic.ZipCode
-import com.github.j5ik2o.spetstore.domain.pet.{PetTypeId, PetId, Pet}
+import com.github.j5ik2o.spetstore.domain.basic._
+import com.github.j5ik2o.spetstore.domain.pet._
 import org.specs2.mutable.Specification
 import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemory
+import com.github.j5ik2o.spetstore.domain.customer.CustomerConfig
+import com.github.j5ik2o.spetstore.domain.pet.PetTypeId
+import com.github.j5ik2o.spetstore.domain.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.pet.Pet
+import com.github.j5ik2o.spetstore.domain.customer.CustomerProfile
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.pet.PetId
+import com.github.j5ik2o.spetstore.domain.customer.Customer
+import com.github.j5ik2o.spetstore.domain.basic.Contact
 
 class CartSpec extends Specification {
 
@@ -34,10 +40,11 @@ class CartSpec extends Specification {
     val pet = Pet(
       id = PetId(),
       petTypeId = PetTypeId(),
+      sexType = SexType.Male,
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
-      quantity = 1
+      supplierId = SupplierId()
     )
     "add cartItem" in {
       val cart = Cart(

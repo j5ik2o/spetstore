@@ -3,6 +3,7 @@ package com.github.j5ik2o.spetstore.domain.pet
 import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.WrappedResultSet
 import java.util.UUID
+import com.github.j5ik2o.spetstore.domain.basic.SexType
 
 private[pet]
 class PetRepositoryOnJDBC
@@ -12,29 +13,33 @@ class PetRepositoryOnJDBC
 
   override def columnNames: Seq[String] = Seq(
     "id",
-    "item_type_id",
+    "pet_type_id",
+    "sex_type",
     "name",
     "description",
     "price",
-    "quantity"
+    "supplier_id"
   )
 
   protected def convertResultSetToEntity(resultSet: WrappedResultSet): Pet =
     Pet(
       id = PetId(UUID.fromString(resultSet.string("id"))),
-      petTypeId = PetTypeId(UUID.fromString(resultSet.string("item_type_id"))),
+      sexType = SexType(resultSet.int("sexType")),
+      petTypeId = PetTypeId(UUID.fromString(resultSet.string("pet_type_id"))),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description"),
       price = resultSet.long("price"),
-      quantity = resultSet.int("quantity")
+      supplierId = SupplierId(UUID.fromString(resultSet.string("supplier_id")))
     )
 
   protected def convertEntityToValues(entity: Pet): Seq[Any] = Seq(
     entity.id,
     entity.petTypeId.value.toString,
+    entity.sexType.id,
     entity.name,
     entity.description,
     entity.price,
-    entity.quantity
+    entity.supplierId.value.toString
   )
+
 }

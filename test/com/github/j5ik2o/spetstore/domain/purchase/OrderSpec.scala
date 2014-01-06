@@ -1,16 +1,20 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
 import com.github.j5ik2o.spetstore.domain.customer._
-import com.github.j5ik2o.spetstore.domain.basic.Contact
-import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.basic.Pref
-import com.github.j5ik2o.spetstore.domain.basic.ZipCode
-import com.github.j5ik2o.spetstore.domain.pet.Pet
-import com.github.j5ik2o.spetstore.domain.pet.PetId
-import com.github.j5ik2o.spetstore.domain.pet.PetTypeId
+import com.github.j5ik2o.spetstore.domain.basic._
+import com.github.j5ik2o.spetstore.domain.pet._
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemory
+import com.github.j5ik2o.spetstore.domain.customer.CustomerConfig
+import com.github.j5ik2o.spetstore.domain.pet.PetTypeId
+import com.github.j5ik2o.spetstore.domain.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.pet.Pet
+import com.github.j5ik2o.spetstore.domain.customer.CustomerProfile
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.pet.PetId
+import com.github.j5ik2o.spetstore.domain.customer.Customer
+import com.github.j5ik2o.spetstore.domain.basic.Contact
 
 class OrderSpec extends Specification {
 
@@ -18,13 +22,15 @@ class OrderSpec extends Specification {
     val pet = Pet(
       id = PetId(),
       petTypeId = PetTypeId(),
+      sexType = SexType.Male,
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
-      quantity = 1
+      supplierId = SupplierId()
     )
     "add orderItem" in {
       val order = Order(
+        status = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -44,6 +50,7 @@ class OrderSpec extends Specification {
     "remove orderItem" in {
       val orderItem = OrderItem(pet, 1)
       val order = Order(
+        status = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -62,6 +69,7 @@ class OrderSpec extends Specification {
     "remove orderItem by index" in {
       val orderItem = OrderItem(pet, 1)
       val order = Order(
+        status = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -80,6 +88,7 @@ class OrderSpec extends Specification {
     "get totalPrice" in {
       val orderItem = OrderItem(pet, 1)
       val order = Order(
+        status = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(

@@ -97,7 +97,7 @@ object Order {
   def fromCart(cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
     val orderItems = cart.cartItems.map(OrderItem.fromCartItem)
-    Order(OrderId(), DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
+    Order(OrderId(), OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
   }
 
 }

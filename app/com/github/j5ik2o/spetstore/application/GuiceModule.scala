@@ -1,6 +1,5 @@
 package com.github.j5ik2o.spetstore.application
 
-import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
 import com.github.j5ik2o.spetstore.application.service.AuthenticationService
 import com.github.j5ik2o.spetstore.domain.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.pet.{CategoryRepository, PetTypeRepository, PetRepository}
