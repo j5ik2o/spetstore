@@ -29,6 +29,8 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 ## ドメイン層
 
+ドメインの目的は、ペットストアの運営です。  ペットやペットフード、アクセサリーなどを仕入れて、顧客に販売するためのドメインです(仕入れの概念が現在ないので実装です)。
+
 ### ドメインモデル
 
 - [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/customer) = 顧客モジュール
