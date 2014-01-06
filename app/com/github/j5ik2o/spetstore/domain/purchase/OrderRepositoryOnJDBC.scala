@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
-import com.github.j5ik2o.spetstore.domain.address.PostalAddress
-import com.github.j5ik2o.spetstore.domain.address.{Pref, ZipCode}
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.basic.{Pref, ZipCode}
 import com.github.j5ik2o.spetstore.domain.infrastructure.json.OrderFormats._
 import com.github.j5ik2o.spetstore.infrastructure.support.RepositoryOnJDBC
 import java.util.UUID
@@ -19,6 +19,8 @@ class OrderRepositoryOnJDBC
 
   override def columnNames: Seq[String] = Seq(
     "id",
+    "status",
+    "order_status",
     "user_name",
     "zip_code",
     "pref_code",
@@ -31,6 +33,7 @@ class OrderRepositoryOnJDBC
   protected def convertResultSetToEntity(resultSet: WrappedResultSet): Order =
     Order(
       id = OrderId(UUID.fromString(resultSet.string("id"))),
+      status = OrderStatus(resultSet.int("status")),
       orderDate = new DateTime(resultSet.timestamp("order_date")),
       userName = resultSet.string("user_name"),
       shippingAddress = PostalAddress(
@@ -45,6 +48,8 @@ class OrderRepositoryOnJDBC
 
   protected def convertEntityToValues(entity: Order): Seq[Any] = Seq(
     entity.id.value.toString,
+    entity.status.id,
+    entity.orderDate.toDate,
     entity.userName,
     entity.shippingAddress.zipCode.asString,
     entity.shippingAddress.pref.toString,

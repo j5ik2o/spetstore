@@ -1,10 +1,10 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
 import com.github.j5ik2o.spetstore.domain.customer._
-import com.github.j5ik2o.spetstore.domain.address.Contact
-import com.github.j5ik2o.spetstore.domain.address.PostalAddress
-import com.github.j5ik2o.spetstore.domain.address.Pref
-import com.github.j5ik2o.spetstore.domain.address.ZipCode
+import com.github.j5ik2o.spetstore.domain.basic.Contact
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.basic.Pref
+import com.github.j5ik2o.spetstore.domain.basic.ZipCode
 import com.github.j5ik2o.spetstore.domain.pet.Pet
 import com.github.j5ik2o.spetstore.domain.pet.PetId
 import com.github.j5ik2o.spetstore.domain.pet.PetTypeId

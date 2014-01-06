@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.pet
 import com.github.j5ik2o.spetstore.infrastructure.support.Entity
 
 /**
- * 商品区分のカテゴリを表すエンティティ。
+ * カテゴリを表すエンティティ。
  *
  * @param id 識別子
  * @param name 名前

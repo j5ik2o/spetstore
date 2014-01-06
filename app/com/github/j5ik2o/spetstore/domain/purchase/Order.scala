@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.domain.purchase
 
 import com.github.nscala_time.time.Imports._
 import com.github.j5ik2o.spetstore.domain.customer.CustomerRepository
-import com.github.j5ik2o.spetstore.domain.address.PostalAddress
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
 import com.github.j5ik2o.spetstore.infrastructure.support.{EntityIOContext, Entity}
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
@@ -18,6 +18,7 @@ import scala.util.Try
  */
 case class Order
 (id: OrderId = OrderId(),
+ status: OrderStatus.Value,
  orderDate: DateTime,
  userName: String,
  shippingAddress: PostalAddress,

@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.address
+package com.github.j5ik2o.spetstore.domain.basic
 
 /**
  * 都道府県を表す値オブジェクト。

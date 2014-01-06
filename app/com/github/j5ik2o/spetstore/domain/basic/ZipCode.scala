@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.address
+package com.github.j5ik2o.spetstore.domain.basic
 
 /**
  * 郵便番号を表す値オブジェクト。
@@ -19,11 +19,11 @@ object ZipCode {
 
   /**
    * 000-0000形式の郵便番号文字列から
-   * [[com.github.j5ik2o.spetstore.domain.address.ZipCode]]
+   * [[com.github.j5ik2o.spetstore.domain.basic.ZipCode]]
    * を生成する。
    *
    * @param zipCode 000-0000形式の郵便番号文字列
-   * @return [[com.github.j5ik2o.spetstore.domain.address.ZipCode]]
+   * @return [[com.github.j5ik2o.spetstore.domain.basic.ZipCode]]
    */
   def apply(zipCode: String): ZipCode = {
     val splits = zipCode.split("-").ensuring(_.size == 2)

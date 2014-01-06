@@ -1,11 +1,14 @@
 package com.github.j5ik2o.spetstore.domain.customer
 
-import com.github.j5ik2o.spetstore.domain.address.{Contact, Pref, ZipCode, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.basic.Contact
+import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.basic._
 import com.github.j5ik2o.spetstore.domain.pet.CategoryId
 import com.github.j5ik2o.spetstore.infrastructure.support.{EntityNotFoundException, EntityIOContext, RepositoryOnJDBC}
 import java.util.UUID
-import scalikejdbc._, SQLInterpolation._
 import scala.util.Try
+import scalikejdbc.WrappedResultSet
+import scalikejdbc._, SQLInterpolation._
 
 private[customer]
 class CustomerRepositoryOnJDBC
@@ -49,6 +52,7 @@ class CustomerRepositoryOnJDBC
     Customer(
       id = CustomerId(UUID.fromString(resultSet.string("id"))),
       name = resultSet.string("name"),
+      sexType = resultSet.intOpt("sex_type").map(SexType(_)),
       status = CustomerStatus(resultSet.int("status")),
       profile = CustomerProfile(
         postalAddress = PostalAddress(
