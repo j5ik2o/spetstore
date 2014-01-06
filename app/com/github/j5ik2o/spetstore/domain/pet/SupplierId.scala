@@ -8,4 +8,5 @@ import java.util.UUID
  *
  * @param value 識別子の値
  */
-case class SupplierId(value: UUID = UUID.randomUUID()) extends Identifier[UUID]
+case class SupplierId(value: UUID = UUID.randomUUID())
+  extends Identifier[UUID]

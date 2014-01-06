@@ -3,18 +3,18 @@ package com.github.j5ik2o.spetstore.domain.pet
 import com.github.j5ik2o.spetstore.infrastructure.support.Repository
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.pet.Inventory]]のためのリポジトリ責務。
+ * [[com.github.j5ik2o.spetstore.domain.pet.Supplier]]のためのリポジトリ責務。
  */
-trait InventoryRepository extends Repository[InventoryId, Inventory] {
+trait SupplierRepository extends Repository[SupplierId, Supplier] {
 
-  type This = InventoryRepository
+  type This = SupplierRepository
 
 }
 
 /**
  * コンパニオンオブジェクト。
  */
-object InventoryRepository {
+object SupplierRepository {
 
   /**
    * メモリ用リポジトリを生成する。
@@ -22,15 +22,14 @@ object InventoryRepository {
    * @param entities エンティティの集合
    * @return [[com.github.j5ik2o.spetstore.domain.pet.CategoryRepository]]
    */
-  def ofMemory(entities: Map[InventoryId, Inventory] = Map.empty): InventoryRepository =
-    new InventoryRepositoryOnMemory(entities)
+  def ofMemory(entities: Map[SupplierId, Supplier] = Map.empty): SupplierRepository =
+    new SupplierRepositoryOnMemory(entities)
 
   /**
    * JDBC用リポジトリを生成する。
    *
    * @return [[com.github.j5ik2o.spetstore.domain.pet.CategoryRepository]]
    */
-  def ofJDBC: InventoryRepository = new InventoryRepositoryOnJDBC
+  def ofJDBC: SupplierRepository = new SupplierRepositoryOnJDBC
 
 }
-
