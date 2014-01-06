@@ -71,7 +71,7 @@ A  = 集約
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala) = DDDにおけるリポジトリの責務
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
-    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBCSpec.scala)
+    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。ちなみに、1エンティティが複数テーブルにマッピングされるような実装は今のところ作っていません。そのうち作ります。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBCSpec.scala)
     - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
     メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemorySpec.scala)
     - RepositoryOnMemcached(TODO)  
