@@ -2,6 +2,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
+import skinny.orm.SkinnyCRUDMapper
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。
@@ -14,95 +15,71 @@ case class EntityIOContextOnJDBC(session: DBSession) extends EntityIOContext
  * JDBC用リポジトリのための骨格実装。
  */
 abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
-  extends Repository[ID, E] with SQLSyntaxSupport[E]{
+  extends Repository[ID, E] with SkinnyCRUDMapper[E] {
 
-  /**
-   * `WrappedResultSet`をエンティティに変換する。
-   *
-   * @param resultSet `WrappedResultSet`
-   * @return エンティティ　
-   */
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): E
+  override def primaryKeyName = "id"
 
-  /**
-   * エンティティをINSERT SQLで利用される、値の列に変換する。
-   *
-   * `columnNames`の順序に対応する必要がある。
-   *
-   * @param entity エンティティ
-   * @return 値の列。
-   */
-  protected def convertEntityToValues(entity: E): Seq[Any]
+  override def defaultAlias = createAlias(tableName)
 
-  /**
-   * エンティティをUPDATE SQLで利用される、キーと値のマップに変換する。
-   *
-   * @param entity エンティティ
-   * @return キーと値のマップ
-   */
-  protected def convertEntityToKeyValues(entity: E): Map[String, Any] =
-    columnNames.zip(convertEntityToValues(entity)).toMap
+  override def useAutoIncrementPrimaryKey = false
 
-  protected def getDBSession(ctx: EntityIOContext): DBSession = ctx match {
-    case EntityIOContextOnJDBC(dbSession) => dbSession
-    case _ => throw new IllegalArgumentException(s"ctx is $ctx")
-  }
+  protected def toNamedValues(entity: E): Seq[(Symbol, Any)]
 
-  def containsByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = Try {
-    implicit val dbSession = getDBSession(ctx)
-    sql"select count(id) from $table where id = ?".
-      bind(identifier.value.toString).
-      map(_.int(1) == 1).single().apply().
-      getOrElse(false)
-  }
-
-  def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = Try {
-    implicit val dbSession = getDBSession(ctx)
-    sql"select * from $table where id = ?".
-      bind(identifier.value.toString).
-      map(convertResultSetToEntity).single().apply().
-      getOrElse(throw EntityNotFoundException(identifier))
-  }
-
-  def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = Try {
-    implicit val dbSession = getDBSession(ctx)
-    def update(entity: E) = {
-      val usb = new UpdateSQLBuilder(sqls"update $table")
-      val kv = convertEntityToKeyValues(entity).map {
-        case (k, v) => (column.column(k), v)
-      }
-      usb.set(kv.toList: _*).toSQL.update().apply()
+  protected def withDBSession[A](ctx: EntityIOContext)(f: DBSession => A): Try[A] = Try {
+    ctx match {
+      case EntityIOContextOnJDBC(dbSession) => f(dbSession)
+      case _ => throw new IllegalStateException(s"Unexpected context is bound (expected: JDBCEntityIOContext, actual: $ctx)")
     }
-    def insert(entity: E) = {
-      val isb = new InsertSQLBuilder(sqls"insert into $table")
-      val columns = columnNames.map(column.column)
+  }
+
+  def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
+    implicit s =>
+      val count = countBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value))
+      if (count == 0) false
+      else if (count == 1) true
+      else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
+  }
+
+  override def existByIdentifiers(identifiers: ID*)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
+    implicit s =>
+      countBy(sqls.in(defaultAlias.field(primaryKeyName), identifiers.map(_.value))) > 0
+  }
+
+  def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = withDBSession(ctx) {
+    implicit s =>
+      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value)).getOrElse(throw EntityNotFoundException(identifier))
+  }
+
+  override def resolveEntities(identifiers: ID*)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {
+    implicit s =>
+      findAllBy(sqls.in(defaultAlias.field(primaryKeyName), identifiers.map(_.value)))
+  }
+
+  def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
+    implicit s =>
       if (entity.id.isDefined) {
-        isb.columns(columns.toList: _*).values(convertEntityToValues(entity): _*).toSQL.update().apply()
+        val count = updateBy(sqls.eq(column.field(primaryKeyName), entity.id.value))
+          .withAttributes(toNamedValues(entity).filterNot {
+          case (k, _) => k.name == primaryKeyName
+        }: _*)
+        if (count == 0) createWithAttributes(toNamedValues(entity): _*)
+        else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $entity.id")
       } else {
-        isb.columns(columns.toList.tail: _*).values(convertEntityToValues(entity): _*).toSQL.update().apply()
+        createWithAttributes(toNamedValues(entity): _*)
       }
-    }
-    if (entity.id.isDefined && update(entity) > 0) {
       (this.asInstanceOf[This], entity)
-    } else {
-      if (insert(entity) > 0) {
-        (this.asInstanceOf[This], entity)
-      } else {
-        throw RepositoryIOException("store error")
-      }
-    }
   }
 
-  def deleteByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = {
-    implicit val dbSession = getDBSession(ctx)
-    resolveEntity(identifier).map {
-      entity =>
-        if (sql"delete from $table where id = ?".bind(identifier.value.toString).update().apply() > 0) {
-          (this.asInstanceOf[This], entity)
-        } else {
-          throw RepositoryIOException("delete error")
-        }
-    }
+  def deleteByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
+    implicit s =>
+      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value)).map {
+        entity =>
+          val count = deleteBy(sqls.eq(column.field(primaryKeyName), identifier.value))
+          if (count == 1) (this.asInstanceOf[This], entity)
+          else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
+          else throw RepositoryIOException(s"Entity (identifier: $identifier) is not found when deleting")
+      }.getOrElse(throw RepositoryIOException(s"Entity (identifier: $identifier) is not found"))
   }
+
 
 }
