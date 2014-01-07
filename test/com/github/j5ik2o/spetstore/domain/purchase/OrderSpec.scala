@@ -1,6 +1,8 @@
 package com.github.j5ik2o.spetstore.domain.purchase
 
+import com.github.j5ik2o.spetstore.domain.basic._
 import com.github.j5ik2o.spetstore.domain.customer._
+<<<<<<< HEAD
 import com.github.j5ik2o.spetstore.domain.basic._
 import com.github.j5ik2o.spetstore.domain.pet._
 import org.joda.time.DateTime
@@ -15,6 +17,15 @@ import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
 import com.github.j5ik2o.spetstore.domain.pet.PetId
 import com.github.j5ik2o.spetstore.domain.customer.Customer
 import com.github.j5ik2o.spetstore.domain.basic.Contact
+=======
+import com.github.j5ik2o.spetstore.domain.pet.Pet
+import com.github.j5ik2o.spetstore.domain.pet.PetId
+import com.github.j5ik2o.spetstore.domain.pet.PetTypeId
+import com.github.j5ik2o.spetstore.domain.pet.SupplierId
+import com.github.j5ik2o.spetstore.infrastructure.support.EntityIOContextOnMemory
+import org.joda.time.DateTime
+import org.specs2.mutable.Specification
+>>>>>>> bugfix
 
 class OrderSpec extends Specification {
 
@@ -24,6 +35,7 @@ class OrderSpec extends Specification {
       petTypeId = PetTypeId(),
       sexType = SexType.Male,
       name = "ぽち",
+      sexType = SexType.Male,
       description = None,
       price = BigDecimal(100),
       supplierId = SupplierId()

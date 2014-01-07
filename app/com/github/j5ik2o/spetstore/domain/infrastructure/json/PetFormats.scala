@@ -16,7 +16,8 @@ object PetFormats {
         JField("sexType", JInt(obj.sexType.id)),
         JField("name", JString(obj.name)),
         JField("description", obj.description.map(JString).getOrElse(JNull)),
-        JField("price", JDecimal(obj.price))
+        JField("price", JDecimal(obj.price)),
+        JField("supplierId", obj.supplierId.asJValue)
       )
 
     def read(value: JValue): Pet = Pet(

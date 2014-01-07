@@ -24,8 +24,8 @@ class PetRepositoryOnJDBC
   protected def convertResultSetToEntity(resultSet: WrappedResultSet): Pet =
     Pet(
       id = PetId(UUID.fromString(resultSet.string("id"))),
-      sexType = SexType(resultSet.int("sexType")),
       petTypeId = PetTypeId(UUID.fromString(resultSet.string("pet_type_id"))),
+      sexType = SexType(resultSet.int("sex_type")),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description"),
       price = resultSet.long("price"),
