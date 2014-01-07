@@ -2,9 +2,10 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
 import org.json4s._
 import org.json4s.DefaultReaders._
-import com.github.j5ik2o.spetstore.domain.pet.{SupplierId, PetTypeId, PetId, Pet}
+import org.json4s.DefaultWriters._
+import com.github.j5ik2o.spetstore.domain.model.pet.{SupplierId, PetTypeId, PetId, Pet}
 import IdentifierFormats._
-import com.github.j5ik2o.spetstore.domain.basic.SexType
+import com.github.j5ik2o.spetstore.domain.model.basic.SexType
 
 object PetFormats {
 

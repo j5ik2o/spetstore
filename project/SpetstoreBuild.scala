@@ -17,6 +17,7 @@ object SpetstoreBuild extends Build {
         "net.codingwell"          %% "scala-guice"                % "4.0.0-beta",
         "com.github.nscala-time"  %% "nscala-time"                % "0.6.0",
         "org.scalikejdbc"         %% "scalikejdbc"                % "[1.7,)",
+        "org.skinny-framework"    %% "skinny-orm"                 % "[0.9,)"  % "compile",
         "org.scalikejdbc"         %% "scalikejdbc-interpolation"  % "[1.7,)",
         "org.scalikejdbc"         %% "scalikejdbc-play-plugin"    % "[1.7,)",
         "com.h2database"          %  "h2"                         % "[1.3,)",

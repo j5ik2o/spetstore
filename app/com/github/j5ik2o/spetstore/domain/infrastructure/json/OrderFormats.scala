@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
-import com.github.j5ik2o.spetstore.domain.pet.Pet
-import com.github.j5ik2o.spetstore.domain.purchase.OrderItem
+import com.github.j5ik2o.spetstore.domain.model.pet.Pet
+import com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem
 import org.json4s._
 import org.json4s.DefaultReaders._
 import PetFormats._

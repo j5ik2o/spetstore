@@ -1,11 +1,11 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.domain.basic.Contact
-import com.github.j5ik2o.spetstore.domain.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.basic.{Pref, ZipCode}
-import com.github.j5ik2o.spetstore.domain.customer._
-import com.github.j5ik2o.spetstore.infrastructure.support.EntityNotFoundException
+import com.github.j5ik2o.spetstore.domain.model.basic.Contact
+import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, ZipCode}
+import com.github.j5ik2o.spetstore.domain.model.customer._
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
 import com.google.inject.Inject
 import java.util.UUID
 import org.json4s._
