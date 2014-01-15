@@ -24,7 +24,7 @@ case class CustomerConfig
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.pet.Category]]
    */
   def favoriteCategory(implicit cr: CategoryRepository, ctx: EntityIOContext): Try[Category] =
-    Try(favoriteCategoryId.get).flatMap(cr.resolveEntity)
+    Try(favoriteCategoryId.get).flatMap(cr.resolveEntity(_))
 
 }
 

@@ -1,6 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import org.specs2.mutable.Specification
+import scala.util.Try
 
 class RepositoryOnMemorySpec extends Specification {
 
@@ -32,7 +33,7 @@ class RepositoryOnMemorySpec extends Specification {
       val entities = Map(personId -> person)
       entities.contains(personId) must beTrue
       PersonRepositoryOnMemory(entities).
-        containsByIdentifier(personId) must beSuccessfulTry.like {
+        existByIdentifier(personId) must beSuccessfulTry.like {
         case result =>
           result must beTrue
       }

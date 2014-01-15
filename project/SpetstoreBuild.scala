@@ -27,7 +27,8 @@ object SpetstoreBuild extends Build {
         "com.github.tototoshi"    %% "play-json4s-jackson"        % "0.2.0",
         "com.github.tototoshi"    %% "play-json4s-test-jackson"   % "0.2.0" % "test",
         "com.github.tototoshi"    %% "play-json4s-native"         % "0.1.0",
-        "com.github.tototoshi"    %% "play-flyway"                % "0.1.4"
+        "com.github.tototoshi"    %% "play-flyway"                % "0.1.4",
+    "mysql" % "mysql-connector-java" % "5.1.28"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

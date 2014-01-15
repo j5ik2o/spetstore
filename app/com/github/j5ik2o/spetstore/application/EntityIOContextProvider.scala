@@ -9,11 +9,11 @@ trait EntityIOContextProvider {
 
 object EntityIOContextProvider {
 
-  object ofMemory extends EntityIOContextProvider {
+  object Memory extends EntityIOContextProvider {
     def get = EntityIOContextOnMemory
   }
 
-  class ofJDBC(dbSession: DBSession) extends EntityIOContextProvider {
+  class JDBC(dbSession: DBSession) extends EntityIOContextProvider {
     def get = EntityIOContextOnJDBC(dbSession)
   }
 

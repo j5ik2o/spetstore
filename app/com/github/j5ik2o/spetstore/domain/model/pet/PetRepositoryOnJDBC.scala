@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.pet
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import scalikejdbc.WrappedResultSet
+import scalikejdbc.{SQLInterpolation, WrappedResultSet}
 import java.util.UUID
 import com.github.j5ik2o.spetstore.domain.model.basic.SexType
 
@@ -42,4 +42,7 @@ class PetRepositoryOnJDBC
     entity.supplierId.value.toString
   )
 
+  protected def toNamedValues(entity: Pet): Seq[(Symbol, Any)] = ???
+
+  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Pet]): Pet = ???
 }

@@ -1,32 +1,30 @@
 package com.github.j5ik2o.spetstore.domain.model.pet
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import scalikejdbc.WrappedResultSet
 import java.util.UUID
+import scalikejdbc._, SQLInterpolation._
 
 private[pet]
 class InventoryRepositoryOnJDBC
   extends RepositoryOnJDBC[InventoryId, Inventory] with InventoryRepository {
 
-  override def tableName: String = "inventory"
+  override def defaultAlias = createAlias("i")
 
-  override def columnNames: Seq[String] = Seq(
-    "id",
-    "pet_id",
-    "quantity"
-  )
+  override val connectionPoolName = 'inventory
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Inventory =
+  override val tableName = "inventory"
+
+  def extract(rs: WrappedResultSet, p: SQLInterpolation.ResultName[Inventory]): Inventory =
     Inventory(
-      id = InventoryId(UUID.fromString(resultSet.string("id"))),
-      petId = PetId(UUID.fromString(resultSet.string("pet_id"))),
-      quantity = resultSet.int("quantity")
+      id = InventoryId(UUID.fromString(rs.get(p.id))),
+      petId = PetId(UUID.fromString(rs.get(p.petId))),
+      quantity = rs.get(p.quantity)
     )
 
-  protected def convertEntityToValues(entity: Inventory): Seq[Any] = Seq(
-    entity.id.value.toString,
-    entity.petId.value.toString,
-    entity.quantity
+  protected def toNamedValues(entity: Inventory): Seq[(Symbol, Any)] = Seq(
+    'id -> entity.id.value,
+    'petId -> entity.petId.value,
+    'quantity -> entity.quantity
   )
 
 }

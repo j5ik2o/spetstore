@@ -1,33 +1,29 @@
 package com.github.j5ik2o.spetstore.domain.model.pet
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import scalikejdbc.WrappedResultSet
 import java.util.UUID
+import scalikejdbc._, SQLInterpolation._
+
 
 private[pet]
 class CategoryRepositoryOnJDBC
-extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
+  extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
 
-
+  override def defaultAlias = createAlias("c")
   override val tableName = "category"
 
-  override val columnNames = Seq(
-    "id",
-    "name",
-    "description"
-  )
-
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Category =
+  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Category]): Category =
     Category(
-      id = CategoryId(UUID.fromString(resultSet.string("id"))),
-      name = resultSet.string("name"),
-      description = resultSet.stringOpt("description")
+      id = CategoryId(UUID.fromString(rs.get(n.id))),
+      name = rs.get(n.name),
+      description = rs.get(n.description)
     )
 
-  protected def convertEntityToValues(entity: Category): Seq[Any] = Seq(
-    entity.id,
-    entity.name,
-    entity.description
+
+  protected def toNamedValues(entity: Category): Seq[(Symbol, Any)] = Seq(
+    'id -> entity.id.value,
+    'name -> entity.name,
+    'description -> entity.description
   )
 
 }

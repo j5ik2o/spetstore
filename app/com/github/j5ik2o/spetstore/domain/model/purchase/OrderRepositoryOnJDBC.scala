@@ -8,7 +8,7 @@ import org.joda.time.DateTime
 import org.json4s.DefaultReaders._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import scalikejdbc.WrappedResultSet
+import scalikejdbc.{SQLInterpolation, WrappedResultSet}
 import com.github.j5ik2o.spetstore.domain.infrastructure.json.OrderFormats._
 
 class OrderRepositoryOnJDBC
@@ -58,4 +58,7 @@ class OrderRepositoryOnJDBC
     compact(JArray(entity.orderItems.toList.map(_.asJValue)))
   )
 
+  protected def toNamedValues(entity: Order): Seq[(Symbol, Any)] = ???
+
+  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Order]): Order = ???
 }

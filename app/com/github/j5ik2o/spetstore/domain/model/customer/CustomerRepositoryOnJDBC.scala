@@ -13,42 +13,41 @@ class CustomerRepositoryOnJDBC
 
   override def defaultAlias = createAlias("c")
 
-  // must be `def`
-  override val connectionPoolName = 'default
   override val tableName = "customer"
 
   override def extract(resultSet: WrappedResultSet, c: ResultName[Customer]): Customer = Customer(
-    id = CustomerId(UUID.fromString(resultSet.string("id"))),
-    name = resultSet.string("name"),
-    sexType = resultSet.intOpt("sex_type").map(SexType(_)),
-    status = CustomerStatus(resultSet.int("status")),
+    id = CustomerId(UUID.fromString(resultSet.get(c.id))),
+    name = resultSet.get(c.name),
+    sexType = resultSet.intOpt(c.sexType).map(SexType(_)),
+    status = CustomerStatus(resultSet.get(c.status)),
     profile = CustomerProfile(
       postalAddress = PostalAddress(
-        zipCode = ZipCode(resultSet.string("zip_code")),
-        pref = Pref(resultSet.int("pref_code")),
-        cityName = resultSet.string("city_name"),
-        addressName = resultSet.string("address_name"),
-        buildingName = resultSet.stringOpt("building_name")
+        zipCode = ZipCode(resultSet.get(c.field("zipCode"))),
+        pref = Pref(resultSet.int(c.field("prefCode"))),
+        cityName = resultSet.string(c.field("cityName")),
+        addressName = resultSet.string(c.field("addressName")),
+        buildingName = resultSet.stringOpt(c.field("buildingName"))
       ),
       contact = Contact(
-        email = resultSet.string("email"),
-        phone = resultSet.string("phone")
+        email = resultSet.string(c.field("email")),
+        phone = resultSet.string(c.field("phone"))
       )
     ),
     config = CustomerConfig(
-      loginName = resultSet.string("login_name"),
-      password = resultSet.string("password"),
-      favoriteCategoryId = resultSet.stringOpt("favorite_category_id").
+      loginName = resultSet.string(c.field("loginName")),
+      password = resultSet.string(c.field("password")),
+      favoriteCategoryId = resultSet.stringOpt(c.field("favoriteCategoryId")).
         map(e => CategoryId(UUID.fromString(e)))
     )
   )
 
   override def toNamedValues(entity: Customer): Seq[(Symbol, Any)] = Seq(
     'id -> entity.id.value.toString,
-    'name -> entity.name,
     'status -> entity.status.id,
+    'name -> entity.name,
+    'sexType -> entity.sexType.map(_.id),
     'zipCode -> entity.profile.postalAddress.zipCode.asString,
-    'pref -> entity.profile.postalAddress.pref.id,
+    'prefCode -> entity.profile.postalAddress.pref.id,
     'cityName -> entity.profile.postalAddress.cityName,
     'addressName -> entity.profile.postalAddress.addressName,
     'buildingName -> entity.profile.postalAddress.buildingName,

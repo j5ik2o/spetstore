@@ -26,7 +26,7 @@ abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
    */
   protected def createInstance(entities: Map[ID, E]): This
 
-  def containsByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] =
+  def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] =
     Success(entities.contains(identifier))
 
   def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = Try {

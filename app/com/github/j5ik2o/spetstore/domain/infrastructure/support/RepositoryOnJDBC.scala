@@ -47,7 +47,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = withDBSession(ctx) {
     implicit s =>
-      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value)).getOrElse(throw EntityNotFoundException(identifier))
+      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value.toString)).getOrElse(throw EntityNotFoundException(identifier))
   }
 
   override def resolveEntities(identifiers: ID*)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {

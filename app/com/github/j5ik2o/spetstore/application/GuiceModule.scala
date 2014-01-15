@@ -6,17 +6,19 @@ import com.github.j5ik2o.spetstore.domain.model.pet._
 import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderRepository, CartRepository}
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
+import scalikejdbc._
 
 class GuiceModule extends AbstractModule with ScalaModule {
 
   def configure() {
     // application
-    bind[EntityIOContextProvider].toInstance(EntityIOContextProvider.ofMemory)
+    bind[EntityIOContextProvider].toInstance(new EntityIOContextProvider.JDBC(AutoSession))
     bind[AuthenticationService]
 
     // domain
     // -> customer
-    bind[CustomerRepository].toInstance(CustomerRepository.ofMemory())
+    bind[CustomerRepository].toInstance(CustomerRepository.ofJDBC)
+
     // -> pet
     bind[CategoryRepository].toInstance(CategoryRepository.ofMemory())
     bind[PetTypeRepository].toInstance(PetTypeRepository.ofMemory())

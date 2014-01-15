@@ -16,22 +16,18 @@ class RepositoryOnJDBCSpec extends Specification {
 
     override val tableName = "person"
 
-    override val columnNames = Seq("id", "first_name", "last_name")
+    protected def toNamedValues(entity: Person): Seq[(Symbol, Any)] = Seq(
+      'id -> entity.id.value,
+      'firstName -> entity.firstName,
+      'lastName -> entity.lastName
+    )
 
-    protected def convertResultSetToEntity(resultSet: WrappedResultSet): Person =
+    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Person]): Person =
       Person(
-        id = PersonId(UUID.fromString(resultSet.string("id"))),
-        firstName = resultSet.string("first_name"),
-        lastName = resultSet.string("last_name")
+        id = PersonId(UUID.fromString(rs.string(n.id))),
+        firstName = rs.string(n.firstName),
+        lastName = rs.string(n.lastName)
       )
-
-    protected def convertEntityToValues(entity: Person): Seq[Any] =
-      if (entity.id.isDefined) {
-        Seq(entity.id.value.toString, entity.firstName, entity.lastName)
-      } else {
-        Seq(entity.firstName, entity.lastName)
-      }
-
   }
 
   Class.forName("org.h2.Driver")
@@ -58,7 +54,7 @@ create table person (
       val person = Person(personId, "Junichi", "Kato")
       val repository = PersonRepositoryOnJDBC()
       repository.storeEntity(person) must beSuccessfulTry
-      repository.containsByIdentifier(personId) must beSuccessfulTry.like {
+      repository.existByIdentifier(personId) must beSuccessfulTry.like {
         case result =>
           result must beTrue
       }
