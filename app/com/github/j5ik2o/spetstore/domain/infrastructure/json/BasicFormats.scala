@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
 import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, Pref, ZipCode, PostalAddress}
-import org.json4s._
 import org.json4s.DefaultReaders._
 import org.json4s.DefaultWriters._
+import org.json4s._
 
 
 object BasicFormats {
@@ -45,19 +45,24 @@ object BasicFormats {
         JField("prefCode", obj.pref.asJValue),
         JField("cityName", JString(obj.cityName)),
         JField("addressName", JString(obj.addressName)),
-        JField("buildingName", obj.buildingName.asJValue)
+        JField("buildingName", obj.buildingName.map(_.asJValue).getOrElse(JNull))
       )
   }
 
   implicit object ContactFormat extends Reader[Contact] with Writer[Contact] {
 
-    def write(obj: Contact): JValue =
-    JObject(
-      JField("email", JString(obj.email)),
-      JField("phone", JString(obj.phone))
-    )
+    def read(value: JValue): Contact =
+      Contact(
+        (value \ "email").as[String],
+        (value \ "phone").as[String]
+      )
 
-    def read(value: JValue): Contact = ???
+    def write(obj: Contact): JValue =
+      JObject(
+        JField("email", JString(obj.email)),
+        JField("phone", JString(obj.phone))
+      )
+
 
   }
 

@@ -14,6 +14,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc._
 import scala.util.{Success, Failure}
+import com.github.j5ik2o.spetstore.domain.infrastructure.json.CustomerFormats._
 
 class CustomerController @Inject()
 (customerRepository: CustomerRepository,

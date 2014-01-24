@@ -1,30 +1,43 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
 import com.github.j5ik2o.spetstore.domain.model.customer.{CustomerConfig, CustomerProfile, Customer}
-import org.json4s.JsonAST.{JInt, JString, JField, JObject}
-import org.json4s._
 import org.json4s.DefaultReaders._
 import org.json4s.DefaultWriters._
+import org.json4s.JsonAST.{JInt, JString, JField, JObject}
+import org.json4s._
 import BasicFormats._
+import IdentifierFormats._
+import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.pet.CategoryId
+import java.util.UUID
 
 object CustomerFormats {
 
   implicit object ConfigFormat extends Reader[CustomerConfig] with Writer[CustomerConfig] {
 
+    def read(value: JValue): CustomerConfig =
+      CustomerConfig(
+        (value \ "loginName").as[String],
+        (value \ "password").as[String],
+        (value \ "favoriteCategoryId").as[Option[String]].map(e => CategoryId(UUID.fromString(e)))
+      )
+
     def write(obj: CustomerConfig): JValue =
       JObject(
         JField("loginName", JString(obj.loginName)),
         JField("password", JString(obj.password)),
-        JField("favoriteCategoryId",
-          obj.favoriteCategoryId.map(e => e.value.toString).asJValue)
+        JField("favoriteCategoryId", obj.favoriteCategoryId.map(_.asJValue).getOrElse(JNull))
       )
-
-    def read(value: JValue): CustomerConfig = ???
 
   }
 
   implicit object ProfileFormat extends Reader[CustomerProfile] with Writer[CustomerProfile] {
-    def read(value: JValue): CustomerProfile = ???
+
+    def read(value: JValue): CustomerProfile =
+      CustomerProfile(
+        (value \ "postalAddress").as[PostalAddress],
+        (value \ "contact").as[Contact]
+      )
 
     def write(obj: CustomerProfile): JValue =
       JObject(
