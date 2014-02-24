@@ -33,8 +33,14 @@ object SpetstoreBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
       scalaVersion in ThisBuild := "2.10.3",
-      conflictWarning := ConflictWarning.disable
-    )
+      conflictWarning := ConflictWarning.disable,
+    initialCommands := """
+  import scalikejdbc._,config._,SQLInterpolation._
+  DBs.setupAll
+  com.github.j5ik2o.domain.infrastructure.db.DBInitializer.run()""".stripMargin
+
+  )
+
 /*
   lazy val spetstore = play.Project(
     id = "spetstore",
