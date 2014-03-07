@@ -17,8 +17,8 @@ object IdentifierFormats {
 
   }
 
-  implicit val petIdFormat = IdentifierFormat(ItemId.apply)
-  implicit val petTypeIdFormat = IdentifierFormat(ItemTypeId.apply)
+  implicit val itemIdFormat = IdentifierFormat(ItemId.apply)
+  implicit val itemTypeIdFormat = IdentifierFormat(ItemTypeId.apply)
   implicit val categoryIdFormat = IdentifierFormat(CategoryId.apply)
   implicit val supplierIdFormat = IdentifierFormat(SupplierId.apply)
 

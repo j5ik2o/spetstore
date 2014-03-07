@@ -12,12 +12,12 @@ object OrderFormats {
 
     def write(obj: OrderItem): JValue =
       JObject(
-        JField("pet", obj.pet.asJValue),
+        JField("item", obj.item.asJValue),
         JField("quantity", JInt(obj.quantity))
       )
 
     def read(value: JValue): OrderItem = OrderItem(
-      pet = (value \ "pet").as[Item],
+      item = (value \ "item").as[Item],
       quantity = (value \ "quantity").as[Int]
     )
 

@@ -13,7 +13,7 @@ object PetFormats {
     def write(obj: Item): JValue =
       JObject(
         JField("id", obj.id.asJValue),
-        JField("petTypeId", obj.itemTypeId.asJValue),
+        JField("itemTypeId", obj.itemTypeId.asJValue),
         JField("sexType", JInt(obj.sexType.id)),
         JField("name", JString(obj.name)),
         JField("description", obj.description.map(JString).getOrElse(JNull)),
@@ -23,7 +23,7 @@ object PetFormats {
 
     def read(value: JValue): Item = Item(
       id = (value \ "id").as[ItemId],
-      itemTypeId = (value \ "petTypeId").as[ItemTypeId],
+      itemTypeId = (value \ "itemTypeId").as[ItemTypeId],
       sexType = SexType((value \ "sexType").as[Int]),
       name = (value \ "name").as[String],
       description = (value \ "description").as[Option[String]],

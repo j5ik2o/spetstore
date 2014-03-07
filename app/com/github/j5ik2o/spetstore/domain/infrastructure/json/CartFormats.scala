@@ -11,14 +11,14 @@ object CartFormats {
   implicit object CartItemFormat extends Writer[CartItem] with Reader[CartItem] {
 
     def read(value: JValue): CartItem = CartItem(
-      pet = (value \ "pet").as[Item],
+      item = (value \ "item").as[Item],
       quantity = (value \ "quantity").as[Int],
       inStock = (value \ "isInStock").as[Boolean]
     )
 
     def write(obj: CartItem): JValue =
       JObject(
-        JField("pet", obj.pet.asJValue),
+        JField("item", obj.item.asJValue),
         JField("quantity", JInt(obj.quantity)),
         JField("isInStock", JBool(obj.inStock))
       )

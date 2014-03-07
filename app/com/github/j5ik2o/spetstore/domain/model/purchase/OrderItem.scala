@@ -5,15 +5,15 @@ import com.github.j5ik2o.spetstore.domain.model.item.Item
 /**
  * 注文する商品を表す値オブジェクト。
  *
- * @param pet [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
+ * @param item [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
  * @param quantity 数量
  */
-case class OrderItem(pet: Item, quantity: Int) {
+case class OrderItem(item: Item, quantity: Int) {
 
   /**
    * 小計。
    */
-  val subTotalPrice: BigDecimal = pet.price * quantity
+  val subTotalPrice: BigDecimal = item.price * quantity
 
 }
 
@@ -31,6 +31,6 @@ object OrderItem {
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]
    */
   def fromCartItem(cartItem: CartItem): OrderItem =
-    OrderItem(cartItem.pet, cartItem.quantity)
+    OrderItem(cartItem.item, cartItem.quantity)
 
 }

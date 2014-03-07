@@ -13,7 +13,7 @@ import org.specs2.mutable.Specification
 class OrderSpec extends Specification {
 
   "order" should {
-    val pet = Item(
+    val item = Item(
       id = ItemId(),
       itemTypeId = ItemTypeId(),
       sexType = SexType.Male,
@@ -35,14 +35,14 @@ class OrderSpec extends Specification {
         ),
         orderItems = List.empty
       )
-      val orderItem = OrderItem(pet, 1)
+      val orderItem = OrderItem(item, 1)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(pet, 1)
+      val orderItem = OrderItem(item, 1)
       val order = Order(
         status = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -61,7 +61,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(pet, 1)
+      val orderItem = OrderItem(item, 1)
       val order = Order(
         status = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -80,7 +80,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(pet, 1)
+      val orderItem = OrderItem(item, 1)
       val order = Order(
         status = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -119,13 +119,13 @@ class OrderSpec extends Specification {
         id = CartId(),
         customerId = customer.id,
         cartItems = List(
-          CartItem(pet, 1, false)
+          CartItem(item, 1, false)
         )
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
       val order = Order.fromCart(cart).get
-      order.orderItems.exists(e => e.pet == pet && e.quantity == 1) must beTrue
+      order.orderItems.exists(e => e.item == item && e.quantity == 1) must beTrue
     }
 
   }

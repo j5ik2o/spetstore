@@ -9,11 +9,11 @@ private[item]
 class ItemRepositoryOnJDBC
   extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
 
-  override def tableName: String = "pet"
+  override def tableName: String = "item"
 
   override def columnNames: Seq[String] = Seq(
     "id",
-    "pet_type_id",
+    "item_type_id",
     "sex_type",
     "name",
     "description",
@@ -24,7 +24,7 @@ class ItemRepositoryOnJDBC
   protected def convertResultSetToEntity(resultSet: WrappedResultSet): Item =
     Item(
       id = ItemId(UUID.fromString(resultSet.string("id"))),
-      itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("pet_type_id"))),
+      itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("item_type_id"))),
       sexType = SexType(resultSet.int("sex_type")),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description"),

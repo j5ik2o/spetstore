@@ -26,12 +26,12 @@ case class Item
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]を取得する。
    *
-   * @param ptr [[com.github.j5ik2o.spetstore.domain.model.item.ItemTypeRepository]]
+   * @param itr [[com.github.j5ik2o.spetstore.domain.model.item.ItemTypeRepository]]
    * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]
    */
-  def petType(implicit ptr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =
-    ptr.resolveEntity(itemTypeId)
+  def itemType(implicit itr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =
+    itr.resolveEntity(itemTypeId)
 
 }
 

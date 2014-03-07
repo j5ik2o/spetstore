@@ -17,13 +17,13 @@ class InventoryRepositoryOnJDBC
   def extract(rs: WrappedResultSet, p: SQLInterpolation.ResultName[Inventory]): Inventory =
     Inventory(
       id = InventoryId(UUID.fromString(rs.get(p.id))),
-      petId = ItemId(UUID.fromString(rs.get(p.petId))),
+      itemId = ItemId(UUID.fromString(rs.get(p.itemId))),
       quantity = rs.get(p.quantity)
     )
 
   protected def toNamedValues(entity: Inventory): Seq[(Symbol, Any)] = Seq(
     'id -> entity.id.value,
-    'petId -> entity.petId.value,
+    'itemId -> entity.itemId.value,
     'quantity -> entity.quantity
   )
 
