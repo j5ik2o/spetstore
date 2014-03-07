@@ -1,15 +1,15 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.j5ik2o.spetstore.domain.model.pet.Pet
+import com.github.j5ik2o.spetstore.domain.model.item.Item
 
 /**
  * 注文する商品を表す値オブジェクト。
  *
- * @param pet [[com.github.j5ik2o.spetstore.domain.model.pet.Pet]]
+ * @param pet [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
  * @param quantity 数量
  * @param inStock 後で購入する場合true
  */
-case class CartItem(pet: Pet, quantity: Int, inStock: Boolean) {
+case class CartItem(pet: Item, quantity: Int, inStock: Boolean) {
 
   /**
    * 小計。

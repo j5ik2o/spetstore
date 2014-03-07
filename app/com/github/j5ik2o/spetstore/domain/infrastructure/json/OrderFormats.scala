@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
-import com.github.j5ik2o.spetstore.domain.model.pet.Pet
+import com.github.j5ik2o.spetstore.domain.model.item.Item
 import com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem
 import org.json4s._
 import org.json4s.DefaultReaders._
@@ -17,7 +17,7 @@ object OrderFormats {
       )
 
     def read(value: JValue): OrderItem = OrderItem(
-      pet = (value \ "pet").as[Pet],
+      pet = (value \ "pet").as[Item],
       quantity = (value \ "quantity").as[Int]
     )
 

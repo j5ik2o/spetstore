@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.domain.model.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFoundException, RepositoryOnJDBC, EntityIOContext}
 import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.pet.CategoryId
+import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import java.util.UUID
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._

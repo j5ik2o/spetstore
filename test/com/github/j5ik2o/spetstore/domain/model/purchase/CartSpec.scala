@@ -9,10 +9,10 @@ import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
 import com.github.j5ik2o.spetstore.domain.model.customer._
-import com.github.j5ik2o.spetstore.domain.model.pet.Pet
-import com.github.j5ik2o.spetstore.domain.model.pet.PetId
-import com.github.j5ik2o.spetstore.domain.model.pet.PetTypeId
-import com.github.j5ik2o.spetstore.domain.model.pet._
+import com.github.j5ik2o.spetstore.domain.model.item.Item
+import com.github.j5ik2o.spetstore.domain.model.item.ItemId
+import com.github.j5ik2o.spetstore.domain.model.item.ItemTypeId
+import com.github.j5ik2o.spetstore.domain.model.item._
 import org.specs2.mutable.Specification
 
 class CartSpec extends Specification {
@@ -37,9 +37,9 @@ class CartSpec extends Specification {
         favoriteCategoryId = None
       )
     )
-    val pet = Pet(
-      id = PetId(),
-      petTypeId = PetTypeId(),
+    val pet = Item(
+      id = ItemId(),
+      itemTypeId = ItemTypeId(),
       sexType = SexType.Male,
       name = "ぽち",
       description = None,

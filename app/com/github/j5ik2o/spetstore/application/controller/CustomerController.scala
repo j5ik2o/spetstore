@@ -8,9 +8,8 @@ import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, ZipCode}
 import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.google.inject.Inject
 import java.util.UUID
-import org.json4s._
-import org.json4s.jackson.JsonMethods._
 import play.api.libs.json._
+import play.api.libs.json.Json._
 import play.api.mvc._
 import scala.util.{Success, Failure}
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
@@ -19,6 +18,8 @@ class CustomerController @Inject()
 (customerRepository: CustomerRepository,
  entityIOContextProvider: EntityIOContextProvider)
   extends ControllerSupport with CustomerJsonSupport {
+
+  import CustomerJsonConverter._
 
   implicit val ctx = entityIOContextProvider.get
 
@@ -69,7 +70,7 @@ class CustomerController @Inject()
     val id = CustomerId(UUID.fromString(customerId))
     customerRepository.resolveEntity(id).map {
       entity =>
-        Ok(pretty(entity.asJValue))
+        Ok(prettyPrint(toJson(entity)))
     }.recoverWith {
       case ex: EntityNotFoundException =>
         Success(NotFound)

@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerRepository, CustomerId}
-import com.github.j5ik2o.spetstore.domain.model.pet.{PetId, Pet}
+import com.github.j5ik2o.spetstore.domain.model.item.{ItemId, Item}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import scala.util.Try
 
@@ -40,12 +40,12 @@ case class Cart
   lazy val totalPrice = cartItems.foldLeft(BigDecimal(0))(_ + _.subTotalPrice)
 
   /**
-   * [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]が含まれるかを検証する。
+   * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]が含まれるかを検証する。
    *
-   * @param itemId [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]
+   * @param itemId [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]
    * @return 含まれる場合はtrue
    */
-  def containsItemId(itemId: PetId): Boolean =
+  def containsItemId(itemId: ItemId): Boolean =
     cartItems.exists {
       _.pet.id == itemId
     }
@@ -70,23 +70,23 @@ case class Cart
   /**
    * このカートに[[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]を追加する。
    *
-   * @param pet [[com.github.j5ik2o.spetstore.domain.model.pet.Pet]]
+   * @param pet [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
    * @param quantity 個数
    * @param isInStock ストックする場合true
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
-  def addCartItem(pet: Pet, quantity: Int, isInStock: Boolean): Cart =
+  def addCartItem(pet: Item, quantity: Int, isInStock: Boolean): Cart =
     addCartItem(CartItem(pet, quantity, isInStock))
 
   /**
-   * [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]を使って
+   * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って
    * [[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]を
    * 削除する。
    *
-   * @param petId [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]
+   * @param petId [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
-  def removeCartItemByPetId(petId: PetId): Cart =
+  def removeCartItemByPetId(petId: ItemId): Cart =
     cartItems.find(_.pet.id == petId).map {
       e =>
         copy(cartItems = cartItems.filterNot(_.pet.id == petId))
@@ -96,10 +96,10 @@ case class Cart
    * 特定の[[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]の数量を
    * インクリメントする。
    *
-   * @param petId [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]
+   * @param petId [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
-  def incrementQuantityByItemId(petId: PetId): Cart =
+  def incrementQuantityByItemId(petId: ItemId): Cart =
     cartItems.find(_.pet.id == petId).map {
       cartItem =>
         val newCartItem = cartItem.incrementQuantity.ensuring(_.quantity > 0)
@@ -109,11 +109,11 @@ case class Cart
   /**
    * 特定の[[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]の数量を更新する。
    *
-   * @param petId [[com.github.j5ik2o.spetstore.domain.model.pet.PetId]]
+   * @param petId [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]
    * @param quantity 数量
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
-  def updateQuantityByItemId(petId: PetId, quantity: Int): Cart = {
+  def updateQuantityByItemId(petId: ItemId, quantity: Int): Cart = {
     require(quantity > 0)
     cartItems.find(_.pet.id == petId).map {
       cartItem =>

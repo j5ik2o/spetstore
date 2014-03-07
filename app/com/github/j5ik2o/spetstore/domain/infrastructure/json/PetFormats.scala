@@ -3,17 +3,17 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.json
 import org.json4s._
 import org.json4s.DefaultReaders._
 import org.json4s.DefaultWriters._
-import com.github.j5ik2o.spetstore.domain.model.pet.{SupplierId, PetTypeId, PetId, Pet}
+import com.github.j5ik2o.spetstore.domain.model.item.{SupplierId, ItemTypeId, ItemId, Item}
 import IdentifierFormats._
 import com.github.j5ik2o.spetstore.domain.model.basic.SexType
 
 object PetFormats {
 
-  implicit object PetFormat extends Writer[Pet] with Reader[Pet] {
-    def write(obj: Pet): JValue =
+  implicit object PetFormat extends Writer[Item] with Reader[Item] {
+    def write(obj: Item): JValue =
       JObject(
         JField("id", obj.id.asJValue),
-        JField("petTypeId", obj.petTypeId.asJValue),
+        JField("petTypeId", obj.itemTypeId.asJValue),
         JField("sexType", JInt(obj.sexType.id)),
         JField("name", JString(obj.name)),
         JField("description", obj.description.map(JString).getOrElse(JNull)),
@@ -21,9 +21,9 @@ object PetFormats {
         JField("supplierId", obj.supplierId.asJValue)
       )
 
-    def read(value: JValue): Pet = Pet(
-      id = (value \ "id").as[PetId],
-      petTypeId = (value \ "petTypeId").as[PetTypeId],
+    def read(value: JValue): Item = Item(
+      id = (value \ "id").as[ItemId],
+      itemTypeId = (value \ "petTypeId").as[ItemTypeId],
       sexType = SexType((value \ "sexType").as[Int]),
       name = (value \ "name").as[String],
       description = (value \ "description").as[Option[String]],

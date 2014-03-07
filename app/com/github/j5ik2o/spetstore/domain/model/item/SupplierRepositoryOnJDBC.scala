@@ -1,11 +1,11 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.{SQLInterpolation, WrappedResultSet}
 import java.util.UUID
 import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, Contact, ZipCode, PostalAddress}
 
-private[pet]
+private[item]
 class SupplierRepositoryOnJDBC
   extends RepositoryOnJDBC[SupplierId, Supplier] with SupplierRepository {
 

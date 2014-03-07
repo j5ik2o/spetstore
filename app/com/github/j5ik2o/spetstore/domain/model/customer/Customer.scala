@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
 import com.github.j5ik2o.spetstore.domain.model.basic.SexType
-import com.github.j5ik2o.spetstore.domain.model.pet.PetId
+import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, Cart, CartItem}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import scala.util.Try
@@ -28,7 +28,7 @@ case class Customer
   def addCartItem(cart: Cart, cartItem: CartItem): Cart =
     cart.addCartItem(cartItem)
 
-  def removeCartItemByPetId(cart: Cart, petId: PetId): Cart =
+  def removeCartItemByPetId(cart: Cart, petId: ItemId): Cart =
     cart.removeCartItemByPetId(petId)
 
   def newOrderFromCart(cart: Cart)

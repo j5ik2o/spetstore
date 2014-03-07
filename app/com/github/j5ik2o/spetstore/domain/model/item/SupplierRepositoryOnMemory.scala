@@ -1,9 +1,9 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnMemory
 import scala.util.Try
 
-private[pet]
+private[item]
 class SupplierRepositoryOnMemory(entities: Map[SupplierId, Supplier])
   extends RepositoryOnMemory[SupplierId, Supplier](entities) with SupplierRepository {
 

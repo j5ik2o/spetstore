@@ -4,7 +4,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier
 import java.util.UUID
 import org.json4s._
 import org.json4s.DefaultReaders._
-import com.github.j5ik2o.spetstore.domain.model.pet.{CategoryId, SupplierId, PetTypeId, PetId}
+import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, SupplierId, ItemTypeId, ItemId}
 
 object IdentifierFormats {
 
@@ -17,8 +17,8 @@ object IdentifierFormats {
 
   }
 
-  implicit val petIdFormat = IdentifierFormat(PetId.apply)
-  implicit val petTypeIdFormat = IdentifierFormat(PetTypeId.apply)
+  implicit val petIdFormat = IdentifierFormat(ItemId.apply)
+  implicit val petTypeIdFormat = IdentifierFormat(ItemTypeId.apply)
   implicit val categoryIdFormat = IdentifierFormat(CategoryId.apply)
   implicit val supplierIdFormat = IdentifierFormat(SupplierId.apply)
 

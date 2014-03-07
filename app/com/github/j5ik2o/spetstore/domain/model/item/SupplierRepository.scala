@@ -1,9 +1,9 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.pet.Supplier]]のためのリポジトリ責務。
+ * [[com.github.j5ik2o.spetstore.domain.model.item.Supplier]]のためのリポジトリ責務。
  */
 trait SupplierRepository extends Repository[SupplierId, Supplier] {
 
@@ -20,7 +20,7 @@ object SupplierRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[com.github.j5ik2o.spetstore.domain.model.pet.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
    */
   def ofMemory(entities: Map[SupplierId, Supplier] = Map.empty): SupplierRepository =
     new SupplierRepositoryOnMemory(entities)
@@ -28,7 +28,7 @@ object SupplierRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.model.pet.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
    */
   def ofJDBC: SupplierRepository = new SupplierRepositoryOnJDBC
 

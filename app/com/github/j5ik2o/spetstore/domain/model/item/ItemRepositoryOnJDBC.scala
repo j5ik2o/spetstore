@@ -1,13 +1,13 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import scalikejdbc.{SQLInterpolation, WrappedResultSet}
 import java.util.UUID
 import com.github.j5ik2o.spetstore.domain.model.basic.SexType
 
-private[pet]
-class PetRepositoryOnJDBC
-  extends RepositoryOnJDBC[PetId, Pet] with PetRepository {
+private[item]
+class ItemRepositoryOnJDBC
+  extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
 
   override def tableName: String = "pet"
 
@@ -21,10 +21,10 @@ class PetRepositoryOnJDBC
     "supplier_id"
   )
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Pet =
-    Pet(
-      id = PetId(UUID.fromString(resultSet.string("id"))),
-      petTypeId = PetTypeId(UUID.fromString(resultSet.string("pet_type_id"))),
+  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Item =
+    Item(
+      id = ItemId(UUID.fromString(resultSet.string("id"))),
+      itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("pet_type_id"))),
       sexType = SexType(resultSet.int("sex_type")),
       name = resultSet.string("name"),
       description = resultSet.stringOpt("description"),
@@ -32,9 +32,9 @@ class PetRepositoryOnJDBC
       supplierId = SupplierId(UUID.fromString(resultSet.string("supplier_id")))
     )
 
-  protected def convertEntityToValues(entity: Pet): Seq[Any] = Seq(
+  protected def convertEntityToValues(entity: Item): Seq[Any] = Seq(
     entity.id,
-    entity.petTypeId.value.toString,
+    entity.itemTypeId.value.toString,
     entity.sexType.id,
     entity.name,
     entity.description,
@@ -42,7 +42,7 @@ class PetRepositoryOnJDBC
     entity.supplierId.value.toString
   )
 
-  protected def toNamedValues(entity: Pet): Seq[(Symbol, Any)] = ???
+  protected def toNamedValues(entity: Item): Seq[(Symbol, Any)] = ???
 
-  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Pet]): Pet = ???
+  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Item]): Item = ???
 }

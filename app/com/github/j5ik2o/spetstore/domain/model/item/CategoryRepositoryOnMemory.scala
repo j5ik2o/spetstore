@@ -1,14 +1,14 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnMemory
 import scala.util.Try
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.pet.CategoryRepository]]のためのオンメモリリポジトリ。
+ * [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]のためのオンメモリリポジトリ。
  *
  * @param entities エンティティの集合
  */
-private[pet]
+private[item]
 class CategoryRepositoryOnMemory(entities: Map[CategoryId, Category])
   extends RepositoryOnMemory[CategoryId, Category](entities) with CategoryRepository {
 

@@ -1,11 +1,11 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import java.util.UUID
 import scalikejdbc._, SQLInterpolation._
 
 
-private[pet]
+private[item]
 class CategoryRepositoryOnJDBC
   extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
 

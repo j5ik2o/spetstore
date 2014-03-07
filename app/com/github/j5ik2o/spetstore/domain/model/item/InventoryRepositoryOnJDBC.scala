@@ -1,10 +1,10 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import java.util.UUID
 import scalikejdbc._, SQLInterpolation._
 
-private[pet]
+private[item]
 class InventoryRepositoryOnJDBC
   extends RepositoryOnJDBC[InventoryId, Inventory] with InventoryRepository {
 
@@ -17,7 +17,7 @@ class InventoryRepositoryOnJDBC
   def extract(rs: WrappedResultSet, p: SQLInterpolation.ResultName[Inventory]): Inventory =
     Inventory(
       id = InventoryId(UUID.fromString(rs.get(p.id))),
-      petId = PetId(UUID.fromString(rs.get(p.petId))),
+      petId = ItemId(UUID.fromString(rs.get(p.petId))),
       quantity = rs.get(p.quantity)
     )
 

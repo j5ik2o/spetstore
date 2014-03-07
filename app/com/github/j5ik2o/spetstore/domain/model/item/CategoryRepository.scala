@@ -1,9 +1,9 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.pet.Category]]のためのリポジトリ責務。
+ * [[com.github.j5ik2o.spetstore.domain.model.item.Category]]のためのリポジトリ責務。
  */
 trait CategoryRepository extends Repository[CategoryId, Category] {
 
@@ -20,7 +20,7 @@ object CategoryRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[com.github.j5ik2o.spetstore.domain.model.pet.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
    */
   def ofMemory(entities: Map[CategoryId, Category] = Map.empty): CategoryRepository =
     new CategoryRepositoryOnMemory(entities)
@@ -28,7 +28,7 @@ object CategoryRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.model.pet.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
    */
   def ofJDBC: CategoryRepository =
     new CategoryRepositoryOnJDBC

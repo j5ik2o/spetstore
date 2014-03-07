@@ -8,7 +8,7 @@ import org.json4s._
 import BasicFormats._
 import IdentifierFormats._
 import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
-import com.github.j5ik2o.spetstore.domain.model.pet.CategoryId
+import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import java.util.UUID
 
 object CustomerFormats {

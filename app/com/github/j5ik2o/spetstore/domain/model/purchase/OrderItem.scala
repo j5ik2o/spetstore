@@ -1,14 +1,14 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.j5ik2o.spetstore.domain.model.pet.Pet
+import com.github.j5ik2o.spetstore.domain.model.item.Item
 
 /**
  * 注文する商品を表す値オブジェクト。
  *
- * @param pet [[com.github.j5ik2o.spetstore.domain.model.pet.Pet]]
+ * @param pet [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
  * @param quantity 数量
  */
-case class OrderItem(pet: Pet, quantity: Int) {
+case class OrderItem(pet: Item, quantity: Int) {
 
   /**
    * 小計。

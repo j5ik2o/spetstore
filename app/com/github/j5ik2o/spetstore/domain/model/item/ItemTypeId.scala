@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.model.pet
+package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier
 import java.util.UUID
@@ -8,5 +8,5 @@ import java.util.UUID
  *
  * @param value 識別子の値。
  */
-case class PetTypeId(value: UUID = UUID.randomUUID())
+case class ItemTypeId(value: UUID = UUID.randomUUID())
   extends Identifier[UUID]
