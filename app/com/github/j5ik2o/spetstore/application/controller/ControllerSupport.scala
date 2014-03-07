@@ -3,9 +3,39 @@ package com.github.j5ik2o.spetstore.application.controller
 import org.json4s.DefaultFormats
 import com.github.tototoshi.play2.json4s.jackson.Json4s
 import play.api.mvc.Controller
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier
+import java.util.UUID
 
 trait ControllerSupport extends Controller with Json4s {
 
   implicit val formats = DefaultFormats
+
+  import play.api.libs.json._
+
+  protected def createErrorResponse(message: String) = JsObject(
+    Seq(
+      "message" -> JsString(message)
+    )
+  )
+
+  protected val OkForCreatedEntity = {
+    id: Identifier[UUID] => Ok(
+      JsObject(
+        Seq(
+          "id" -> JsString(id.value.toString)
+        )
+      )
+    )
+  }
+
+  protected val BadRequestForIOError = BadRequest(createErrorResponse("IO Error"))
+
+  protected val BadRequestForValidate = {
+    param: JsObject => BadRequest(createErrorResponse(s"Validate Error: $param"))
+  }
+
+  protected val NotFoundForEntity = {
+    id: Identifier[UUID] => NotFound(s"identifier = $id")
+  }
 
 }

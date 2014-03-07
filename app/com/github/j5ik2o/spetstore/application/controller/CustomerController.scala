@@ -19,8 +19,6 @@ class CustomerController @Inject()
  entityIOContextProvider: EntityIOContextProvider)
   extends ControllerSupport with CustomerJsonSupport {
 
-  import CustomerJsonConverter._
-
   implicit val ctx = entityIOContextProvider.get
 
   private def convertToEntity(customerJson: CustomerJson): Customer =
@@ -45,25 +43,20 @@ class CustomerController @Inject()
       )
     )
 
-
   def create = Action {
     request =>
       request.body.asJson.map {
         _.validate[CustomerJson].map {
           customerJson =>
-            val customer = convertToEntity(customerJson)
-            customerRepository.storeEntity(customer).recoverWith {
-              case ex => ex.printStackTrace(); Failure(ex)
-            }.map {
-              _ =>
-                Ok( s"""{"id": ${customer.id.value}}""")
-            }.getOrElse(BadRequest("io error"))
+            customerRepository.storeEntity(convertToEntity(customerJson)).map {
+              case (_, customer) =>
+                OkForCreatedEntity(customer.id)
+            }.getOrElse(BadRequestForIOError)
         }.recoverTotal {
-          e => BadRequest("Detected error: " + JsError.toFlatJson(e))
+          error =>
+            BadRequestForValidate(JsError.toFlatJson(error))
         }
-      }.getOrElse {
-        BadRequest("ng")
-      }
+      }.getOrElse(InternalServerError)
   }
 
   def get(customerId: String) = Action {
@@ -73,7 +66,7 @@ class CustomerController @Inject()
         Ok(prettyPrint(toJson(entity)))
     }.recoverWith {
       case ex: EntityNotFoundException =>
-        Success(NotFound)
+        Success(NotFoundForEntity(id))
     }.getOrElse(InternalServerError)
   }
 
