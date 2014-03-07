@@ -33,20 +33,20 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 ### ドメインモデル
 
-- [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/customer) = 顧客モジュール
-    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/customer/Customer.scala) (GE,A) = ペットストアの顧客
-        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/customer/CustomerStatus.scala) (VO)
-        - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/customer/CustomerProfile.scala) (VO)
-        - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/customer/CustomerConfig.scala) (VO)
-- [Item Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/item) = 商品モジュール
-    - [Category](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/item/Category.scala) (GE,A) = 商品のカテゴリ(ex. 犬)
-    - [ItemType](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/item/ItemType.scala) (GE,A) = 商品の種類(ex. 柴犬)
-    - [Item](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/item/Item.scala) (GE,A) = 商品(ex. ぽち)
-- [Purchase Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/purchase) = 購買モジュール
-    - [Cart](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/purchase/Cart.scala) (GE,A) = ショッピングカート
-        - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/purchase/CartItem.scala) (VO) = カート内の商品と数量
-    - [Order](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/purchase/Order.scala) (GE,A) = 注文
-        - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/purchase/OrderItem.scala) (VO) = 注文する商品と数量
+- [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/model/customer) = 顧客モジュール
+    - [Customer](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/Customer.scala) (GE,A) = ペットストアの顧客
+        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerStatus.scala) (VO)
+        - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerProfile.scala) (VO)
+        - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerConfig.scala) (VO)
+- [Item Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/model/item) = 商品モジュール
+    - [Category](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/item/Category.scala) (GE,A) = 商品のカテゴリ(ex. 犬)
+    - [ItemType](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/item/ItemType.scala) (GE,A) = 商品の種類(ex. 柴犬)
+    - [Item](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/item/Item.scala) (GE,A) = 商品(ex. ぽち)
+- [Purchase Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/model/purchase) = 購買モジュール
+    - [Cart](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/purchase/Cart.scala) (GE,A) = ショッピングカート
+        - [CartItem](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/purchase/CartItem.scala) (VO) = カート内の商品と数量
+    - [Order](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/purchase/Order.scala) (GE,A) = 注文
+        - [OrderItem](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/purchase/OrderItem.scala) (VO) = 注文する商品と数量
 
 GE = グローバルな識別子を持つエンティティ  
 VO = 値オブジェクト  
