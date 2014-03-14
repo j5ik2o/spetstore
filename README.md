@@ -54,8 +54,8 @@ A  = 集約
 
 ### Specs
 とりあえず、重要なところだけSpecを書いています。
-- [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/purchase/CartSpec.scala)
-- [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/purchase/OrderSpec.scala)
+- [CartSpec](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/model/purchase/CartSpec.scala)
+- [OrderSpec](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/model/purchase/OrderSpec.scala)
 
 ここで重要なのは、モデルの表現(クラス名、属性名、振る舞いの名前(引数・戻り値も))にユビキタス言語以外の言葉を利用しないことです。  
 原則的に、これらの要素に、実装技術の言葉を含めてはいけません(実装技術の言葉を含めてしまうとメンタルモデルが離れていきドメインについて理解することが難しくなるため。ただし、StringやIntなどのデータ型や、ListやMap, Try, Option, Futureなどのコンテナ型は例外とする)。実装技術に関する知識は、アプリケーション層かインフラストラクチャ層に対応づけましょう。
@@ -71,9 +71,9 @@ A  = 集約
 - [Entity](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
 - [Repository](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala) = DDDにおけるリポジトリの責務
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBC.scala)  
-    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。ちなみに、1エンティティが複数テーブルにマッピングされるような実装は今のところ作っていません。そのうち作ります。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnJDBCSpec.scala)
-    - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemory.scala)  
-    メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/infrastructure/support/RepositoryOnMemorySpec.scala)
+    JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。ちなみに、1エンティティが複数テーブルにマッピングされるような実装は今のところ作っていません。そのうち作ります。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnJDBCSpec.scala)
+    - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnMemory.scala)  
+    メモリに対応したリポジトリの骨格実装。内部実装はMapですがRepositoryとして操作できる。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnMemorySpec.scala)
     - RepositoryOnMemcached(TODO)  
     Memcachedに対応したリポジトリの骨格実装。
     - CacheManagementRepository(TODO)  
