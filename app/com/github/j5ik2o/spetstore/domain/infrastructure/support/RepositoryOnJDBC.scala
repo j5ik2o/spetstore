@@ -17,7 +17,7 @@ case class EntityIOContextOnJDBC(session: DBSession) extends EntityIOContext
 abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
   extends Repository[ID, E] with SkinnyCRUDMapper[E] {
 
-  override def primaryKeyName = "id"
+  override def primaryKeyFieldName = "id"
 
   override def defaultAlias = createAlias(tableName)
 
@@ -34,7 +34,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      val count = countBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value))
+      val count = countBy(sqls.eq(defaultAlias.field(primaryKeyFieldName), identifier.value))
       if (count == 0) false
       else if (count == 1) true
       else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
@@ -42,25 +42,25 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   override def existByIdentifiers(identifiers: ID*)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      countBy(sqls.in(defaultAlias.field(primaryKeyName), identifiers.map(_.value))) > 0
+      countBy(sqls.in(defaultAlias.field(primaryKeyFieldName), identifiers.map(_.value))) > 0
   }
 
   def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = withDBSession(ctx) {
     implicit s =>
-      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value.toString)).getOrElse(throw EntityNotFoundException(identifier))
+      findBy(sqls.eq(defaultAlias.field(primaryKeyFieldName), identifier.value.toString)).getOrElse(throw EntityNotFoundException(identifier))
   }
 
   override def resolveEntities(identifiers: ID*)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {
     implicit s =>
-      findAllBy(sqls.in(defaultAlias.field(primaryKeyName), identifiers.map(_.value)))
+      findAllBy(sqls.in(defaultAlias.field(primaryKeyFieldName), identifiers.map(_.value)))
   }
 
   def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
       if (entity.id.isDefined) {
-        val count = updateBy(sqls.eq(column.field(primaryKeyName), entity.id.value))
+        val count = updateBy(sqls.eq(column.field(primaryKeyFieldName), entity.id.value))
           .withAttributes(toNamedValues(entity).filterNot {
-          case (k, _) => k.name == primaryKeyName
+          case (k, _) => k.name == primaryKeyFieldName
         }: _*)
         if (count == 0) createWithAttributes(toNamedValues(entity): _*)
         else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $entity.id")
@@ -72,9 +72,9 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def deleteByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
-      findBy(sqls.eq(defaultAlias.field(primaryKeyName), identifier.value)).map {
+      findBy(sqls.eq(defaultAlias.field(primaryKeyFieldName), identifier.value)).map {
         entity =>
-          val count = deleteBy(sqls.eq(column.field(primaryKeyName), identifier.value))
+          val count = deleteBy(sqls.eq(column.field(primaryKeyFieldName), identifier.value))
           if (count == 1) (this.asInstanceOf[This], entity)
           else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
           else throw RepositoryIOException(s"Entity (identifier: $identifier) is not found when deleting")
