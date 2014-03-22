@@ -14,6 +14,7 @@ import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemTypeId
 import com.github.j5ik2o.spetstore.domain.model.item._
 import org.specs2.mutable.Specification
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 
 class CartSpec extends Specification {
 

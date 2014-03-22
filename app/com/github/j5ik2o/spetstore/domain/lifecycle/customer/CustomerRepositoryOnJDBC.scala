@@ -1,11 +1,20 @@
-package com.github.j5ik2o.spetstore.domain.model.customer
+package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFoundException, RepositoryOnJDBC, EntityIOContext}
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{RepositoryOnJDBC, EntityIOContext}
 import com.github.j5ik2o.spetstore.domain.model.basic._
+import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import java.util.UUID
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
+import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
+import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
+import scalikejdbc.WrappedResultSet
+import com.github.j5ik2o.spetstore.domain.model.basic.Contact
 
 private[customer]
 class CustomerRepositoryOnJDBC

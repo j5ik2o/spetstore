@@ -2,7 +2,6 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import java.util.UUID
 import org.specs2.mutable.Specification
-import scala.util.Failure
 import scalikejdbc._, SQLInterpolation._
 
 class RepositoryOnJDBCSpec extends Specification {
@@ -14,7 +13,11 @@ class RepositoryOnJDBCSpec extends Specification {
 
     type This = PersonRepository
 
+    override def defaultAlias = createAlias("p")
+
+    // must be `def`
     override val tableName = "person"
+
 
     protected def toNamedValues(entity: Person): Seq[(Symbol, Any)] = Seq(
       'id -> entity.id.value,
@@ -43,39 +46,54 @@ create table person (
 )
 """.execute().apply()
 
+
+  def withContext[A](session: DBSession)(f: (EntityIOContext) => A): A = f(EntityIOContextOnJDBC(session))
+
   "repository" should {
-    "store entity" in {
-      val personId = PersonId()
-      val person = Person(personId, "Junichi", "Kato")
-      PersonRepositoryOnJDBC().storeEntity(person) must beSuccessfulTry
-    }
-    "contains a entity" in {
-      val personId = PersonId()
-      val person = Person(personId, "Junichi", "Kato")
-      val repository = PersonRepositoryOnJDBC()
-      repository.storeEntity(person) must beSuccessfulTry
-      repository.existByIdentifier(personId) must beSuccessfulTry.like {
-        case result =>
-          result must beTrue
+    "store entity" in new PersonAutoRollback {
+      withContext(session) {
+        implicit ctx =>
+          val personId = PersonId()
+          val person = Person(personId, "Junichi", "Kato")
+          PersonRepositoryOnJDBC().storeEntity(person) must beSuccessfulTry
       }
     }
-    "get a entity" in {
-      val personId = PersonId()
-      val person = Person(personId, "Junichi", "Kato")
-      val repository = PersonRepositoryOnJDBC()
-      repository.storeEntity(person) must beSuccessfulTry
-      repository.resolveEntity(personId) must beSuccessfulTry.like {
-        case entity =>
-          entity must_== person
+    "contains a entity" in new PersonAutoRollback {
+      withContext(session) {
+        implicit ctx =>
+          val personId = PersonId()
+          val person = Person(personId, "Junichi", "Kato")
+          val repository = PersonRepositoryOnJDBC()
+          repository.storeEntity(person) must beSuccessfulTry
+          repository.existByIdentifier(personId) must beSuccessfulTry.like {
+            case result =>
+              result must beTrue
+          }
+      }
+    }
+    "get a entity" in new PersonAutoRollback {
+      withContext(session) {
+        implicit ctx =>
+          val personId = PersonId()
+          val person = Person(personId, "Junichi", "Kato")
+          val repository = PersonRepositoryOnJDBC()
+          repository.storeEntity(person) must beSuccessfulTry
+          repository.resolveEntity(personId) must beSuccessfulTry.like {
+            case entity =>
+              entity must_== person
+          }
       }
     }
 
-    "delete a entity" in {
-      val personId = PersonId()
-      val person = Person(personId, "Junichi", "Kato")
-      val repository = PersonRepositoryOnJDBC()
-      repository.storeEntity(person) must beSuccessfulTry
-      repository.deleteByIdentifier(personId) must beSuccessfulTry
+    "delete a entity" in new PersonAutoRollback {
+      withContext(session) {
+        implicit ctx =>
+          val personId = PersonId()
+          val person = Person(personId, "Junichi", "Kato")
+          val repository = PersonRepositoryOnJDBC()
+          repository.storeEntity(person) must beSuccessfulTry
+          repository.deleteByIdentifier(personId) must beSuccessfulTry
+      }
     }
 
 

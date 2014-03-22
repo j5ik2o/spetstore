@@ -1,10 +1,12 @@
-package com.github.j5ik2o.spetstore.domain.model.customer
+package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnMemory}
+import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import scala.util.{Success, Try}
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.customer.CustomerRepository]]のためのオンメモリリポジトリ。
+ * [[customer.CustomerRepository]]のためのオンメモリリポジトリ。
  *
  * @param entities エンティティの集合
  */

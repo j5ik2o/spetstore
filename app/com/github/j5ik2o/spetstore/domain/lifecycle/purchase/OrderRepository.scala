@@ -1,6 +1,8 @@
-package com.github.j5ik2o.spetstore.domain.model.purchase
+package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
+import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, OrderId}
+import com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]のためのリポジトリ責務。
@@ -20,7 +22,7 @@ object OrderRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティのマップ
-   * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderRepository]]
+   * @return [[purchase.OrderRepository]]
    */
   def ofMemory(entities: Map[OrderId, Order] = Map.empty): OrderRepository =
     new OrderRepositoryOnMemory(entities)
@@ -28,7 +30,7 @@ object OrderRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderRepository]]
+   * @return [[purchase.OrderRepository]]
    */
   def ofJDBC: OrderRepository = new OrderRepositoryOnJDBC
 

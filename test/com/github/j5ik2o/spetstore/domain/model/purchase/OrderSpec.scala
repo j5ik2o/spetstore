@@ -9,6 +9,7 @@ import com.github.j5ik2o.spetstore.domain.model.item.ItemTypeId
 import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 
 class OrderSpec extends Specification {
 

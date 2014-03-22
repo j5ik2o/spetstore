@@ -1,7 +1,8 @@
-package com.github.j5ik2o.spetstore.domain.model.purchase
+package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItem, Cart, CartId}
 import java.util.UUID
 import org.json4s.DefaultReaders._
 import org.json4s._

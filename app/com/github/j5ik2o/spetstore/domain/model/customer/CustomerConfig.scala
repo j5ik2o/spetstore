@@ -1,8 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext
-import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryRepository, CategoryId}
+import com.github.j5ik2o.spetstore.domain.model.item.{Category,CategoryId}
 import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]の設定を表す値オブジェクト。
@@ -19,7 +20,7 @@ case class CustomerConfig
   /**
    * お気に入りのカテゴリを取得する。
    *
-   * @param cr [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
+   * @param cr [[com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository]]
    * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.item.Category]]
    */

@@ -1,12 +1,12 @@
 package com.github.j5ik2o.spetstore.application
 
 import com.github.j5ik2o.spetstore.application.service.AuthenticationService
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerRepository
-import com.github.j5ik2o.spetstore.domain.model.item._
-import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderRepository, CartRepository}
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import scalikejdbc._
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.lifecycle.purchase.{OrderRepository, CartRepository}
+import com.github.j5ik2o.spetstore.domain.lifecycle.item._
 
 class GuiceModule extends AbstractModule with ScalaModule {
 

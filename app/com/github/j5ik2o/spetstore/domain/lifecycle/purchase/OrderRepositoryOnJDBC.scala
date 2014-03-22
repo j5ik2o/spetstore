@@ -1,8 +1,9 @@
-package com.github.j5ik2o.spetstore.domain.model.purchase
+package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
 import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
 import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, ZipCode}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderStatus, OrderItem, Order, OrderId}
 import java.util.UUID
 import org.joda.time.DateTime
 import org.json4s.DefaultReaders._

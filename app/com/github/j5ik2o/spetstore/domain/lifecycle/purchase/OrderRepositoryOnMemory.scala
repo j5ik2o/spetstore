@@ -1,7 +1,7 @@
-package com.github.j5ik2o.spetstore.domain.model.purchase
+package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnMemory
-import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, OrderId}
 
 /**
  *

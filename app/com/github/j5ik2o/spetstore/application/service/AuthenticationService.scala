@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.application.service
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerRepository
 import com.google.inject.{Inject, Singleton}
 import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 
 @Singleton
 class AuthenticationService @Inject()

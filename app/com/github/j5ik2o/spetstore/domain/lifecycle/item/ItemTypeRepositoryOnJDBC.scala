@@ -1,10 +1,11 @@
-package com.github.j5ik2o.spetstore.domain.model.item
+package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import scalikejdbc.{SQLInterpolation, WrappedResultSet}
+import scalikejdbc.WrappedResultSet
 import java.util.UUID
 
 import scalikejdbc._, SQLInterpolation._
+import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, ItemType, ItemTypeId}
 
 
 private[item]

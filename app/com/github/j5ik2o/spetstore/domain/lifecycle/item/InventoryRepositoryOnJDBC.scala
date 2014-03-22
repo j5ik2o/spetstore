@@ -1,6 +1,7 @@
-package com.github.j5ik2o.spetstore.domain.model.item
+package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.model.item.{ItemId, Inventory, InventoryId}
 import java.util.UUID
 import scalikejdbc._, SQLInterpolation._
 

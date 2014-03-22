@@ -1,6 +1,7 @@
-package com.github.j5ik2o.spetstore.domain.model.item
+package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
+import com.github.j5ik2o.spetstore.domain.model.item.{Item, ItemId}
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.item.Item]]のためのリポジトリ責務。
