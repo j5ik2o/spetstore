@@ -35,19 +35,20 @@ class RepositoryOnJDBCSpec extends Specification {
 
   Class.forName("org.h2.Driver")
   ConnectionPool.singleton("jdbc:h2:mem:test", "user", "pass")
-  implicit val session = AutoSession
-  implicit val ctx = EntityIOContextOnJDBC(session)
 
-  sql"""
+  DB autoCommit {
+    implicit s =>
+      sql"""
 create table person (
   id varchar(64) not null primary key,
   first_name varchar(64),
   last_name varchar(64)
 )
 """.execute().apply()
+  }
 
-
-  def withContext[A](session: DBSession)(f: (EntityIOContext) => A): A = f(EntityIOContextOnJDBC(session))
+  def withContext[A](session: DBSession)(f: (EntityIOContext) => A): A =
+    f(EntityIOContextOnJDBC(session))
 
   "repository" should {
     "store entity" in new PersonAutoRollback {
