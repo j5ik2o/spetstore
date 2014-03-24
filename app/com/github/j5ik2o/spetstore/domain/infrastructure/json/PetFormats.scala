@@ -14,7 +14,6 @@ object PetFormats {
       JObject(
         JField("id", obj.id.asJValue),
         JField("itemTypeId", obj.itemTypeId.asJValue),
-        JField("sexType", JInt(obj.sexType.id)),
         JField("name", JString(obj.name)),
         JField("description", obj.description.map(JString).getOrElse(JNull)),
         JField("price", JDecimal(obj.price)),
@@ -24,7 +23,6 @@ object PetFormats {
     def read(value: JValue): Item = Item(
       id = (value \ "id").as[ItemId],
       itemTypeId = (value \ "itemTypeId").as[ItemTypeId],
-      sexType = SexType((value \ "sexType").as[Int]),
       name = (value \ "name").as[String],
       description = (value \ "description").as[Option[String]],
       price = (value \ "price").as[BigDecimal],

@@ -1,60 +1,53 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import scalikejdbc.{SQLInterpolation, WrappedResultSet}
 import java.util.UUID
 import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, Contact, ZipCode, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.model.item.{Supplier, SupplierId}
+import scalikejdbc._, SQLInterpolation._
 
 private[item]
 class SupplierRepositoryOnJDBC
   extends RepositoryOnJDBC[SupplierId, Supplier] with SupplierRepository {
 
-  override def tableName: String = "supplier"
+  class Dao extends AbstractDao[Supplier] {
 
-  override def columnNames: Seq[String] = Seq(
-    "id",
-    "name",
-    "status",
-    "zip_code",
-    "pref_code",
-    "city_name",
-    "address_name",
-    "building_name",
-    "email",
-    "phone"
-  )
+    override def defaultAlias = createAlias("s")
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Supplier =
-    Supplier(
-      id = SupplierId(UUID.fromString(resultSet.string("id"))),
-      name = resultSet.string("name"),
-      postalAddress = PostalAddress(
-        zipCode = ZipCode(resultSet.string("zip_code")),
-        pref = Pref(resultSet.int("pref_code")),
-        cityName = resultSet.string("city_name"),
-        addressName = resultSet.string("address_name"),
-        buildingName = resultSet.stringOpt("building_name")
-      ),
-      contact = Contact(
-        email = resultSet.string("email"),
-        phone = resultSet.string("phone")
-      )
+    override def tableName: String = "supplier"
+
+    def toNamedValues(entity: Supplier): Seq[(Symbol, Any)] = Seq(
+      'id -> entity.id.value,
+      'name -> entity.name,
+      'zipCode -> entity.postalAddress.zipCode.asString,
+      'prefCode -> entity.postalAddress.pref.id,
+      'cityName -> entity.postalAddress.cityName,
+      'addressName -> entity.postalAddress.addressName,
+      'buildingName -> entity.postalAddress.buildingName,
+      'email -> entity.contact.email,
+      'phone -> entity.contact.phone
     )
 
-  protected def convertEntityToValues(entity: Supplier): Seq[Any] = Seq(
-    entity.id.value.toString,
-    entity.name,
-    entity.postalAddress.zipCode.asString,
-    entity.postalAddress.pref.id,
-    entity.postalAddress.cityName,
-    entity.postalAddress.addressName,
-    entity.postalAddress.buildingName,
-    entity.contact.email,
-    entity.contact.phone
-  )
+    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Supplier]): Supplier = {
+      Supplier(
+        id = SupplierId(UUID.fromString(rs.get(n.id))),
+        name = rs.get(n.name),
+        postalAddress = PostalAddress(
+          zipCode = ZipCode(rs.get(n.field("zipCode"))),
+          pref = Pref(rs.get(n.field("prefCode"))),
+          cityName = rs.get(n.field("cityName")),
+          addressName = rs.get(n.field("addressName")),
+          buildingName = rs.get(n.field("buildingName"))
+        ),
+        contact = Contact(
+          email = rs.get(n.field("email")),
+          phone = rs.get(n.field("phone"))
+        )
+      )
+    }
 
-  protected def toNamedValues(entity: Supplier): Seq[(Symbol, Any)] = ???
+  }
 
-  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Supplier]): Supplier = ???
+  override protected def createDao = new Dao
+
 }

@@ -71,4 +71,9 @@ class CustomerController @Inject()
     }.getOrElse(InternalServerError)
   }
 
+  def list = Action {
+    request =>
+      Ok
+  }
+
 }

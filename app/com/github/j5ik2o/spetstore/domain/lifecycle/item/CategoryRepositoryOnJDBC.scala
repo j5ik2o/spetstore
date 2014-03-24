@@ -10,21 +10,25 @@ private[item]
 class CategoryRepositoryOnJDBC
   extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
 
-  override def defaultAlias = createAlias("c")
-  override val tableName = "category"
+  class Dao extends AbstractDao[Category] {
+    override def defaultAlias = createAlias("c")
 
-  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Category]): Category =
-    Category(
-      id = CategoryId(UUID.fromString(rs.get(n.id))),
-      name = rs.get(n.name),
-      description = rs.get(n.description)
+    override val tableName = "category"
+
+    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Category]): Category =
+      Category(
+        id = CategoryId(UUID.fromString(rs.get(n.id))),
+        name = rs.get(n.name),
+        description = rs.get(n.description)
+      )
+
+
+    def toNamedValues(entity: Category): Seq[(Symbol, Any)] = Seq(
+      'id -> entity.id.value,
+      'name -> entity.name,
+      'description -> entity.description
     )
+  }
 
-
-  protected def toNamedValues(entity: Category): Seq[(Symbol, Any)] = Seq(
-    'id -> entity.id.value,
-    'name -> entity.name,
-    'description -> entity.description
-  )
-
+  override protected def createDao = new Dao
 }

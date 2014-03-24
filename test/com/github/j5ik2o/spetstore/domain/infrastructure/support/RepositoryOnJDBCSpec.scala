@@ -13,25 +13,31 @@ class RepositoryOnJDBCSpec extends Specification {
 
     type This = PersonRepository
 
-    override def defaultAlias = createAlias("p")
+    class Dao extends AbstractDao[Person] {
 
-    // must be `def`
-    override val tableName = "person"
+      override def defaultAlias = createAlias("p")
+
+      // must be `def`
+      override val tableName = "person"
 
 
-    protected def toNamedValues(entity: Person): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'firstName -> entity.firstName,
-      'lastName -> entity.lastName
-    )
-
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Person]): Person =
-      Person(
-        id = PersonId(UUID.fromString(rs.string(n.id))),
-        firstName = rs.string(n.firstName),
-        lastName = rs.string(n.lastName)
+      def toNamedValues(entity: Person): Seq[(Symbol, Any)] = Seq(
+        'id -> entity.id.value,
+        'firstName -> entity.firstName,
+        'lastName -> entity.lastName
       )
+
+      def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Person]): Person =
+        Person(
+          id = PersonId(UUID.fromString(rs.string(n.id))),
+          firstName = rs.string(n.firstName),
+          lastName = rs.string(n.lastName)
+        )
+    }
+
+    override protected def createDao = new Dao
   }
+
 
   Class.forName("org.h2.Driver")
   ConnectionPool.singleton("jdbc:h2:mem:test", "user", "pass")

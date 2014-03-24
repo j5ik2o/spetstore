@@ -1,6 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import scala.util.{Failure, Success, Try}
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 
 /**
  * DDDのリポジトリ責務を表すトレイト。
@@ -26,6 +27,8 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
   def resolveEntity(identifier: ID)(implicit ctx: Ctx): Try[E]
 
   def resolveEntities(identifiers: ID*)(implicit ctx: Ctx): Try[Seq[E]] = traverse(identifiers)(resolveEntity)
+
+  def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: EntityIOContext): Try[Seq[E]]
 
   def storeEntity(entity: E)(implicit ctx: Ctx): Try[(This, E)]
 

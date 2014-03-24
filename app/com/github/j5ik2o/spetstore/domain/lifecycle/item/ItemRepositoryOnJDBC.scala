@@ -1,49 +1,39 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import com.github.j5ik2o.spetstore.domain.model.basic.SexType
 import com.github.j5ik2o.spetstore.domain.model.item.{SupplierId, ItemTypeId, Item, ItemId}
 import java.util.UUID
-import scalikejdbc.{SQLInterpolation, WrappedResultSet}
+import scalikejdbc._, SQLInterpolation._
 
 private[item]
 class ItemRepositoryOnJDBC
   extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
 
-  override def tableName: String = "item"
+  class Dao extends AbstractDao[Item] {
 
-  override def columnNames: Seq[String] = Seq(
-    "id",
-    "item_type_id",
-    "sex_type",
-    "name",
-    "description",
-    "price",
-    "supplier_id"
-  )
+    override def tableName: String = "item"
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Item =
-    Item(
-      id = ItemId(UUID.fromString(resultSet.string("id"))),
-      itemTypeId = ItemTypeId(UUID.fromString(resultSet.string("item_type_id"))),
-      sexType = SexType(resultSet.int("sex_type")),
-      name = resultSet.string("name"),
-      description = resultSet.stringOpt("description"),
-      price = resultSet.long("price"),
-      supplierId = SupplierId(UUID.fromString(resultSet.string("supplier_id")))
+    def toNamedValues(entity: Item): Seq[(Symbol, Any)] = Seq(
+      'id -> entity.id,
+      'itemTypeId -> entity.itemTypeId.value.toString,
+      'name -> entity.name,
+      'description -> entity.description,
+      'price -> entity.price,
+      'supplierId -> entity.supplierId.value.toString
     )
 
-  protected def convertEntityToValues(entity: Item): Seq[Any] = Seq(
-    entity.id,
-    entity.itemTypeId.value.toString,
-    entity.sexType.id,
-    entity.name,
-    entity.description,
-    entity.price,
-    entity.supplierId.value.toString
-  )
+    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Item]): Item = {
+      Item(
+        id = ItemId(UUID.fromString(rs.get(n.id))),
+        itemTypeId = ItemTypeId(UUID.fromString(rs.get(n.field("itemTypeId")))),
+        name = rs.get(n.name),
+        description = rs.stringOpt(n.field("description")),
+        price = rs.get(n.price),
+        supplierId = SupplierId(UUID.fromString(rs.get(n.field("supplierId"))))
+      )
+    }
+  }
 
-  protected def toNamedValues(entity: Item): Seq[(Symbol, Any)] = ???
+  override protected def createDao = new Dao
 
-  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Item]): Item = ???
 }

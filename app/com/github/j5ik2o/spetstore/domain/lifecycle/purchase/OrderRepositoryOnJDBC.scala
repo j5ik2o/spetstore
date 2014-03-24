@@ -9,57 +9,48 @@ import org.joda.time.DateTime
 import org.json4s.DefaultReaders._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
-import scalikejdbc.{SQLInterpolation, WrappedResultSet}
+import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.domain.infrastructure.json.OrderFormats._
 
 class OrderRepositoryOnJDBC
   extends RepositoryOnJDBC[OrderId, Order] with OrderRepository {
 
-  override def tableName: String = "order"
+  class Dao extends AbstractDao[Order] {
 
-  override def columnNames: Seq[String] = Seq(
-    "id",
-    "status",
-    "order_status",
-    "user_name",
-    "zip_code",
-    "pref_code",
-    "city_name",
-    "address_name",
-    "building_name",
-    "order_items"
-  )
+    override def tableName: String = "order"
 
-  protected def convertResultSetToEntity(resultSet: WrappedResultSet): Order =
-    Order(
-      id = OrderId(UUID.fromString(resultSet.string("id"))),
-      status = OrderStatus(resultSet.int("status")),
-      orderDate = new DateTime(resultSet.timestamp("order_date")),
-      userName = resultSet.string("user_name"),
-      shippingAddress = PostalAddress(
-        zipCode = ZipCode(resultSet.string("zip_code")),
-        pref = Pref(resultSet.int("pref_code")),
-        cityName = resultSet.string("city_name"),
-        addressName = resultSet.string("address_name"),
-        buildingName = resultSet.stringOpt("building_name")
-      ),
-      orderItems = parse(resultSet.string("order_items")).as[List[OrderItem]]
+    def toNamedValues(entity: Order): Seq[(Symbol, Any)] = Seq(
+      'id -> entity.id.value.toString,
+      'status -> entity.status.id,
+      'orderDate -> entity.orderDate.toDate,
+      'userName -> entity.userName,
+      'zipCode -> entity.shippingAddress.zipCode.asString,
+      'prefCode -> entity.shippingAddress.pref.id,
+      'cityName -> entity.shippingAddress.cityName,
+      'addressName -> entity.shippingAddress.addressName,
+      'buildingName -> entity.shippingAddress.buildingName,
+      'orderItems -> compact(JArray(entity.orderItems.toList.map(_.asJValue)))
     )
 
-  protected def convertEntityToValues(entity: Order): Seq[Any] = Seq(
-    entity.id.value.toString,
-    entity.status.id,
-    entity.orderDate.toDate,
-    entity.userName,
-    entity.shippingAddress.zipCode.asString,
-    entity.shippingAddress.pref.toString,
-    entity.shippingAddress.cityName,
-    entity.shippingAddress.addressName,
-    entity.shippingAddress.buildingName,
-    compact(JArray(entity.orderItems.toList.map(_.asJValue)))
-  )
+    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Order]): Order = {
+      Order(
+        id = OrderId(UUID.fromString(rs.string("id"))),
+        status = OrderStatus(rs.int("status")),
+        orderDate = new DateTime(rs.timestamp("order_date")),
+        userName = rs.string("user_name"),
+        shippingAddress = PostalAddress(
+          zipCode = ZipCode(rs.string("zip_code")),
+          pref = Pref(rs.int("pref_code")),
+          cityName = rs.string("city_name"),
+          addressName = rs.string("address_name"),
+          buildingName = rs.stringOpt("building_name")
+        ),
+        orderItems = parse(rs.string("order_items")).as[List[OrderItem]]
+      )
+    }
 
-  protected def toNamedValues(entity: Order): Seq[(Symbol, Any)] = ???
+  }
 
-  def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Order]): Order = ???
+  override protected def createDao = new Dao
+
 }

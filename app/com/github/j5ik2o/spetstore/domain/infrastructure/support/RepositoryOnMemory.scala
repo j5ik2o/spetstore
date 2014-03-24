@@ -33,6 +33,10 @@ abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
     entities.get(identifier).getOrElse(throw EntityNotFoundException(identifier))
   }
 
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[E]] = Try {
+    entities.map(_._2).toList.slice(offset, offset + limit)
+  }
+
   def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = Success {
     (createInstance(entities + (entity.id -> entity)), entity)
   }

@@ -41,7 +41,6 @@ class CartSpec extends Specification {
     val item = Item(
       id = ItemId(),
       itemTypeId = ItemTypeId(),
-      sexType = SexType.Male,
       name = "ぽち",
       description = None,
       price = BigDecimal(100),

@@ -21,4 +21,6 @@ extends RepositoryOnMemory[CustomerId, Customer](entities) with CustomerReposito
     entities.map(_._2).toList.filter(_.config.loginName == loginName).head
   }
 
+
+
 }

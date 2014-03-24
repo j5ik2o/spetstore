@@ -18,7 +18,6 @@ case class Item
 (id: ItemId = ItemId(),
  itemTypeId: ItemTypeId,
  name: String,
- sexType: SexType.Value,
  description: Option[String] = None,
  price: BigDecimal,
  supplierId: SupplierId)
