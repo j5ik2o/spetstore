@@ -1,7 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import scala.util.{Failure, Success, Try}
-import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 
 /**
  * DDDのリポジトリ責務を表すトレイト。

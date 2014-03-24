@@ -11,7 +11,7 @@ import java.util.UUID
 import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.mvc._
-import scala.util.{Success, Failure}
+import scala.util.Success
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 
@@ -73,7 +73,12 @@ class CustomerController @Inject()
 
   def list = Action {
     request =>
-      Ok
+      val offset = request.getQueryString("offset").map(_.toInt).getOrElse(0)
+      val limit = request.getQueryString("limit").map(_.toInt).getOrElse(100)
+      customerRepository.resolveEntities(offset, limit).map {
+        entities =>
+          Ok(prettyPrint(JsArray(entities.map(toJson(_)))))
+      }.getOrElse(InternalServerError)
   }
 
 }

@@ -40,7 +40,7 @@ object CustomerRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.customer.CustomerRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository]]
    */
   def ofJDBC: CustomerRepository =
     new CustomerRepositoryOnJDBC

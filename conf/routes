@@ -3,8 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
 POST    /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.create
+GET     /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
 GET     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.get(id)
 
 # Map static resources from the /public folder to the /assets URL path

@@ -63,7 +63,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {
     implicit s =>
-      defaultDao.findAllWithLimitOffset(offset, limit)
+      defaultDao.findAllWithLimitOffset(limit, offset)
   }
 
   def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
