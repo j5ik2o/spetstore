@@ -2,9 +2,7 @@ package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
-import com.github.j5ik2o.spetstore.domain.model.basic.Contact
-import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, ZipCode}
+import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.google.inject.Inject
 import java.util.UUID
@@ -14,6 +12,15 @@ import play.api.mvc._
 import scala.util.Success
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import play.api.Logger
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
+import play.api.libs.json.JsArray
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
+import scala.util.Success
+import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
+import com.github.j5ik2o.spetstore.domain.model.basic.Contact
 
 class CustomerController @Inject()
 (customerRepository: CustomerRepository,
@@ -27,6 +34,7 @@ class CustomerController @Inject()
       id = CustomerId(UUID.randomUUID()),
       status = CustomerStatus.Enabled,
       name = customerJson.name,
+      sexType = SexType(customerJson.sexType),
       profile = CustomerProfile(
         postalAddress = PostalAddress(
           ZipCode(customerJson.zipCode1, customerJson.zipCode2),
@@ -46,17 +54,24 @@ class CustomerController @Inject()
 
   def create = Action {
     request =>
+      Logger.debug("create")
       request.body.asJson.map {
-        _.validate[CustomerJson].map {
-          customerJson =>
-            customerRepository.storeEntity(convertToEntity(customerJson)).map {
-              case (_, customer) =>
-                OkForCreatedEntity(customer.id)
-            }.getOrElse(BadRequestForIOError)
-        }.recoverTotal {
-          error =>
-            BadRequestForValidate(JsError.toFlatJson(error))
-        }
+        e =>
+          Logger.debug("check1")
+          e.validate[CustomerJson].map {
+            customerJson =>
+              customerRepository.storeEntity(convertToEntity(customerJson)).map {
+                case (_, customer) =>
+                  OkForCreatedEntity(customer.id)
+              }.recover {
+                case ex =>
+                  Logger.error("catch error", ex)
+                  BadRequestForIOError
+              }.get
+          }.recoverTotal {
+            error =>
+              BadRequestForValidate(JsError.toFlatJson(error))
+          }
       }.getOrElse(InternalServerError)
   }
 

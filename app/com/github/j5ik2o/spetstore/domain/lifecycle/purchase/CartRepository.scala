@@ -2,7 +2,6 @@ package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId}
-import com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]のためのリポジトリ責務。
@@ -22,7 +21,7 @@ object CartRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[purchase.CartRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository]]
    */
   def ofMemory(entities: Map[CartId, Cart] = Map.empty): CartRepository =
     new CartRepositoryOnMemory(entities)
@@ -30,7 +29,7 @@ object CartRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[purchase.CartRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository]]
    */
   def ofJDBC: CartRepository = new CartRepositoryOnJDBC
 

@@ -100,6 +100,7 @@ class OrderSpec extends Specification {
         id = CustomerId(),
         status = CustomerStatus.Enabled,
         name = "Junichi Kato",
+        sexType = SexType.Female,
         profile = CustomerProfile(
           postalAddress = PostalAddress(
             ZipCode("100", "1000"),

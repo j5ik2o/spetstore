@@ -15,7 +15,7 @@ class AuthenticationService @Inject()
   def authentication(loginName: String, password: String): Try[Boolean] = {
     customerRepository.resolveByLoginName(loginName).map {
       customer =>
-        customer.config.password == password
+        customer.exists(_.config.password == password)
     }
   }
 

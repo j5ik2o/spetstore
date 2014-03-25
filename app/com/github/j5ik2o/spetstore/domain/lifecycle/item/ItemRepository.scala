@@ -21,7 +21,7 @@ object ItemRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[com.github.j5ik2o.spetstore.domain.model.item.ItemRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository]]
    */
   def ofMemory(entities: Map[ItemId, Item] = Map.empty): ItemRepository =
     new ItemRepositoryOnMemory(entities)
@@ -29,7 +29,7 @@ object ItemRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.model.item.ItemRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository]]
    */
   def ofJDBC: ItemRepository =
     new ItemRepositoryOnJDBC

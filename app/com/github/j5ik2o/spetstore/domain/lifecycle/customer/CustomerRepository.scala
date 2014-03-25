@@ -19,7 +19,8 @@ trait CustomerRepository extends Repository[CustomerId, Customer] {
    * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]
    */
-  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Customer]
+  def resolveByLoginName(loginName: String)
+                        (implicit ctx: EntityIOContext): Try[Option[Customer]]
 
 }
 

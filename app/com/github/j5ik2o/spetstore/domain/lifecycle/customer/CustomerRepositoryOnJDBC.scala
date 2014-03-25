@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{RepositoryOnJDBC, EntityIOContext}
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFoundException, RepositoryOnJDBC, EntityIOContext}
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer._
 import java.util.UUID
@@ -30,7 +30,7 @@ class CustomerRepositoryOnJDBC
     override def extract(resultSet: WrappedResultSet, c: ResultName[Customer]): Customer = Customer(
       id = CustomerId(UUID.fromString(resultSet.get(c.id))),
       name = resultSet.get(c.name),
-      sexType = resultSet.intOpt(c.sexType).map(SexType(_)),
+      sexType = SexType(resultSet.get(c.sexType)),
       status = CustomerStatus(resultSet.get(c.status)),
       profile = CustomerProfile(
         postalAddress = PostalAddress(
@@ -57,7 +57,7 @@ class CustomerRepositoryOnJDBC
       'id -> entity.id.value.toString,
       'status -> entity.status.id,
       'name -> entity.name,
-      'sexType -> entity.sexType.map(_.id),
+      'sexType -> entity.sexType.id,
       'zipCode -> entity.profile.postalAddress.zipCode.asString,
       'prefCode -> entity.profile.postalAddress.pref.id,
       'cityName -> entity.profile.postalAddress.cityName,
@@ -71,12 +71,11 @@ class CustomerRepositoryOnJDBC
     )
   }
 
-  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Customer] = ??? //withDBSession {
-  //    implicit s =>
-  //          ???
-  ////      findBy(sqls.eq(defaultAlias.field(primaryKeyName).eq, identifier.value)).getOrElse(throw EntityNotFoundException(identifier))   sql"select * from $table where login_name = ?".bind(loginName).map(convertResultSetToEntity).
-  ////      single().apply().getOrElse(throw EntityNotFoundException(s"loginName = $loginName"))
-  //  }
+  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]] = withDBSession(ctx) {
+    implicit s =>
+      val c = defaultDao.defaultAlias
+      defaultDao.findBy(sqls.eq(c.column("loginName"), loginName))
+  }
 
 
 }

@@ -53,7 +53,7 @@ object CustomerFormats {
         JField("id", JString(obj.id.value.toString)),
         JField("status", JInt(obj.status.id)),
         JField("name", JString(obj.name)),
-        JField("sexType", obj.sexType.map(_.id).asJValue),
+        JField("sexType", JInt(obj.sexType.id)),
         JField("profile", obj.profile.asJValue),
         JField("config", obj.config.asJValue)
       )

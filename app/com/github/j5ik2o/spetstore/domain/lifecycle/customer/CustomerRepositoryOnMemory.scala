@@ -17,8 +17,8 @@ extends RepositoryOnMemory[CustomerId, Customer](entities) with CustomerReposito
   protected def createInstance(entities: Map[CustomerId, Customer]): This =
     new CustomerRepositoryOnMemory(entities)
 
-  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Customer] = Success {
-    entities.map(_._2).toList.filter(_.config.loginName == loginName).head
+  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]] = Try {
+    entities.map(_._2).toList.find(_.config.loginName == loginName)
   }
 
 

@@ -21,7 +21,7 @@ object InventoryRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository]]
    */
   def ofMemory(entities: Map[InventoryId, Inventory] = Map.empty): InventoryRepository =
     new InventoryRepositoryOnMemory(entities)
@@ -29,7 +29,7 @@ object InventoryRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]
+   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository]]
    */
   def ofJDBC: InventoryRepository = new InventoryRepositoryOnJDBC
 

@@ -21,7 +21,7 @@ case class Customer
 (id: CustomerId = CustomerId(),
  status: CustomerStatus.Value,
  name: String,
- sexType: Option[SexType.Value] = None,
+ sexType: SexType.Value,
  profile: CustomerProfile,
  config: CustomerConfig)
   extends Entity[CustomerId] {
