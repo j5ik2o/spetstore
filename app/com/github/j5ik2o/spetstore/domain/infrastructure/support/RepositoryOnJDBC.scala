@@ -40,7 +40,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      val count = defaultDao.countBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value))
+      val count = defaultDao.countBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value.toString))
       if (count == 0) false
       else if (count == 1) true
       else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
@@ -53,13 +53,13 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = withDBSession(ctx) {
     implicit s =>
-      defaultDao.findBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value)).
+      defaultDao.findBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value.toString)).
         getOrElse(throw EntityNotFoundException(identifier))
   }
 
   override def resolveEntities(identifiers: ID*)(implicit ctx: Ctx): Try[Seq[E]] = withDBSession(ctx) {
     implicit s =>
-      defaultDao.findAllBy(sqls.in(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifiers.map(_.value)))
+      defaultDao.findAllBy(sqls.in(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifiers.map(_.value.toString)))
   }
 
   def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {
@@ -70,7 +70,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
   def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
       if (entity.id.isDefined) {
-        val count = defaultDao.updateBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), entity.id.value))
+        val count = defaultDao.updateBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), entity.id.value.toString))
           .withAttributes(defaultDao.toNamedValues(entity).filterNot {
           case (k, _) => k.name == defaultDao.primaryKeyFieldName
         }: _*)
@@ -86,7 +86,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
     implicit s =>
       defaultDao.findBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value)).map {
         entity =>
-          val count = defaultDao.deleteBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), identifier.value))
+          val count = defaultDao.deleteBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), identifier.value.toString))
           if (count == 1) (this.asInstanceOf[This], entity)
           else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
           else throw RepositoryIOException(s"Entity (identifier: $identifier) is not found when deleting")

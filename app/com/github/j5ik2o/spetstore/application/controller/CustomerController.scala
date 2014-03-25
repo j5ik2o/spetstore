@@ -9,7 +9,6 @@ import java.util.UUID
 import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.mvc._
-import scala.util.Success
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import play.api.Logger
@@ -31,7 +30,7 @@ class CustomerController @Inject()
 
   private def convertToEntity(customerJson: CustomerJson): Customer =
     Customer(
-      id = CustomerId(UUID.randomUUID()),
+      id = CustomerId(customerJson.id.map(UUID.fromString).getOrElse(UUID.randomUUID())),
       status = CustomerStatus.Enabled,
       name = customerJson.name,
       sexType = SexType(customerJson.sexType),
@@ -54,10 +53,8 @@ class CustomerController @Inject()
 
   def create = Action {
     request =>
-      Logger.debug("create")
       request.body.asJson.map {
         e =>
-          Logger.debug("check1")
           e.validate[CustomerJson].map {
             customerJson =>
               customerRepository.storeEntity(convertToEntity(customerJson)).map {
@@ -75,6 +72,16 @@ class CustomerController @Inject()
       }.getOrElse(InternalServerError)
   }
 
+  def list = Action {
+    request =>
+      val offset = request.getQueryString("offset").map(_.toInt).getOrElse(0)
+      val limit = request.getQueryString("limit").map(_.toInt).getOrElse(100)
+      customerRepository.resolveEntities(offset, limit).map {
+        entities =>
+          Ok(prettyPrint(JsArray(entities.map(toJson(_)))))
+      }.getOrElse(InternalServerError)
+  }
+
   def get(customerId: String) = Action {
     val id = CustomerId(UUID.fromString(customerId))
     customerRepository.resolveEntity(id).map {
@@ -86,14 +93,44 @@ class CustomerController @Inject()
     }.getOrElse(InternalServerError)
   }
 
-  def list = Action {
+  def update(customerId: String) = Action {
     request =>
-      val offset = request.getQueryString("offset").map(_.toInt).getOrElse(0)
-      val limit = request.getQueryString("limit").map(_.toInt).getOrElse(100)
-      customerRepository.resolveEntities(offset, limit).map {
-        entities =>
-          Ok(prettyPrint(JsArray(entities.map(toJson(_)))))
-      }.getOrElse(InternalServerError)
+      val id = CustomerId(UUID.fromString(customerId))
+      customerRepository.existByIdentifier(id).map {
+        exist =>
+          if (exist) {
+            request.body.asJson.map {
+              e =>
+                e.validate[CustomerJson].map {
+                  customerJson =>
+                    require(id.value.toString == customerJson.id.get)
+                    customerRepository.storeEntity(convertToEntity(customerJson)).map {
+                      case (_, customer) =>
+                        OkForCreatedEntity(customer.id)
+                    }.recover {
+                      case ex =>
+                        Logger.error("catch error", ex)
+                        BadRequestForIOError
+                    }.get
+                }.recoverTotal {
+                  error =>
+                    BadRequestForValidate(JsError.toFlatJson(error))
+                }
+            }.getOrElse(InternalServerError)
+          } else {
+            BadRequest
+          }
+      }.get
   }
 
+  def delete(customerId: String) = Action {
+    val id = CustomerId(UUID.fromString(customerId))
+    customerRepository.deleteByIdentifier(id).map {
+      case (_, entity) =>
+        Ok(prettyPrint(toJson(entity)))
+    }.recoverWith {
+      case ex: EntityNotFoundException =>
+        Success(NotFoundForEntity(id))
+    }.getOrElse(InternalServerError)
+  }
 }

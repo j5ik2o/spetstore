@@ -6,6 +6,8 @@
 POST    /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.create
 GET     /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
 GET     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.get(id)
+PUT     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.update(id)
+DELETE  /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.delete(id)
 
 # Map static resources from the /public folder to the /assets URL path
 # GET     /assets/*file               controllers.Assets.at(path="/public", file)
