@@ -26,6 +26,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
     def toNamedValues(entity: E): Seq[(Symbol, Any)]
   }
+
   protected def createDao: AbstractDao[E]
 
   val defaultDao = createDao
