@@ -14,9 +14,9 @@ object DBInitializer {
               implicit s =>
                 sql"""
 CREATE TABLE `customer` (
-  `id`        VARCHAR(64)   NOT NULL,
-  `status`    INT           NOT NULL,
-  `name`        VARCHAR(256)  NOT NULL,
+  `id`            VARCHAR(64)   NOT NULL,
+  `status`        INT           NOT NULL,
+  `name`          VARCHAR(256)  NOT NULL,
   `sex_type`      INT       NOT NULL,
   `zip_code`      VARCHAR(20)   NOT NULL,
   `pref_code`     INT           NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `customer` (
   `building_name` VARCHAR(256),
   `email`         VARCHAR(64)   NOT NULL,
   `phone`         VARCHAR(64)   NOT NULL,
-  `login_name`     VARCHAR(64)   NOT NULL,
+  `login_name`    VARCHAR(64)   NOT NULL,
   `password`      VARCHAR(64)   NOT NULL,
   `favorite_category_id`  VARCHAR(64),
   PRIMARY KEY(`id`)
