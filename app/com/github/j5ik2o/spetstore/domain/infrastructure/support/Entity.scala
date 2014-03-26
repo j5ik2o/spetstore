@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 /**
  * DDDのエンティティ責務を表すトレイト。
  *
- * @tparam ID [[com.github.j5ik2o.spetstore.infrastructure.support.Identifier]]
+ * @tparam ID [[com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier]]
  */
 trait Entity[ID <: Identifier[_]] {
 
