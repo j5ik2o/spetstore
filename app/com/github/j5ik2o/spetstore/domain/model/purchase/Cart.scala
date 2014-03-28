@@ -5,6 +5,8 @@ import com.github.j5ik2o.spetstore.domain.model.item.{ItemId, Item}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import scala.util.Try
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 
 /**
  * ショッピングカートを表すエンティティ。
@@ -13,6 +15,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
  */
 case class Cart
 (id: CartId = CartId(),
+ status: StatusType.Value,
  customerId: CustomerId,
  cartItems: List[CartItem]) extends Entity[CartId] {
 
@@ -38,7 +41,9 @@ case class Cart
   /**
    * 合計金額。
    */
-  lazy val totalPrice = cartItems.foldLeft(BigDecimal(0))(_ + _.subTotalPrice)
+  def totalPrice(implicit ir: ItemRepository, ctx: EntityIOContext) = Try {
+    cartItems.foldLeft(BigDecimal(0))((l, r) => l + r.subTotalPrice.get)
+  }
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]が含まれるかを検証する。
@@ -48,7 +53,7 @@ case class Cart
    */
   def containsItemId(itemId: ItemId): Boolean =
     cartItems.exists {
-      _.item.id == itemId
+      _.itemId == itemId
     }
 
   /**
@@ -59,10 +64,10 @@ case class Cart
    */
   def addCartItem(cartItem: CartItem): Cart = {
     require(cartItem.quantity > 0)
-    cartItems.find(_.item == cartItem.item).map {
+    cartItems.find(_.itemId == cartItem.itemId).map {
       currentItem =>
         val newCartItem = currentItem.addQuantity(cartItem.quantity).ensuring(_.quantity > 0)
-        copy(cartItems = newCartItem :: cartItems.filterNot(_.item == cartItem.item))
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.itemId == cartItem.itemId))
     }.getOrElse {
       copy(cartItems = cartItem :: cartItems)
     }
@@ -77,7 +82,7 @@ case class Cart
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
   def addCartItem(item: Item, quantity: Int, isInStock: Boolean): Cart =
-    addCartItem(CartItem(item, quantity, isInStock))
+    addCartItem(CartItem(cartItems.size.toLong + 1, StatusType.Enabled, item.id, quantity, isInStock))
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って
@@ -88,9 +93,9 @@ case class Cart
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
   def removeCartItemByPetId(itemId: ItemId): Cart =
-    cartItems.find(_.item.id == itemId).map {
+    cartItems.find(_.itemId == itemId).map {
       e =>
-        copy(cartItems = cartItems.filterNot(_.item.id == itemId))
+        copy(cartItems = cartItems.filterNot(_.itemId == itemId))
     }.getOrElse(this)
 
   /**
@@ -101,10 +106,10 @@ case class Cart
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
   def incrementQuantityByItemId(itemId: ItemId): Cart =
-    cartItems.find(_.item.id == itemId).map {
+    cartItems.find(_.itemId == itemId).map {
       cartItem =>
         val newCartItem = cartItem.incrementQuantity.ensuring(_.quantity > 0)
-        copy(cartItems = newCartItem :: cartItems.filterNot(_.item.id == itemId))
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.itemId == itemId))
     }.getOrElse(this)
 
   /**
@@ -116,10 +121,10 @@ case class Cart
    */
   def updateQuantityByItemId(itemId: ItemId, quantity: Int): Cart = {
     require(quantity > 0)
-    cartItems.find(_.item.id == itemId).map {
+    cartItems.find(_.itemId == itemId).map {
       cartItem =>
         val newCartItem = cartItem.withQuantity(quantity).ensuring(_.quantity > 0)
-        copy(cartItems = newCartItem :: cartItems.filterNot(_.item.id == itemId))
+        copy(cartItems = newCartItem :: cartItems.filterNot(_.itemId == itemId))
     }.getOrElse(this)
   }
 

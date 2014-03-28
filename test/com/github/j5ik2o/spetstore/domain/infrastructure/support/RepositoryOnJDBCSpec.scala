@@ -1,41 +1,58 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
-import java.util.UUID
 import org.specs2.mutable.Specification
 import scalikejdbc._, SQLInterpolation._
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 
 class RepositoryOnJDBCSpec extends Specification {
 
   sequential
 
+  case class PersonRecord(id: Long, firstName: String, lastName: String)
+
+  object PersonRecord extends CRUDMapper[PersonRecord] {
+
+    override def defaultAlias = createAlias("p")
+
+    override def tableName: String = "person"
+
+    override def useAutoIncrementPrimaryKey: Boolean = false
+
+    override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[PersonRecord]) = PersonRecord(
+      id = rs.get(n.id),
+      firstName = rs.get(n.firstName),
+      lastName = rs.get(n.lastName)
+    )
+
+    override def toNamedValues(record: PersonRecord): Seq[(Symbol, Any)] = Seq(
+      'id -> record.id,
+      'firstName -> record.firstName,
+      'lastName -> record.lastName
+    )
+
+  }
+
   case class PersonRepositoryOnJDBC()
-    extends RepositoryOnJDBC[PersonId, Person] with PersonRepository {
+    extends SimpleRepositoryOnJDBC[PersonId, Person] with PersonRepository {
 
-    type This = PersonRepository
+    override type This = PersonRepositoryOnJDBC
 
-    class Dao extends AbstractDao[Person] {
+    override type T = PersonRecord
 
-      override def defaultAlias = createAlias("p")
+    override protected val mapper = PersonRecord
 
-      // must be `def`
-      override val tableName = "person"
+    override protected def convertToRecord(entity: Person): TS = PersonRecord(
+      id = entity.id.value,
+      firstName = entity.firstName,
+      lastName = entity.lastName
+    )
 
-
-      def toNamedValues(entity: Person): Seq[(Symbol, Any)] = Seq(
-        'id -> entity.id.value,
-        'firstName -> entity.firstName,
-        'lastName -> entity.lastName
-      )
-
-      def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Person]): Person =
-        Person(
-          id = PersonId(UUID.fromString(rs.string(n.id))),
-          firstName = rs.string(n.firstName),
-          lastName = rs.string(n.lastName)
-        )
-    }
-
-    override protected def createDao = new Dao
+    override protected def convertToEntity(record: TS): Person = Person(
+      id = PersonId(record.id),
+      firstName = record.firstName,
+      lastName = record.lastName
+    )
   }
 
 
@@ -46,7 +63,7 @@ class RepositoryOnJDBCSpec extends Specification {
     implicit s =>
       sql"""
 create table person (
-  id varchar(64) not null primary key,
+  id bigint not null primary key,
   first_name varchar(64),
   last_name varchar(64)
 )

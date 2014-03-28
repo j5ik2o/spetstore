@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
-import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, Contact, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
 
 /**
@@ -13,6 +13,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
  */
 case class Supplier
 (id: SupplierId,
+ status: StatusType.Value,
  name: String,
  postalAddress: PostalAddress,
  contact: Contact)

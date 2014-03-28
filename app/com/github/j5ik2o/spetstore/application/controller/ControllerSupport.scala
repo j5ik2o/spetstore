@@ -19,7 +19,7 @@ trait ControllerSupport extends Controller with Json4s {
   )
 
   protected val OkForCreatedEntity = {
-    id: Identifier[UUID] => Ok(
+    id: Identifier[Long] => Ok(
       JsObject(
         Seq(
           "id" -> JsString(id.value.toString)
@@ -35,7 +35,7 @@ trait ControllerSupport extends Controller with Json4s {
   }
 
   protected val NotFoundForEntity = {
-    id: Identifier[UUID] => NotFound(s"identifier = $id")
+    id: Identifier[Long] => NotFound(s"identifier = $id")
   }
 
 }

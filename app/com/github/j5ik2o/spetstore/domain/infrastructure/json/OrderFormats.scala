@@ -1,10 +1,11 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
-import com.github.j5ik2o.spetstore.domain.model.item.Item
+import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem
 import org.json4s._
 import org.json4s.DefaultReaders._
-import PetFormats._
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
+import IdentifierFormats._
 
 object OrderFormats {
 
@@ -12,12 +13,16 @@ object OrderFormats {
 
     def write(obj: OrderItem): JValue =
       JObject(
-        JField("item", obj.item.asJValue),
+        JField("no", JInt(obj.no)),
+        JField("status", JInt(obj.status.id)),
+        JField("itemId", obj.itemId.asJValue),
         JField("quantity", JInt(obj.quantity))
       )
 
     def read(value: JValue): OrderItem = OrderItem(
-      item = (value \ "item").as[Item],
+      no = (value \ "no").as[Long],
+      status = StatusType((value \ "status").as[Int]),
+      itemId = (value \ "itemId").as[ItemId],
       quantity = (value \ "quantity").as[Int]
     )
 

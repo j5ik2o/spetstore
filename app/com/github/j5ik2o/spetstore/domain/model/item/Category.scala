@@ -1,6 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 
 /**
  * カテゴリを表すエンティティ。
@@ -11,6 +12,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
  */
 case class Category
 (id: CategoryId = CategoryId(),
+ status: StatusType.Value,
  name: String,
  description: Option[String] = None)
   extends Entity[CategoryId]

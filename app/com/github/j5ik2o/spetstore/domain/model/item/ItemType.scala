@@ -1,6 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 
 /**
  * 商品の種類を表すエンティティ。
@@ -12,6 +13,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
  */
 case class ItemType
 (id: ItemTypeId = ItemTypeId(),
+ status: StatusType.Value,
  categoryId: CategoryId,
  name: String,
  description: Option[String] = None)

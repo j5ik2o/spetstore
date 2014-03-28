@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
-import com.github.j5ik2o.spetstore.domain.model.basic.SexType
+import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, SexType}
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, Cart, CartItem}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
@@ -11,7 +11,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
  * ペットストアの顧客を表すエンティティ。
  *
  * @param id 識別子
- * @param status [[com.github.j5ik2o.spetstore.domain.model.customer.CustomerStatus]]
+ * @param status [[StatusType]]
  * @param name 名前
  * @param sexType 性別
  * @param profile [[com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile]]
@@ -19,7 +19,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
  */
 case class Customer
 (id: CustomerId = CustomerId(),
- status: CustomerStatus.Value,
+ status: StatusType.Value,
  name: String,
  sexType: SexType.Value,
  profile: CustomerProfile,

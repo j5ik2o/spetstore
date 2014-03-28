@@ -27,7 +27,7 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
 
   def resolveEntities(identifiers: ID*)(implicit ctx: Ctx): Try[Seq[E]] = traverse(identifiers)(resolveEntity)
 
-  def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: EntityIOContext): Try[Seq[E]]
+  def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: Ctx): Try[Seq[E]]
 
   def storeEntity(entity: E)(implicit ctx: Ctx): Try[(This, E)]
 

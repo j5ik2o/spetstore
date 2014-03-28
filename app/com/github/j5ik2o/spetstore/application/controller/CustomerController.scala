@@ -20,6 +20,7 @@ import scala.util.Success
 import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
 import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 import com.github.j5ik2o.spetstore.domain.model.basic.Contact
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class CustomerController @Inject()
 (customerRepository: CustomerRepository,
@@ -30,8 +31,8 @@ class CustomerController @Inject()
 
   private def convertToEntity(customerJson: CustomerJson): Customer =
     Customer(
-      id = CustomerId(customerJson.id.map(UUID.fromString).getOrElse(UUID.randomUUID())),
-      status = CustomerStatus.Enabled,
+      id = CustomerId(customerJson.id.getOrElse(IdentifierService.generate(classOf[Customer]))),
+      status = StatusType.Enabled,
       name = customerJson.name,
       sexType = SexType(customerJson.sexType),
       profile = CustomerProfile(
@@ -82,8 +83,8 @@ class CustomerController @Inject()
       }.getOrElse(InternalServerError)
   }
 
-  def get(customerId: String) = Action {
-    val id = CustomerId(UUID.fromString(customerId))
+  def get(customerId: Long) = Action {
+    val id = CustomerId(customerId)
     customerRepository.resolveEntity(id).map {
       entity =>
         Ok(prettyPrint(toJson(entity)))
@@ -93,9 +94,9 @@ class CustomerController @Inject()
     }.getOrElse(InternalServerError)
   }
 
-  def update(customerId: String) = Action {
+  def update(customerId: Long) = Action {
     request =>
-      val id = CustomerId(UUID.fromString(customerId))
+      val id = CustomerId(customerId)
       customerRepository.existByIdentifier(id).map {
         exist =>
           if (exist) {
@@ -103,7 +104,7 @@ class CustomerController @Inject()
               e =>
                 e.validate[CustomerJson].map {
                   customerJson =>
-                    require(id.value.toString == customerJson.id.get)
+                    require(id.value == customerJson.id.get)
                     customerRepository.storeEntity(convertToEntity(customerJson)).map {
                       case (_, customer) =>
                         OkForCreatedEntity(customer.id)
@@ -123,8 +124,8 @@ class CustomerController @Inject()
       }.get
   }
 
-  def delete(customerId: String) = Action {
-    val id = CustomerId(UUID.fromString(customerId))
+  def delete(customerId: Long) = Action {
+    val id = CustomerId(customerId)
     customerRepository.deleteByIdentifier(id).map {
       case (_, entity) =>
         Ok(prettyPrint(toJson(entity)))

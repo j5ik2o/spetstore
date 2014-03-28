@@ -1,19 +1,23 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.j5ik2o.spetstore.domain.model.item.Item
+import com.github.j5ik2o.spetstore.domain.model.item.ItemId
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext
 
 /**
  * 注文する商品を表す値オブジェクト。
  *
- * @param item [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
+ * @param itemId [[com.github.j5ik2o.spetstore.domain.model.item.Item]]のI
  * @param quantity 数量
  */
-case class OrderItem(item: Item, quantity: Int) {
+case class OrderItem(no: Long, status: StatusType.Value, itemId: ItemId, quantity: Int) {
 
   /**
    * 小計。
    */
-  val subTotalPrice: BigDecimal = item.price * quantity
+  def subTotalPrice(implicit ir: ItemRepository, ctx: EntityIOContext): Try[BigDecimal] = ir.resolveEntity(itemId).map(_.price * quantity)
 
 }
 
@@ -31,6 +35,6 @@ object OrderItem {
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]
    */
   def fromCartItem(cartItem: CartItem): OrderItem =
-    OrderItem(cartItem.item, cartItem.quantity)
+    OrderItem(cartItem.no, cartItem.status, cartItem.itemId, cartItem.quantity)
 
 }

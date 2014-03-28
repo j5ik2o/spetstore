@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItem, Cart, CartId}
 import java.util.UUID
@@ -9,31 +9,24 @@ import org.json4s.DefaultReaders._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import scalikejdbc._, SQLInterpolation._
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.infrastructure.db.CartRecord
 
 
 private[purchase]
 class CartRepositoryOnJDBC
   extends RepositoryOnJDBC[CartId, Cart] with CartRepository {
 
-  class Dao extends AbstractDao[Cart] {
-    override def defaultAlias = createAlias("c")
+  override type T = CartRecord
 
-    override def tableName: String = "cart"
+  override protected val mapper = CartRecord
 
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Cart]): Cart =
-      Cart(
-        id = CartId(UUID.fromString(rs.get(n.id))),
-        customerId = CustomerId(UUID.fromString(rs.get(n.customerId))),
-        cartItems = parse(rs.string(n.field("cartItems"))).as[List[CartItem]]
-      )
+  override def deleteByIdentifier(identifier: CartId)(implicit ctx: CartRepositoryOnJDBC#Ctx): Try[(CartRepositoryOnJDBC#This, Cart)] = ???
 
-    def toNamedValues(entity: Cart): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'customerId -> entity.customerId.value,
-      'cartItems -> compact(JArray(entity.cartItems.toList.map(_.asJValue)))
-    )
-  }
+  override def storeEntity(entity: Cart)(implicit ctx: CartRepositoryOnJDBC#Ctx): Try[(CartRepositoryOnJDBC#This, Cart)] = ???
 
-  override protected def createDao = new Dao
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Cart]] = ???
 
+  override def resolveEntity(identifier: CartId)(implicit ctx: CartRepositoryOnJDBC#Ctx): Try[Cart] = ???
 }

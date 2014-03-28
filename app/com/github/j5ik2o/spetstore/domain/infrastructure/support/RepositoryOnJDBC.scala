@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
-import skinny.orm.SkinnyCRUDMapper
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。
@@ -11,25 +11,53 @@ import skinny.orm.SkinnyCRUDMapper
  */
 case class EntityIOContextOnJDBC(session: DBSession) extends EntityIOContext
 
+trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends RepositoryOnJDBC[ID, E] {
+  type TS = T
+
+  protected def convertToEntity(record: TS): E
+
+  protected def convertToRecord(entity: E): TS
+
+  override def resolveEntity(identifier: ID)(implicit ctx: Ctx): Try[E] = Try {
+    mapper.findById(identifier.value).map(convertToEntity).getOrElse(throw EntityNotFoundException(identifier))
+  }
+
+  override def storeEntity(entity: E)(implicit ctx: Ctx): Try[(This, E)] = Try {
+    val count = mapper.updateById(entity.id.value)
+      .withAttributes(mapper.toNamedValues(convertToRecord(entity)).filterNot {
+      case (k, _) => k.name == mapper.primaryKeyFieldName
+    }: _*)
+    if (count == 0) mapper.createWithAttributes(mapper.toNamedValues(convertToRecord(entity)): _*)
+    else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $entity.id")
+    (this.asInstanceOf[This], entity)
+  }
+
+  override def deleteByIdentifier(identifier: ID)(implicit ctx: Ctx): Try[(This, E)] = identifier.synchronized {
+    resolveEntity(identifier).map {
+      entity =>
+        if (mapper.deleteById(identifier.value) == 0) {
+          throw new RepositoryIOException("")
+        } else {
+          (this.asInstanceOf[This], entity)
+        }
+    }
+  }
+
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[E]] = Try {
+    mapper.findAllWithLimitOffset(offset, limit).map(convertToEntity)
+  }
+
+}
+
 /**
  * JDBC用リポジトリのための骨格実装。
  */
-abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
+abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
   extends Repository[ID, E] {
 
-  abstract class AbstractDao[A <: E] extends SkinnyCRUDMapper[A] {
-    override def primaryKeyFieldName = "id"
+  type T
 
-    override def defaultAlias = createAlias(tableName)
-
-    override def useAutoIncrementPrimaryKey = false
-
-    def toNamedValues(entity: E): Seq[(Symbol, Any)]
-  }
-
-  protected def createDao: AbstractDao[E]
-
-  val defaultDao = createDao
+  protected val mapper: CRUDMapper[T]
 
   protected def withDBSession[A](ctx: EntityIOContext)(f: DBSession => A): Try[A] = Try {
     ctx match {
@@ -40,7 +68,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      val count = defaultDao.countBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value.toString))
+      val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(mapper.primaryKeyFieldName), identifier.value))
       if (count == 0) false
       else if (count == 1) true
       else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
@@ -48,49 +76,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[_], E <: Entity[ID]]
 
   override def existByIdentifiers(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      defaultDao.countBy(sqls.in(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifiers.map(_.value))) > 0
-  }
-
-  def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = withDBSession(ctx) {
-    implicit s =>
-      defaultDao.findBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value.toString)).
-        getOrElse(throw EntityNotFoundException(identifier))
-  }
-
-  override def resolveEntities(identifiers: ID*)(implicit ctx: Ctx): Try[Seq[E]] = withDBSession(ctx) {
-    implicit s =>
-      defaultDao.findAllBy(sqls.in(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifiers.map(_.value.toString)))
-  }
-
-  def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: EntityIOContext): Try[Seq[E]] = withDBSession(ctx) {
-    implicit s =>
-      defaultDao.findAllWithLimitOffset(limit, offset)
-  }
-
-  def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
-    implicit s =>
-      if (entity.id.isDefined) {
-        val count = defaultDao.updateBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), entity.id.value.toString))
-          .withAttributes(defaultDao.toNamedValues(entity).filterNot {
-          case (k, _) => k.name == defaultDao.primaryKeyFieldName
-        }: _*)
-        if (count == 0) defaultDao.createWithAttributes(defaultDao.toNamedValues(entity): _*)
-        else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $entity.id")
-      } else {
-        defaultDao.createWithAttributes(defaultDao.toNamedValues(entity): _*)
-      }
-      (this.asInstanceOf[This], entity)
-  }
-
-  def deleteByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = withDBSession(ctx) {
-    implicit s =>
-      defaultDao.findBy(sqls.eq(defaultDao.defaultAlias.field(defaultDao.primaryKeyFieldName), identifier.value)).map {
-        entity =>
-          val count = defaultDao.deleteBy(sqls.eq(defaultDao.column.field(defaultDao.primaryKeyFieldName), identifier.value.toString))
-          if (count == 1) (this.asInstanceOf[This], entity)
-          else if (count > 1) throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
-          else throw RepositoryIOException(s"Entity (identifier: $identifier) is not found when deleting")
-      }.getOrElse(throw RepositoryIOException(s"Entity (identifier: $identifier) is not found"))
+      mapper.countBy(sqls.in(mapper.defaultAlias.field(mapper.primaryKeyFieldName), identifiers.map(_.value))) > 0
   }
 
 }

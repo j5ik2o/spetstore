@@ -8,12 +8,12 @@ import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, SupplierId, It
 
 object IdentifierFormats {
 
-  case class IdentifierFormat[A <: Identifier[_]](apply: UUID => A)
+  case class IdentifierFormat[A <: Identifier[_]](apply: Long => A)
     extends Writer[A] with Reader[A] {
 
     def write(obj: A): JValue = JString(obj.value.toString)
 
-    def read(value: JValue): A = apply(UUID.fromString((value \ "id").as[String]))
+    def read(value: JValue): A = apply((value \ "id").as[Long])
 
   }
 

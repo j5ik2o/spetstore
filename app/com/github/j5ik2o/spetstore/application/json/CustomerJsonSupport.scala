@@ -6,7 +6,7 @@ import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 
 trait CustomerJsonSupport {
 
-  case class CustomerJson(id: Option[String],
+  case class CustomerJson(id: Option[Long],
                           name: String,
                           sexType: Int,
                           zipCode1: String,
@@ -24,7 +24,7 @@ trait CustomerJsonSupport {
   implicit object CustomerJsonConverter extends Reads[CustomerJson] with Writes[Customer] {
 
     def reads(json: JsValue): JsResult[CustomerJson] = {
-      ((__ \ 'id).readNullable[String] and
+      ((__ \ 'id).readNullable[Long] and
         (__ \ 'name).read[String] and
         (__ \ 'sexType).read[Int] and
         (__ \ 'zipCode1).read[String] and
@@ -43,7 +43,7 @@ trait CustomerJsonSupport {
     override def writes(o: Customer): JsValue = {
       JsObject(
         Seq(
-          "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
+          "id" -> (if (o.id.isDefined) JsNumber(o.id.value) else JsNull),
           "name" -> JsString(o.name),
           "sexType" -> JsNumber(o.sexType.id),
           "zipCode" -> JsString(o.profile.postalAddress.zipCode.asString),

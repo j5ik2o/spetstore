@@ -1,39 +1,26 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.item.{SupplierId, ItemTypeId, Item, ItemId}
 import java.util.UUID
 import scalikejdbc._, SQLInterpolation._
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.infrastructure.db.ItemRecord
 
 private[item]
 class ItemRepositoryOnJDBC
   extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
 
-  class Dao extends AbstractDao[Item] {
+  override type T = ItemRecord
 
-    override def tableName: String = "item"
+  override protected val mapper = ItemRecord
 
-    def toNamedValues(entity: Item): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id,
-      'itemTypeId -> entity.itemTypeId.value.toString,
-      'name -> entity.name,
-      'description -> entity.description,
-      'price -> entity.price,
-      'supplierId -> entity.supplierId.value.toString
-    )
+  override def deleteByIdentifier(identifier: ItemId)(implicit ctx: ItemRepositoryOnJDBC#Ctx): Try[(ItemRepositoryOnJDBC#This, Item)] = ???
 
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Item]): Item = {
-      Item(
-        id = ItemId(UUID.fromString(rs.get(n.id))),
-        itemTypeId = ItemTypeId(UUID.fromString(rs.get(n.field("itemTypeId")))),
-        name = rs.get(n.name),
-        description = rs.stringOpt(n.field("description")),
-        price = rs.get(n.price),
-        supplierId = SupplierId(UUID.fromString(rs.get(n.field("supplierId"))))
-      )
-    }
-  }
+  override def storeEntity(entity: Item)(implicit ctx: ItemRepositoryOnJDBC#Ctx): Try[(ItemRepositoryOnJDBC#This, Item)] = ???
 
-  override protected def createDao = new Dao
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Item]] = ???
 
+  override def resolveEntity(identifier: ItemId)(implicit ctx: ItemRepositoryOnJDBC#Ctx): Try[Item] = ???
 }

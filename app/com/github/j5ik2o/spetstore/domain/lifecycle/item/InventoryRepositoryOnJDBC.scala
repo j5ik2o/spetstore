@@ -1,36 +1,25 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.item.{ItemId, Inventory, InventoryId}
 import java.util.UUID
 import scalikejdbc._, SQLInterpolation._
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.infrastructure.db.InventoryRecord
 
 private[item]
 class InventoryRepositoryOnJDBC
   extends RepositoryOnJDBC[InventoryId, Inventory] with InventoryRepository {
+  override type T = InventoryRecord
 
-  class Dao extends AbstractDao[Inventory] {
-    override def defaultAlias = createAlias("i")
+  override protected val mapper = InventoryRecord
 
-    override val connectionPoolName = 'inventory
+  override def deleteByIdentifier(identifier: InventoryId)(implicit ctx: InventoryRepositoryOnJDBC#Ctx): Try[(InventoryRepositoryOnJDBC#This, Inventory)] = ???
 
-    override val tableName = "inventory"
+  override def storeEntity(entity: Inventory)(implicit ctx: InventoryRepositoryOnJDBC#Ctx): Try[(InventoryRepositoryOnJDBC#This, Inventory)] = ???
 
-    def extract(rs: WrappedResultSet, p: SQLInterpolation.ResultName[Inventory]): Inventory =
-      Inventory(
-        id = InventoryId(UUID.fromString(rs.get(p.id))),
-        itemId = ItemId(UUID.fromString(rs.get(p.itemId))),
-        quantity = rs.get(p.quantity)
-      )
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Inventory]] = ???
 
-    def toNamedValues(entity: Inventory): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'itemId -> entity.itemId.value,
-      'quantity -> entity.quantity
-    )
-
-  }
-
-  override protected def createDao = new Dao
-
+  override def resolveEntity(identifier: InventoryId)(implicit ctx: InventoryRepositoryOnJDBC#Ctx): Try[Inventory] = ???
 }

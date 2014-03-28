@@ -10,21 +10,27 @@ import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
+import scala.util.Success
 
 class OrderSpec extends Specification {
 
   "order" should {
     val item = Item(
       id = ItemId(),
+      status = StatusType.Enabled,
       itemTypeId = ItemTypeId(),
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
       supplierId = SupplierId()
     )
+    implicit val ctx = EntityIOContextOnMemory
+    implicit val itemRepository = ItemRepository.ofMemory().storeEntity(item).get._1
     "add orderItem" in {
       val order = Order(
-        status = OrderStatus.Pending,
+        status = StatusType.Enabled,
+        orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -35,16 +41,17 @@ class OrderSpec extends Specification {
         ),
         orderItems = List.empty
       )
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
-        status = OrderStatus.Pending,
+        status = StatusType.Enabled,
+        orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -61,9 +68,10 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
-        status = OrderStatus.Pending,
+        status = StatusType.Enabled,
+        orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -80,9 +88,10 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(item, 1)
+      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
-        status = OrderStatus.Pending,
+        status = StatusType.Enabled,
+        orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
         userName = "Junichi Kato",
         shippingAddress = PostalAddress(
@@ -93,12 +102,12 @@ class OrderSpec extends Specification {
         ),
         orderItems = List(orderItem)
       )
-      order.totalPrice must_== BigDecimal(100)
+      order.totalPrice must_== Success(BigDecimal(100))
     }
     "apply from cart" in {
       val customer = Customer(
         id = CustomerId(),
-        status = CustomerStatus.Enabled,
+        status = StatusType.Enabled,
         name = "Junichi Kato",
         sexType = SexType.Female,
         profile = CustomerProfile(
@@ -118,15 +127,16 @@ class OrderSpec extends Specification {
       )
       val cart = Cart(
         id = CartId(),
+        StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(
-          CartItem(item, 1, false)
+          CartItem(1, StatusType.Enabled, item.id, 1, false)
         )
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
       val order = Order.fromCart(cart).get
-      order.orderItems.exists(e => e.item == item && e.quantity == 1) must beTrue
+      order.orderItems.exists(e => e.itemId == item.id && e.quantity == 1) must beTrue
     }
 
   }

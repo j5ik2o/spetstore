@@ -1,39 +1,28 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
 import java.util.UUID
 
 import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, ItemType, ItemTypeId}
+import scala.util.Try
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.infrastructure.db.ItemTypeRecord
 
 
 private[item]
 class ItemTypeRepositoryOnJDBC
   extends RepositoryOnJDBC[ItemTypeId, ItemType] with ItemTypeRepository {
 
-  class Dao extends AbstractDao[ItemType] {
+  override type T = ItemTypeRecord
 
-    override def defaultAlias = createAlias("i")
+  override protected val mapper = ItemTypeRecord
 
-    override def tableName: String = "item_type"
+  override def deleteByIdentifier(identifier: ItemTypeId)(implicit ctx: ItemTypeRepositoryOnJDBC#Ctx): Try[(ItemTypeRepositoryOnJDBC#This, ItemType)] = ???
 
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[ItemType]): ItemType =
-      ItemType(
-        id = ItemTypeId(UUID.fromString(rs.get(n.id))),
-        categoryId = CategoryId(UUID.fromString(rs.get(n.categoryId))),
-        name = rs.get(n.name),
-        description = rs.get(n.description)
-      )
+  override def storeEntity(entity: ItemType)(implicit ctx: ItemTypeRepositoryOnJDBC#Ctx): Try[(ItemTypeRepositoryOnJDBC#This, ItemType)] = ???
 
-    def toNamedValues(entity: ItemType): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'categoryId -> entity.categoryId.value,
-      'name -> entity.name,
-      'description -> entity.description
-    )
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[ItemType]] = ???
 
-  }
-
-  override protected def createDao = new Dao
-
+  override def resolveEntity(identifier: ItemTypeId)(implicit ctx: ItemTypeRepositoryOnJDBC#Ctx): Try[ItemType] = ???
 }

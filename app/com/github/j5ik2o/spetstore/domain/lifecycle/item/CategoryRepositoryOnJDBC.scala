@@ -1,34 +1,31 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.SimpleRepositoryOnJDBC
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
-import java.util.UUID
-import scalikejdbc._, SQLInterpolation._
+import com.github.j5ik2o.spetstore.infrastructure.db.CategoryRecord
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 
 
 private[item]
 class CategoryRepositoryOnJDBC
-  extends RepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
+  extends SimpleRepositoryOnJDBC[CategoryId, Category] with CategoryRepository {
 
-  class Dao extends AbstractDao[Category] {
-    override def defaultAlias = createAlias("c")
+  override type T = CategoryRecord
 
-    override val tableName = "category"
+  override protected val mapper = CategoryRecord
 
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Category]): Category =
-      Category(
-        id = CategoryId(UUID.fromString(rs.get(n.id))),
-        name = rs.get(n.name),
-        description = rs.get(n.description)
-      )
+  override protected def convertToEntity(record: TS): Category = Category(
+    id = CategoryId(record.id),
+    status = StatusType(record.status),
+    name = record.name,
+    description = record.description
+  )
 
+  override protected def convertToRecord(entity: Category): TS = CategoryRecord(
+    id = entity.id.value,
+    status = entity.status.id,
+    name = entity.name,
+    description = entity.description
+  )
 
-    def toNamedValues(entity: Category): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'name -> entity.name,
-      'description -> entity.description
-    )
-  }
-
-  override protected def createDao = new Dao
 }

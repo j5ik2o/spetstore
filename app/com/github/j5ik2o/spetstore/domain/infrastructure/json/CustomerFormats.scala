@@ -19,7 +19,7 @@ object CustomerFormats {
       CustomerConfig(
         (value \ "loginName").as[String],
         (value \ "password").as[String],
-        (value \ "favoriteCategoryId").as[Option[String]].map(e => CategoryId(UUID.fromString(e)))
+        (value \ "favoriteCategoryId").as[Option[Long]].map(e => CategoryId(e))
       )
 
     def write(obj: CustomerConfig): JValue =

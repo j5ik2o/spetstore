@@ -1,53 +1,23 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnJDBC
-import java.util.UUID
-import com.github.j5ik2o.spetstore.domain.model.basic.{Pref, Contact, ZipCode, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.item.{Supplier, SupplierId}
-import scalikejdbc._, SQLInterpolation._
+import scala.util.Try
+import com.github.j5ik2o.spetstore.infrastructure.db.SupplierRecord
 
 private[item]
 class SupplierRepositoryOnJDBC
   extends RepositoryOnJDBC[SupplierId, Supplier] with SupplierRepository {
 
-  class Dao extends AbstractDao[Supplier] {
+  override type T = SupplierRecord
 
-    override def defaultAlias = createAlias("s")
+  override protected val mapper = SupplierRecord
 
-    override def tableName: String = "supplier"
+  override def deleteByIdentifier(identifier: SupplierId)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[(SupplierRepositoryOnJDBC#This, Supplier)] = ???
 
-    def toNamedValues(entity: Supplier): Seq[(Symbol, Any)] = Seq(
-      'id -> entity.id.value,
-      'name -> entity.name,
-      'zipCode -> entity.postalAddress.zipCode.asString,
-      'prefCode -> entity.postalAddress.pref.id,
-      'cityName -> entity.postalAddress.cityName,
-      'addressName -> entity.postalAddress.addressName,
-      'buildingName -> entity.postalAddress.buildingName,
-      'email -> entity.contact.email,
-      'phone -> entity.contact.phone
-    )
+  override def storeEntity(entity: Supplier)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[(SupplierRepositoryOnJDBC#This, Supplier)] = ???
 
-    def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[Supplier]): Supplier = {
-      Supplier(
-        id = SupplierId(UUID.fromString(rs.get(n.id))),
-        name = rs.get(n.name),
-        postalAddress = PostalAddress(
-          zipCode = ZipCode(rs.get(n.field("zipCode"))),
-          pref = Pref(rs.get(n.field("prefCode"))),
-          cityName = rs.get(n.field("cityName")),
-          addressName = rs.get(n.field("addressName")),
-          buildingName = rs.get(n.field("buildingName"))
-        ),
-        contact = Contact(
-          email = rs.get(n.field("email")),
-          phone = rs.get(n.field("phone"))
-        )
-      )
-    }
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Supplier]] = ???
 
-  }
-
-  override protected def createDao = new Dao
-
+  override def resolveEntity(identifier: SupplierId)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[Supplier] = ???
 }

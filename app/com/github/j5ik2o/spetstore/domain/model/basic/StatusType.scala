@@ -1,9 +1,9 @@
-package com.github.j5ik2o.spetstore.domain.model.customer
+package com.github.j5ik2o.spetstore.domain.model.basic
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]の状態を表す値オブジェクト。
  */
-object CustomerStatus extends Enumeration {
+object StatusType extends Enumeration {
 
   /**
    * 有効

@@ -1,11 +1,12 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
 import com.github.nscala_time.time.Imports._
-import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import scala.collection.mutable.ListBuffer
-import scala.util.Try
+import scala.util.{Success, Try}
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 
 /**
  * 注文を表すエンティティ。
@@ -18,7 +19,8 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
  */
 case class Order
 (id: OrderId = OrderId(),
- status: OrderStatus.Value,
+ status: StatusType.Value,
+ orderStatus: OrderStatus.Value,
  orderDate: DateTime,
  userName: String,
  shippingAddress: PostalAddress,
@@ -40,8 +42,18 @@ case class Order
    *
    * @return 合計
    */
-  lazy val totalPrice: BigDecimal =
-    orderItems.map(_.subTotalPrice).reduceLeft(_ + _)
+  def totalPrice(implicit ir: ItemRepository, ctx: EntityIOContext): Try[BigDecimal] = {
+    orderItems.foldLeft(Try(BigDecimal(0))){
+      (l, r) =>
+        for {
+          e1 <- l
+          e2 <- r.subTotalPrice
+        } yield {
+          e1 + e2
+        }
+    }
+  }
+
 
   /**
    * この注文に[[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]を追加する。
@@ -97,7 +109,7 @@ object Order {
   def fromCart(cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
     val orderItems = cart.cartItems.map(OrderItem.fromCartItem)
-    Order(OrderId(), OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
+    Order(OrderId(), cart.status, OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
   }
 
 }
