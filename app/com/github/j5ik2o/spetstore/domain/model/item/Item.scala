@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
-import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, SexType}
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemTypeRepository
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
+import scala.util.Try
 
 /**
  * ペットを表すエンティティ。

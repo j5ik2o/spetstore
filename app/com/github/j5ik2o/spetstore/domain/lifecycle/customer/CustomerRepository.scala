@@ -3,7 +3,6 @@ package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Repository}
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]のためのリポジトリ責務。

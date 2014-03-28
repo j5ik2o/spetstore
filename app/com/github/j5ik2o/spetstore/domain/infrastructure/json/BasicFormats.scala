@@ -2,7 +2,6 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
 import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, Pref, ZipCode, PostalAddress}
 import org.json4s.DefaultReaders._
-import org.json4s.DefaultWriters._
 import org.json4s._
 
 
@@ -45,7 +44,7 @@ object BasicFormats {
         JField("prefCode", obj.pref.asJValue),
         JField("cityName", JString(obj.cityName)),
         JField("addressName", JString(obj.addressName)),
-        JField("buildingName", obj.buildingName.map(_.asJValue).getOrElse(JNull))
+        JField("buildingName", obj.buildingName.map(JString(_)).getOrElse(JNull))
       )
   }
 

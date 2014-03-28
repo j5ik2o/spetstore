@@ -2,8 +2,7 @@ package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnMemory}
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
-import scala.util.{Success, Try}
-import com.github.j5ik2o.spetstore.domain.lifecycle.customer
+import scala.util.Try
 
 /**
  * [[customer.CustomerRepository]]のためのオンメモリリポジトリ。

@@ -1,11 +1,11 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
+import IdentifierFormats._
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.CartItem
 import org.json4s.DefaultReaders._
 import org.json4s._
-import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
-import IdentifierFormats._
 
 object CartFormats {
 

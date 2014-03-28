@@ -1,11 +1,11 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, SexType}
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, Cart, CartItem}
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 
 /**
  * ペットストアの顧客を表すエンティティ。

@@ -4,7 +4,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnMem
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.item.CategoryRepository]]のためのオンメモリリポジトリ。
+ * [[com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository]]のためのオンメモリリポジトリ。
  *
  * @param entities エンティティの集合
  */

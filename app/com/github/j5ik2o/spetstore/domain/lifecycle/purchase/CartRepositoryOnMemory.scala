@@ -2,7 +2,6 @@ package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.RepositoryOnMemory
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId}
-import com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 /**
  * [[purchase.CartRepository]]のためのオンメモリリポジトリ。

@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
-import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, Contact, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.Entity
+import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, Contact, PostalAddress}
 
 /**
  * 仕入れ先を表すエンティティ。

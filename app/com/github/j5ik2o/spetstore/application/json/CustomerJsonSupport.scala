@@ -1,8 +1,8 @@
 package com.github.j5ik2o.spetstore.application.json
 
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 
 trait CustomerJsonSupport {
 

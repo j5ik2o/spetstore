@@ -1,12 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
-import com.github.j5ik2o.spetstore.domain.model.item.{SupplierId, ItemTypeId, Item, ItemId}
-import java.util.UUID
-import scalikejdbc._, SQLInterpolation._
-import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.domain.model.item.{Item, ItemId}
 import com.github.j5ik2o.spetstore.infrastructure.db.ItemRecord
+import scala.util.Try
 
 private[item]
 class ItemRepositoryOnJDBC

@@ -1,9 +1,8 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
+import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 import org.specs2.mutable.Specification
 import scalikejdbc._, SQLInterpolation._
-import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 
 class RepositoryOnJDBCSpec extends Specification {
 
@@ -42,13 +41,13 @@ class RepositoryOnJDBCSpec extends Specification {
 
     override protected val mapper = PersonRecord
 
-    override protected def convertToRecord(entity: Person): TS = PersonRecord(
+    override protected def convertToRecord(entity: Person) = PersonRecord(
       id = entity.id.value,
       firstName = entity.firstName,
       lastName = entity.lastName
     )
 
-    override protected def convertToEntity(record: TS): Person = Person(
+    override protected def convertToEntity(record: T): Person = Person(
       id = PersonId(record.id),
       firstName = record.firstName,
       lastName = record.lastName

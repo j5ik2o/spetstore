@@ -1,6 +1,8 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContextOnMemory
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.github.j5ik2o.spetstore.domain.model.item.Item
@@ -9,8 +11,6 @@ import com.github.j5ik2o.spetstore.domain.model.item.ItemTypeId
 import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
-import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
-import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import scala.util.Success
 
 class OrderSpec extends Specification {

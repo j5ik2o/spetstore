@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext
+import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 import com.github.j5ik2o.spetstore.domain.model.item.{Category,CategoryId}
 import scala.util.Try
-import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]の設定を表す値オブジェクト。

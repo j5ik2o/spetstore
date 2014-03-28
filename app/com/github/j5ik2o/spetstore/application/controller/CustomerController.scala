@@ -1,26 +1,24 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
-import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.customer._
-import com.google.inject.Inject
-import java.util.UUID
-import play.api.libs.json._
-import play.api.libs.json.Json._
-import play.api.mvc._
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
-import play.api.Logger
+import com.github.j5ik2o.spetstore.domain.model.basic.Contact
+import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
+import com.github.j5ik2o.spetstore.domain.model.basic._
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
-import play.api.libs.json.JsArray
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
+import com.google.inject.Inject
+import play.api.Logger
+import play.api.libs.json.JsArray
+import play.api.libs.json.Json._
+import play.api.libs.json._
+import play.api.mvc._
 import scala.util.Success
-import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.model.customer.Customer
-import com.github.j5ik2o.spetstore.domain.model.basic.Contact
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class CustomerController @Inject()
 (customerRepository: CustomerRepository,

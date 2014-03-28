@@ -1,15 +1,13 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
+import BasicFormats._
+import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.model.customer.{CustomerConfig, CustomerProfile, Customer}
+import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import org.json4s.DefaultReaders._
-import org.json4s.DefaultWriters._
 import org.json4s.JsonAST.{JInt, JString, JField, JObject}
 import org.json4s._
-import BasicFormats._
 import IdentifierFormats._
-import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
-import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
-import java.util.UUID
 
 object CustomerFormats {
 

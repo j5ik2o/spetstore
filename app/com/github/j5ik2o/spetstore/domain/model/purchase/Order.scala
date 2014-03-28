@@ -1,12 +1,12 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.nscala_time.time.Imports._
-import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, PostalAddress}
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
-import scala.collection.mutable.ListBuffer
-import scala.util.{Success, Try}
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
+import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, PostalAddress}
+import com.github.nscala_time.time.Imports._
+import scala.collection.mutable.ListBuffer
+import scala.util.Try
 
 /**
  * 注文を表すエンティティ。

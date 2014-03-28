@@ -1,7 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import org.specs2.mutable.Specification
-import scala.util.Try
 
 class RepositoryOnMemorySpec extends Specification {
 

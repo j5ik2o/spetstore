@@ -1,17 +1,16 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
 import com.github.j5ik2o.spetstore.domain.infrastructure.support._
+import com.github.j5ik2o.spetstore.domain.model.basic.Contact
+import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
 import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.customer._
+import com.github.j5ik2o.spetstore.domain.model.customer.Customer
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
+import com.github.j5ik2o.spetstore.infrastructure.db.CustomerRecord
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
-import com.github.j5ik2o.spetstore.infrastructure.db.CustomerRecord
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
-import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
-import com.github.j5ik2o.spetstore.domain.model.customer.Customer
-import com.github.j5ik2o.spetstore.domain.model.basic.Contact
 
 private[customer]
 class CustomerRepositoryOnJDBC
@@ -65,9 +64,10 @@ class CustomerRepositoryOnJDBC
   )
 
   def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]] = withDBSession(ctx) {
-    implicit s =>
+    implicit s => Try {
       val c = mapper.defaultAlias
       mapper.findBy(sqls.eq(c.loginName, loginName)).map(convertToEntity)
+    }
   }
 
 }
