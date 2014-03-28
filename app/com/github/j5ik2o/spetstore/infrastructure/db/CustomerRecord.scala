@@ -24,6 +24,8 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
   override def defaultAlias = createAlias("c")
 
+  override def tableName: String = "customer"
+
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CustomerRecord]) = CustomerRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
@@ -69,6 +71,8 @@ object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
   override def defaultAlias = createAlias("c")
 
+  override def tableName: String = "category"
+
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CategoryRecord]) = CategoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
@@ -93,6 +97,8 @@ case class InventoryRecord
 object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
   override def defaultAlias = createAlias("i")
+
+  override def tableName: String = "inventory"
 
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[InventoryRecord]) = InventoryRecord(
     id = rs.get(n.id),
@@ -122,6 +128,8 @@ case class ItemRecord
 object ItemRecord extends CRUDMapper[ItemRecord] {
 
   override def defaultAlias = createAlias("i")
+
+  override def tableName: String = "item"
 
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[ItemRecord]) = ItemRecord(
     id = rs.get(n.id),
@@ -156,6 +164,8 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
   override def defaultAlias = createAlias("it")
 
+  override def tableName: String = "item_type"
+
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
@@ -187,7 +197,10 @@ case class SupplierRecord
  phone: String)
 
 object SupplierRecord extends CRUDMapper[SupplierRecord] {
+
   override def defaultAlias = createAlias("s")
+
+  override def tableName: String = "supplier"
 
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
     id = rs.get(n.id),
@@ -223,6 +236,8 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
   override def defaultAlias = createAlias("c")
 
+  override def tableName: String = "cart"
+
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartRecord]): CartRecord = CartRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
@@ -242,7 +257,9 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   override def defaultAlias = createAlias("ci")
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord]): CartItemRecord = CartItemRecord(
+  override def tableName: String = "cart_item"
+
+  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord])  = CartItemRecord(
     no = rs.get(n.no),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
@@ -279,7 +296,9 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 
   override def defaultAlias = createAlias("o")
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderRecord]): OrderRecord = OrderRecord(
+  override def tableName: String = "order"
+
+  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderRecord]) = OrderRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderDateTime = rs.get(n.orderDateTime),
@@ -310,3 +329,16 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 
 case class OrderItemRecord
 (id: Long, status: Int, itemId: Long, quantity: Int)
+
+
+object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
+
+  override def defaultAlias = createAlias("oi")
+
+  override def tableName: String = "order_item"
+
+  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = ???
+
+  override def toNamedValues(record: OrderItemRecord): Seq[(Symbol, Any)] = ???
+
+}

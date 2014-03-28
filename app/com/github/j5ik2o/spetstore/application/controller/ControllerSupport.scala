@@ -21,7 +21,7 @@ trait ControllerSupport extends Controller with Json4s {
     id: Identifier[Long] => Ok(
       JsObject(
         Seq(
-          "id" -> JsString(id.value.toString)
+          "id" -> JsNumber(id.value)
         )
       )
     )
