@@ -8,7 +8,7 @@ import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.github.j5ik2o.spetstore.domain.model.item._
 import org.specs2.mutable.Specification
 import scala.util.Success
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class CartSpec extends Specification {
 

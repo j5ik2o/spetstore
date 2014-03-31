@@ -7,10 +7,14 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.purchase.{OrderRepository, C
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import scalikejdbc._
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class GuiceModule extends AbstractModule with ScalaModule {
 
   def configure() {
+
+    bind[IdentifierService].toInstance(IdentifierService())
+
     // application
     bind[EntityIOContextProvider].toInstance(new EntityIOContextProvider.JDBC(AutoSession))
     bind[AuthenticationService]

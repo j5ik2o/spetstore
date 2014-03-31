@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.lifecycle
+package com.github.j5ik2o.spetstore.infrastructure.identifier
 
 import java.util.concurrent.atomic.AtomicInteger
 

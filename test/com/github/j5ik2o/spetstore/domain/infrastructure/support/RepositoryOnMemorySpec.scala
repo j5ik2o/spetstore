@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import org.specs2.mutable.Specification
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class RepositoryOnMemorySpec extends Specification {
 

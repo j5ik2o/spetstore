@@ -12,7 +12,7 @@ import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import scala.util.Success
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class OrderSpec extends Specification {
 

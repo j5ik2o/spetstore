@@ -3,7 +3,6 @@ package com.github.j5ik2o.spetstore.application.controller
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
 import com.github.j5ik2o.spetstore.application.json.CustomerJsonSupport
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer.Customer
@@ -16,9 +15,11 @@ import play.api.libs.json.Json._
 import play.api.libs.json._
 import play.api.mvc._
 import scala.util.Success
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class CustomerController @Inject()
-(customerRepository: CustomerRepository,
+(identifierService: IdentifierService,
+  customerRepository: CustomerRepository,
  entityIOContextProvider: EntityIOContextProvider)
   extends ControllerSupport with CustomerJsonSupport {
 
@@ -26,7 +27,7 @@ class CustomerController @Inject()
 
   private def convertToEntity(customerJson: CustomerJson): Customer =
     Customer(
-      id = CustomerId(customerJson.id.getOrElse(IdentifierService().generate)),
+      id = CustomerId(customerJson.id.getOrElse(identifierService.generate)),
       status = StatusType.Enabled,
       name = customerJson.name,
       sexType = SexType(customerJson.sexType),

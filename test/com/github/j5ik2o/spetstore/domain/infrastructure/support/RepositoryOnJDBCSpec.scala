@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 import org.specs2.mutable.Specification
 import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
-import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class RepositoryOnJDBCSpec extends Specification {
 
