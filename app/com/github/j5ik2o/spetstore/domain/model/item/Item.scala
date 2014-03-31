@@ -15,7 +15,7 @@ import scala.util.Try
  * @param price 価格
  */
 case class Item
-(id: ItemId = ItemId(),
+(id: ItemId,
  status: StatusType.Value,
  itemTypeId: ItemTypeId,
  name: String,

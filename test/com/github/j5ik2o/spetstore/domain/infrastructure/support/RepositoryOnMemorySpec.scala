@@ -1,8 +1,11 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
 import org.specs2.mutable.Specification
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class RepositoryOnMemorySpec extends Specification {
+
+  val identifierService = IdentifierService()
 
   case class PersonRepositoryOnMemory(entities: Map[PersonId, Person] = Map.empty)
     extends RepositoryOnMemory[PersonId, Person](entities) with PersonRepository {
@@ -17,7 +20,7 @@ class RepositoryOnMemorySpec extends Specification {
   "repository" should {
     implicit val ctx = EntityIOContextOnMemory
     "store a entity" in {
-      val personId = PersonId()
+      val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory().
         storeEntity(person) must beSuccessfulTry.like {
@@ -27,7 +30,7 @@ class RepositoryOnMemorySpec extends Specification {
     }
 
     "contains a entity" in {
-      val personId = PersonId()
+      val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       val entities = Map(personId -> person)
       entities.contains(personId) must beTrue
@@ -39,7 +42,7 @@ class RepositoryOnMemorySpec extends Specification {
     }
 
     "get a entity" in {
-      val personId = PersonId()
+      val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory(Map(personId -> person)).
         resolveEntity(personId) must beSuccessfulTry.like {
@@ -49,7 +52,7 @@ class RepositoryOnMemorySpec extends Specification {
     }
 
     "delete a entity" in {
-      val personId = PersonId()
+      val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory(Map(personId -> person)).
         deleteByIdentifier(personId) must beSuccessfulTry.like {

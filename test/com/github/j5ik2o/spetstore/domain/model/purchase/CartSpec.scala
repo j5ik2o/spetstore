@@ -8,12 +8,15 @@ import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.github.j5ik2o.spetstore.domain.model.item._
 import org.specs2.mutable.Specification
 import scala.util.Success
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class CartSpec extends Specification {
 
+  val identifierService = IdentifierService()
+
   "cart" should {
     val customer = Customer(
-      id = CustomerId(),
+      id = CustomerId(identifierService.generate),
       status = StatusType.Enabled,
       name = "Junichi Kato",
       sexType = SexType.Female,
@@ -33,20 +36,20 @@ class CartSpec extends Specification {
       )
     )
     val item = Item(
-      id = ItemId(),
+      id = ItemId(identifierService.generate),
       status = StatusType.Enabled,
-      itemTypeId = ItemTypeId(),
+      itemTypeId = ItemTypeId(identifierService.generate),
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
-      supplierId = SupplierId()
+      supplierId = SupplierId(identifierService.generate)
     )
     implicit val ctx = EntityIOContextOnMemory
     implicit val itemRepository = ItemRepository.ofMemory().storeEntity(item).get._1
 
     "add cartItem" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List.empty
@@ -60,7 +63,7 @@ class CartSpec extends Specification {
     }
     "add cartItem as item" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List.empty
@@ -74,7 +77,7 @@ class CartSpec extends Specification {
     "add cartItem if contains cartItem" in {
       val cartItem = CartItem(1, StatusType.Enabled, item.id, 2, false)
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(cartItem)
@@ -87,7 +90,7 @@ class CartSpec extends Specification {
     }
     "remove cartItem by itemId" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))
@@ -100,7 +103,7 @@ class CartSpec extends Specification {
     }
     "increment quantity by itemId" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))
@@ -113,7 +116,7 @@ class CartSpec extends Specification {
     }
     "update quantity by itemId" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))
@@ -126,7 +129,7 @@ class CartSpec extends Specification {
     }
     "contains item" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))
@@ -135,7 +138,7 @@ class CartSpec extends Specification {
     }
     "get totalPrice" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))
@@ -144,7 +147,7 @@ class CartSpec extends Specification {
     }
     "get customer" in {
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(CartItem(1, StatusType.Enabled, item.id, 1, false))

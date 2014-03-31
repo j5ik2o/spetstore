@@ -8,5 +8,5 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
  *
  * @param value 識別子の値
  */
-case class OrderId(value: Long = IdentifierService.generate(classOf[Order]))
+case class OrderId(value: Long)
   extends Identifier[Long]

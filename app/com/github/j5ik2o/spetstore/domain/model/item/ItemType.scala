@@ -12,7 +12,7 @@ import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
  * @param description 説明
  */
 case class ItemType
-(id: ItemTypeId = ItemTypeId(),
+(id: ItemTypeId,
  status: StatusType.Value,
  categoryId: CategoryId,
  name: String,

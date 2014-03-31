@@ -1,6 +1,5 @@
 package com.github.j5ik2o.spetstore.infrastructure.db
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 import org.joda.time.DateTime
 import scalikejdbc._, SQLInterpolation._
 

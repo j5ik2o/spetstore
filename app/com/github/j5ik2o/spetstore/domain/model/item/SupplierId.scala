@@ -8,5 +8,5 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
  *
  * @param value 識別子の値
  */
-case class SupplierId(value: Long = IdentifierService.generate(classOf[Supplier]))
+case class SupplierId(value: Long)
   extends Identifier[Long]

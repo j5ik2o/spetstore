@@ -18,7 +18,7 @@ import scala.util.Try
  * @param orderItems [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]のリスト
  */
 case class Order
-(id: OrderId = OrderId(),
+(id: OrderId,
  status: StatusType.Value,
  orderStatus: OrderStatus.Value,
  orderDate: DateTime,
@@ -106,10 +106,10 @@ object Order {
    * @param cart [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]
    */
-  def fromCart(cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
+  def fromCart(orderId: OrderId, cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
     val orderItems = cart.cartItems.map(OrderItem.fromCartItem)
-    Order(OrderId(), cart.status, OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
+    Order(orderId, cart.status, OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
   }
 
 }

@@ -38,7 +38,7 @@ object SpetstoreBuild extends Build {
     initialCommands := """
   import scalikejdbc._,config._,SQLInterpolation._
   DBs.setupAll
-  com.github.j5ik2o.spetstore.domain.infrastructure.db.DBInitializer.run()""".stripMargin
+  com.github.j5ik2o.spetstore.infrastructure.db.DBInitializer.run()""".stripMargin
 
   )
 

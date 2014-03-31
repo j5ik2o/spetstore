@@ -26,7 +26,7 @@ class CustomerController @Inject()
 
   private def convertToEntity(customerJson: CustomerJson): Customer =
     Customer(
-      id = CustomerId(customerJson.id.getOrElse(IdentifierService.generate(classOf[Customer]))),
+      id = CustomerId(customerJson.id.getOrElse(IdentifierService().generate)),
       status = StatusType.Enabled,
       name = customerJson.name,
       sexType = SexType(customerJson.sexType),

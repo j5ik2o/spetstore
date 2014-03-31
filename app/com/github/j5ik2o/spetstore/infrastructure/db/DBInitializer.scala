@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.domain.infrastructure.db
+package com.github.j5ik2o.spetstore.infrastructure.db
 
 import scalikejdbc._, SQLInterpolation._
 

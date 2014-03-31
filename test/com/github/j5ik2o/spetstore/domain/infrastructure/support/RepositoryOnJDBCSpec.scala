@@ -1,12 +1,15 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 import org.specs2.mutable.Specification
 import scalikejdbc._, SQLInterpolation._
+import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class RepositoryOnJDBCSpec extends Specification {
 
   sequential
+
+  val identifierService = IdentifierService()
 
   case class PersonRecord(id: Long, firstName: String, lastName: String)
 
@@ -76,7 +79,7 @@ create table person (
     "store entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId()
+          val personId = PersonId(identifierService.generate)
           val person = Person(personId, "Junichi", "Kato")
           PersonRepositoryOnJDBC().storeEntity(person) must beSuccessfulTry
       }
@@ -84,7 +87,7 @@ create table person (
     "contains a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId()
+          val personId = PersonId(identifierService.generate)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry
@@ -97,7 +100,7 @@ create table person (
     "get a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId()
+          val personId = PersonId(identifierService.generate)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry
@@ -111,7 +114,7 @@ create table person (
     "delete a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId()
+          val personId = PersonId(identifierService.generate)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry

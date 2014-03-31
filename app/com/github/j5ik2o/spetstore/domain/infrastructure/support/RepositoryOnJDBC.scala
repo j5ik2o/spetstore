@@ -1,8 +1,8 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.db.CRUDMapper
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
+import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。

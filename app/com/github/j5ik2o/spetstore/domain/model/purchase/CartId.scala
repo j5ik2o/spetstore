@@ -8,6 +8,6 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
  *
  * @param value 識別子の値
  */
-case class CartId(value: Long = IdentifierService.generate(classOf[Cart]))
+case class CartId(value: Long)
   extends Identifier[Long]
 

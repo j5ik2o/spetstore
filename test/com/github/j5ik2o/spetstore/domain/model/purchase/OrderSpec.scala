@@ -12,23 +12,27 @@ import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import scala.util.Success
+import com.github.j5ik2o.spetstore.domain.lifecycle.IdentifierService
 
 class OrderSpec extends Specification {
 
+  val identifierService = IdentifierService()
+
   "order" should {
     val item = Item(
-      id = ItemId(),
+      id = ItemId(identifierService.generate),
       status = StatusType.Enabled,
-      itemTypeId = ItemTypeId(),
+      itemTypeId = ItemTypeId(identifierService.generate),
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
-      supplierId = SupplierId()
+      supplierId = SupplierId(identifierService.generate)
     )
     implicit val ctx = EntityIOContextOnMemory
     implicit val itemRepository = ItemRepository.ofMemory().storeEntity(item).get._1
     "add orderItem" in {
       val order = Order(
+        id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -50,6 +54,7 @@ class OrderSpec extends Specification {
     "remove orderItem" in {
       val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
+        id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -70,6 +75,7 @@ class OrderSpec extends Specification {
     "remove orderItem by index" in {
       val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
+        id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -90,6 +96,7 @@ class OrderSpec extends Specification {
     "get totalPrice" in {
       val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
       val order = Order(
+        id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
@@ -106,7 +113,7 @@ class OrderSpec extends Specification {
     }
     "apply from cart" in {
       val customer = Customer(
-        id = CustomerId(),
+        id = CustomerId(identifierService.generate),
         status = StatusType.Enabled,
         name = "Junichi Kato",
         sexType = SexType.Female,
@@ -126,7 +133,7 @@ class OrderSpec extends Specification {
         )
       )
       val cart = Cart(
-        id = CartId(),
+        id = CartId(identifierService.generate),
         StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(
@@ -135,7 +142,7 @@ class OrderSpec extends Specification {
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
-      val order = Order.fromCart(cart).get
+      val order = Order.fromCart(OrderId(identifierService.generate), cart).get
       order.orderItems.exists(e => e.itemId == item.id && e.quantity == 1) must beTrue
     }
 

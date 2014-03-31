@@ -14,7 +14,7 @@ import scala.util.Try
  * @param cartItems [[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]のリスト
  */
 case class Cart
-(id: CartId = CartId(),
+(id: CartId,
  status: StatusType.Value,
  customerId: CustomerId,
  cartItems: List[CartItem]) extends Entity[CartId] {

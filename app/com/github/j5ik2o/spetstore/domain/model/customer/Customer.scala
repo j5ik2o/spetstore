@@ -4,7 +4,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContex
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, SexType}
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, Cart, CartItem}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderId, Order, Cart, CartItem}
 import scala.util.Try
 
 /**
@@ -18,7 +18,7 @@ import scala.util.Try
  * @param config [[com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig]]
  */
 case class Customer
-(id: CustomerId = CustomerId(),
+(id: CustomerId,
  status: StatusType.Value,
  name: String,
  sexType: SexType.Value,
@@ -32,9 +32,9 @@ case class Customer
   def removeCartItemByPetId(cart: Cart, itemId: ItemId): Cart =
     cart.removeCartItemByPetId(itemId)
 
-  def newOrderFromCart(cart: Cart)
+  def newOrderFromCart(orderId: OrderId, cart: Cart)
                       (implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] =
-    Order.fromCart(cart)
+    Order.fromCart(orderId, cart)
 
 }
 
