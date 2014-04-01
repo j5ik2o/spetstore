@@ -115,6 +115,8 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
 
   protected val mapper: CRUDMapper[T]
 
+  protected val idName: String = "id"
+
   protected def withDBSession[A](ctx: EntityIOContext)(f: DBSession => A): A = {
     ctx match {
       case EntityIOContextOnJDBC(dbSession) => f(dbSession)
@@ -124,7 +126,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
 
   def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s => Try {
-      val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(mapper.primaryKeyFieldName), identifier.value))
+      val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(idName), identifier.value))
       if (count == 0) false
       else if (count == 1) true
       else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
@@ -133,7 +135,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
 
   override def existByIdentifiers(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
-      Try(mapper.countBy(sqls.in(mapper.defaultAlias.field(mapper.primaryKeyFieldName), identifiers.map(_.value))) > 0)
+      Try(mapper.countBy(sqls.in(mapper.defaultAlias.field(idName), identifiers.map(_.value))) > 0)
   }
 
 }

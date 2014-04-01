@@ -15,11 +15,9 @@ class RepositoryOnJDBCSpec extends Specification {
 
   object PersonRecord extends CRUDMapper[PersonRecord] {
 
-    override def defaultAlias = createAlias("p")
+    override def defaultAlias = createAlias("person")
 
     override def tableName: String = "person"
-
-    override def useAutoIncrementPrimaryKey: Boolean = false
 
     override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[PersonRecord]) = PersonRecord(
       id = rs.get(n.id),
@@ -65,13 +63,14 @@ class RepositoryOnJDBCSpec extends Specification {
     implicit s =>
       sql"""
 create table person (
-  id bigint not null primary key,
+  pk bigint not null auto_increment primary key,
+  id bigint not null unique,
   first_name varchar(64),
   last_name varchar(64)
 )
 """.execute().apply()
   }
-
+  val idValue = identifierService.generate
   def withContext[A](session: DBSession)(f: (EntityIOContext) => A): A =
     f(EntityIOContextOnJDBC(session))
 
@@ -79,7 +78,7 @@ create table person (
     "store entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId(identifierService.generate)
+          val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           PersonRepositoryOnJDBC().storeEntity(person) must beSuccessfulTry
       }
@@ -87,7 +86,7 @@ create table person (
     "contains a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId(identifierService.generate)
+          val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry
@@ -100,7 +99,7 @@ create table person (
     "get a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId(identifierService.generate)
+          val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry
@@ -114,7 +113,7 @@ create table person (
     "delete a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
-          val personId = PersonId(identifierService.generate)
+          val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
           repository.storeEntity(person) must beSuccessfulTry
