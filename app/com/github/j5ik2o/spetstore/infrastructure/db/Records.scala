@@ -229,7 +229,7 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
 }
 
 
-case class CartRecord(id: Long, status: Int, customerId: Long)
+case class CartRecord(id: Long, status: Int, customerId: Long, cartItems: Seq[CartItemRecord] = Nil)
 
 object CartRecord extends CRUDMapper[CartRecord] {
 
@@ -248,11 +248,22 @@ object CartRecord extends CRUDMapper[CartRecord] {
     'status -> record.status,
     'customerId -> record.customerId
   )
+
+  val cartItemsRef = hasMany[CartItemRecord](
+    // association's SkinnyMapper and alias
+    many = CartItemRecord -> CartItemRecord.cartItemsAlias,
+    // defines join condition by using aliases
+    on = (c, ci) => sqls.eq(c.id, ci.cartId),
+    // function to merge associations to main entity
+    merge = (cart, cartItems) => cart.copy(cartItems = cartItems)
+  )
+
 }
 
 case class CartItemRecord(no: Long, status: Int, cartId: Long, itemId: Long, quantity: Int, inStock: Boolean)
 
 object CartItemRecord extends CRUDMapper[CartItemRecord] {
+  val cartItemsAlias = createAlias("cart_items")
 
   override def defaultAlias = createAlias("ci")
 

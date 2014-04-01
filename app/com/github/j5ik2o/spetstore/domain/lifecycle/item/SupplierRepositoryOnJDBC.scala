@@ -13,11 +13,11 @@ class SupplierRepositoryOnJDBC
 
   override protected val mapper = SupplierRecord
 
-  override def deleteByIdentifier(identifier: SupplierId)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[(SupplierRepositoryOnJDBC#This, Supplier)] = ???
+  override def deleteByIdentifier(identifier: SupplierId)(implicit ctx: Ctx): Try[(This, Supplier)] = ???
 
-  override def storeEntity(entity: Supplier)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[(SupplierRepositoryOnJDBC#This, Supplier)] = ???
+  override def storeEntity(entity: Supplier)(implicit ctx: Ctx): Try[(This, Supplier)] = ???
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Supplier]] = ???
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Supplier]] = ???
 
-  override def resolveEntity(identifier: SupplierId)(implicit ctx: SupplierRepositoryOnJDBC#Ctx): Try[Supplier] = ???
+  override def resolveEntity(identifier: SupplierId)(implicit ctx: Ctx): Try[Supplier] = ???
 }

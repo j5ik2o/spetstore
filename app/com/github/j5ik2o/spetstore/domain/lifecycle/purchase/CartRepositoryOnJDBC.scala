@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{Identifier, DaoSupport, RepositoryOnJDBC}
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFoundException, Identifier, DaoSupport, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
@@ -23,7 +23,7 @@ class CartRepositoryOnJDBC
 
     override protected val mapper = self.mapper
 
-    override protected def convertToRecord(model: Cart): CartRecord = {
+    override def convertToRecord(model: Cart): CartRecord = {
       CartRecord(
         id = model.id.value,
         status = model.status.id,
@@ -31,14 +31,25 @@ class CartRepositoryOnJDBC
       )
     }
 
-    override protected def convertToEntity(record: CartRecord): Cart = Cart(
+    override def convertToEntity(record: CartRecord): Cart = Cart(
       id = CartId(record.id),
       status = StatusType(record.status),
       customerId = CustomerId(record.customerId),
-      cartItems = List.empty
+      cartItems = record.cartItems.map(CartItemRecordService.convertToEntity).toList
     )
 
-    override protected def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
+    override def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
+
+    override def findById(id: Identifier[Long])(implicit s: DBSession): Try[Cart] = Try {
+      CartRecord.joins(CartRecord.cartItemsRef).
+        findBy(sqls.eq(mapper.defaultAlias.field(idName), convertToPrimaryKey(id))).
+        map(convertToEntity).getOrElse(throw new EntityNotFoundException(s"$id"))
+    }
+
+    override def findAllWithLimitOffset(limit: Int, offset: Int)(implicit s: DBSession): Try[Seq[Cart]] = Try {
+      CartRecord.joins(CartRecord.cartItemsRef).findAllWithLimitOffset(limit, offset).map(convertToEntity)
+    }
+
   }
 
   private case class CartItemRecordService(cartId: CartId)
@@ -51,18 +62,27 @@ class CartRepositoryOnJDBC
       mapper.findAllBy(sqls.eq(alias.cartId, cartId.value)).map(convertToEntity)
     }
 
-    override protected def convertToRecord(model: CartItem): CartItemRecord = {
+    override def convertToEntity(record: CartItemRecord): CartItem = CartItemRecordService.convertToEntity(record)
+
+    override def convertToRecord(model: CartItem): CartItemRecord = CartItemRecordService.convertToRecord(cartId, model)
+
+    override def convertToPrimaryKey(id: Long): Long = CartItemRecordService.convertToPrimaryKey(id)
+  }
+
+  private object CartItemRecordService {
+
+    def convertToRecord(cartId: CartId, model: CartItem): CartItemRecord = {
       CartItemRecord(
         no = model.no,
         status = model.status.id,
-        cartId = this.cartId.value,
+        cartId = cartId.value,
         itemId = model.itemId.value,
         quantity = model.quantity,
         inStock = model.inStock
       )
     }
 
-    override protected def convertToEntity(record: CartItemRecord): CartItem = CartItem(
+    def convertToEntity(record: CartItemRecord): CartItem = CartItem(
       no = record.no,
       status = StatusType(record.status),
       itemId = ItemId(record.itemId),
@@ -70,7 +90,8 @@ class CartRepositoryOnJDBC
       inStock = record.inStock
     )
 
-    override protected def convertToPrimaryKey(id: Long): Long = id
+    def convertToPrimaryKey(id: Long): Long = id
+
   }
 
   override def storeEntity(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
@@ -102,26 +123,11 @@ class CartRepositoryOnJDBC
 
   override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Cart]] = withDBSession(ctx) {
     implicit s =>
-      CartRecordService.findAllWithLimitOffset(offset, limit).map {
-        entities =>
-          entities.map {
-            entity =>
-              CartItemRecordService(entity.id).findByCartId.map {
-                _cartItems =>
-                  entity.copy(cartItems = _cartItems)
-              }.get
-          }
-      }
+      CartRecordService.findAllWithLimitOffset(offset, limit)
   }
 
   override def resolveEntity(identifier: CartId)(implicit ctx: Ctx): Try[Cart] = withDBSession(ctx) {
     implicit s =>
-      CartRecordService.findById(identifier).map {
-        entity =>
-          CartItemRecordService(entity.id).findByCartId.map {
-            _cartItems =>
-              entity.copy(cartItems = _cartItems)
-          }.get
-      }
+      CartRecordService.findById(identifier)
   }
 }

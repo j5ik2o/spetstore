@@ -20,11 +20,11 @@ trait DaoSupport[ID, M, T] {
 
   protected val idName: String = "id"
 
-  protected def convertToPrimaryKey(id: ID): Long
+  def convertToPrimaryKey(id: ID): Long
 
-  protected def convertToRecord(model: M): T
+  def convertToRecord(model: M): T
 
-  protected def convertToEntity(record: T): M
+  def convertToEntity(record: T): M
 
   def insertOrUpdate(id: ID, model: M)(implicit s: DBSession) = Try {
     val count = mapper.updateBy(sqls.eq(mapper.column.field(idName), convertToPrimaryKey(id)))
@@ -62,11 +62,11 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
   private object MainService extends DaoSupport[Identifier[Long], E, T] {
     override protected val mapper = self.mapper
 
-    override protected def convertToRecord(model: E) = self.convertToRecord(model)
+    override def convertToRecord(model: E) = self.convertToRecord(model)
 
-    override protected def convertToEntity(record: T) = self.convertToEntity(record)
+    override def convertToEntity(record: T) = self.convertToEntity(record)
 
-    override protected def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
+    override def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
   }
 
   protected def convertToEntity(record: T): E

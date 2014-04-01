@@ -12,11 +12,11 @@ class OrderRepositoryOnJDBC
 
   override protected val mapper = OrderRecord
 
-  override def deleteByIdentifier(identifier: OrderId)(implicit ctx: OrderRepositoryOnJDBC#Ctx): Try[(OrderRepositoryOnJDBC#This, Order)] = ???
+  override def deleteByIdentifier(identifier: OrderId)(implicit ctx: Ctx): Try[(This, Order)] = ???
 
-  override def storeEntity(entity: Order)(implicit ctx: OrderRepositoryOnJDBC#Ctx): Try[(OrderRepositoryOnJDBC#This, Order)] = ???
+  override def storeEntity(entity: Order)(implicit ctx: Ctx): Try[(This, Order)] = ???
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[Order]] = ???
+  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Order]] = ???
 
-  override def resolveEntity(identifier: OrderId)(implicit ctx: OrderRepositoryOnJDBC#Ctx): Try[Order] = ???
+  override def resolveEntity(identifier: OrderId)(implicit ctx: Ctx): Try[Order] = ???
 }
