@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS `customer`;
 """.execute().apply()
 sql"""
 CREATE TABLE `customer` (
+  `pk`                    BIGINT        NOT NULL AUTO_INCREMENT,
   `id`                    BIGINT        NOT NULL,
   `status`                INT           NOT NULL,
   `name`                  VARCHAR(256)  NOT NULL,
@@ -31,7 +32,8 @@ CREATE TABLE `customer` (
   `login_name`            VARCHAR(64)   NOT NULL,
   `password`              VARCHAR(64)   NOT NULL,
   `favorite_category_id`  BIGINT,
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`)
 );
 """.execute().apply()
 
@@ -40,11 +42,36 @@ DROP TABLE IF EXISTS `category`;
 """.execute().apply()
 sql"""
 CREATE TABLE `category` (
+  `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
   `status`      INT           NOT NULL,
   `name`        VARCHAR(256)  NOT NULL,
   `description` VARCHAR(1024),
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`)
+);
+""".execute().apply()
+sql"""
+CREATE TABLE `cart` (
+  `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
+  `id`          BIGINT        NOT NULL,
+  `status`      INT           NOT NULL,
+  `customer_id` BIGINT,
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`)
+);
+""".execute().apply()
+                sql"""
+CREATE TABLE `cart_item` (
+  `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
+  `no`          INT           NOT NULL,
+  `status`      INT           NOT NULL,
+  `cart_id`     BIGINT        NOT NULL,
+  `item_id`     BIGINT        NOT NULL,
+  `quantity`    INT           NOT NULL,
+  `in_stock`    INT           NOT NULL,
+  PRIMARY KEY(`pk`),
+  UNIQUE(`no`,`cart_id`)
 );
 
 """.execute().apply()

@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
-import scala.util.Try
-import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
 import play.Logger
+import scala.util.Try
+import scalikejdbc._, SQLInterpolation._
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。
@@ -16,6 +16,10 @@ trait DaoSupport[ID, M, T] {
 
   protected val mapper: CRUDMapper[T]
 
+  private lazy val m = mapper.defaultAlias
+
+  protected val idName: String = "id"
+
   protected def convertToPrimaryKey(id: ID): Long
 
   protected def convertToRecord(model: M): T
@@ -23,7 +27,7 @@ trait DaoSupport[ID, M, T] {
   protected def convertToEntity(record: T): M
 
   def insertOrUpdate(id: ID, model: M)(implicit s: DBSession) = Try {
-    val count = mapper.updateById(convertToPrimaryKey(id))
+    val count = mapper.updateBy(sqls.eq(mapper.column.field(idName), convertToPrimaryKey(id)))
       .withAttributes(mapper.toNamedValues(convertToRecord(model)).filterNot {
       case (k, _) => k.name == mapper.primaryKeyFieldName
     }: _*)
@@ -33,7 +37,7 @@ trait DaoSupport[ID, M, T] {
   }
 
   def findById(id: ID)(implicit s: DBSession): Try[M] = Try {
-    mapper.findById(convertToPrimaryKey(id)).map(convertToEntity).getOrElse(throw new EntityNotFoundException(s"$id"))
+    mapper.findBy(sqls.eq(mapper.defaultAlias.field(idName), convertToPrimaryKey(id))).map(convertToEntity).getOrElse(throw new EntityNotFoundException(s"$id"))
   }
 
   def findAllWithLimitOffset(limit: Int, offset: Int)(implicit s: DBSession): Try[Seq[M]] = Try {
@@ -42,7 +46,7 @@ trait DaoSupport[ID, M, T] {
 
   def deleteById(id: ID)(implicit s: DBSession): Try[M] = findById(id).map {
     entity =>
-      if (mapper.deleteById(convertToPrimaryKey(id)) == 0) {
+      if (mapper.deleteBy(sqls.eq(mapper.defaultAlias.field(idName), convertToPrimaryKey(id))) == 0) {
         throw new RepositoryIOException("")
       } else {
         entity

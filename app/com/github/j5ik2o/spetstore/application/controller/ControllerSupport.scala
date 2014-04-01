@@ -44,7 +44,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
                   OkForCreatedEntity(entity.id)
               }.recover {
                 case ex =>
-                  BadRequestForIOError
+                  BadRequestForIOError(ex)
               }.get
           })
       }.getOrElse(InternalServerError)
@@ -90,7 +90,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
                             OkForCreatedEntity(entity.id)
                         }.recover {
                           case ex =>
-                            BadRequestForIOError
+                            BadRequestForIOError(ex)
                         }.get
                     })
                 }.getOrElse(InternalServerError)
@@ -134,7 +134,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       )
   }
 
-  protected val BadRequestForIOError = BadRequest(createErrorResponse("IO Error"))
+  protected val BadRequestForIOError = { ex: Throwable => BadRequest(createErrorResponse("IO Error : "+ex.toString)) }
 
   protected val BadRequestForValidate = {
     param: JsObject => BadRequest(createErrorResponse(s"Validate Error: $param"))

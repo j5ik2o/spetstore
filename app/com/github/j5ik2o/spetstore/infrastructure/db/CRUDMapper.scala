@@ -4,7 +4,9 @@ import skinny.orm.SkinnyCRUDMapper
 
 trait CRUDMapper[T] extends SkinnyCRUDMapper[T] {
 
-  override def useAutoIncrementPrimaryKey = false
+//  override def useAutoIncrementPrimaryKey = false
+
+  override def primaryKeyFieldName = "pk"
 
   def toNamedValues(record: T): Seq[(Symbol, Any)]
 

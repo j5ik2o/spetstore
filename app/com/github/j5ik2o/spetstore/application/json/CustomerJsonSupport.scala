@@ -76,7 +76,7 @@ trait CustomerJsonSupport {
 
 
 
-  implicit object CustomerJsonConverter extends Reads[CustomerJson] with Writes[Customer] {
+  implicit object JsonConverter extends Reads[CustomerJson] with Writes[Customer] {
 
     def reads(json: JsValue): JsResult[CustomerJson] = {
       ((__ \ 'id).readNullable[String] and

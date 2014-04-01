@@ -13,14 +13,13 @@ case class CategoryJson(id: Option[String],
 trait CategoryJsonSupport {
   this: CategoryController =>
 
-  protected def convertToEntity(json: CategoryJson): Category = {
+  protected def convertToEntity(json: CategoryJson): Category =
     Category(
       id = CategoryId(json.id.map(_.toLong).get),
       status = StatusType.Enabled,
       name = json.name,
       description = json.description
     )
-  }
 
   protected def convertToEntityWithoutId(json: CategoryJson): Category =
     Category(
@@ -31,7 +30,7 @@ trait CategoryJsonSupport {
     )
 
 
-  implicit object CategoryJsonConverter extends Reads[CategoryJson] with Writes[Category] {
+  implicit object JsonConverter extends Reads[CategoryJson] with Writes[Category] {
 
     override def writes(o: Category): JsValue = JsObject(
       Seq(
