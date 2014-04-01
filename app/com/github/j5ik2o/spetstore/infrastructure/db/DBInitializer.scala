@@ -64,14 +64,16 @@ CREATE TABLE `cart` (
                 sql"""
 CREATE TABLE `cart_item` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
-  `no`          INT           NOT NULL,
+  `id`          BIGINT        NOT NULL,
   `status`      INT           NOT NULL,
   `cart_id`     BIGINT        NOT NULL,
+  `no`          INT           NOT NULL,
   `item_id`     BIGINT        NOT NULL,
   `quantity`    INT           NOT NULL,
   `in_stock`    INT           NOT NULL,
   PRIMARY KEY(`pk`),
-  UNIQUE(`no`,`cart_id`)
+  UNIQUE(`id`),
+  UNIQUE(`cart_id`,`no`)
 );
 
 """.execute().apply()

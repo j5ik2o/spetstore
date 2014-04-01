@@ -260,9 +260,10 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
 }
 
-case class CartItemRecord(no: Long, status: Int, cartId: Long, itemId: Long, quantity: Int, inStock: Boolean)
+case class CartItemRecord(id: Long, no: Long, status: Int, cartId: Long, itemId: Long, quantity: Int, inStock: Boolean)
 
 object CartItemRecord extends CRUDMapper[CartItemRecord] {
+
   val cartItemsAlias = createAlias("cart_items")
 
   override def defaultAlias = createAlias("ci")
@@ -270,6 +271,7 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
   override def tableName: String = "cart_item"
 
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord])  = CartItemRecord(
+    id = rs.get(n.id),
     no = rs.get(n.no),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
@@ -279,6 +281,7 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
   )
 
   override def toNamedValues(record: CartItemRecord): Seq[(Symbol, Any)] = Seq(
+    'id -> record.id,
     'no -> record.no,
     'status -> record.status,
     'cartId -> record.cartId,

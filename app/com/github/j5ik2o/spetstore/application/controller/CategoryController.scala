@@ -7,6 +7,13 @@ import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import com.google.inject.Inject
 
+/**
+ * [[Category]]のためのコントローラ。
+ *
+ * @param identifierService [[IdentifierService]]
+ * @param entityIOContextProvider [[]]
+ * @param repository
+ */
 case class CategoryController @Inject()
 (identifierService: IdentifierService,
  entityIOContextProvider: EntityIOContextProvider,

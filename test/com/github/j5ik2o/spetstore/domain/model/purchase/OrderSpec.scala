@@ -16,7 +16,7 @@ import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class OrderSpec extends Specification {
 
-  val identifierService = IdentifierService()
+  implicit val identifierService = IdentifierService()
 
   "order" should {
     val item = Item(
@@ -45,14 +45,14 @@ class OrderSpec extends Specification {
         ),
         orderItems = List.empty
       )
-      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate),1, StatusType.Enabled, item.id, 1)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -73,7 +73,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -94,7 +94,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -132,12 +132,13 @@ class OrderSpec extends Specification {
           favoriteCategoryId = None
         )
       )
+      val cartItemId = CartItemId(identifierService.generate)
       val cart = Cart(
         id = CartId(identifierService.generate),
         StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(
-          CartItem(1, StatusType.Enabled, item.id, 1, false)
+          CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false)
         )
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))

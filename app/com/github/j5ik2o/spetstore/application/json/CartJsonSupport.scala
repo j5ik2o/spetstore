@@ -4,13 +4,11 @@ import com.github.j5ik2o.spetstore.application.controller.CartController
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.Cart
-import com.github.j5ik2o.spetstore.domain.model.purchase.CartId
-import com.github.j5ik2o.spetstore.domain.model.purchase.CartItem
+import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, Cart, CartId, CartItem}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class CartItemJson(no: Long, itemId: String, quantity: Int, inStock: Boolean)
+case class CartItemJson(id: Long, no: Long, itemId: String, quantity: Int, inStock: Boolean)
 
 case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson])
 
@@ -18,6 +16,7 @@ trait CartJsonSupport {
   this: CartController =>
 
   protected def convertToEntity(json: CartItemJson): CartItem = CartItem(
+    id = CartItemId(json.id),
     no = json.no,
     status = StatusType.Enabled,
     itemId = ItemId(json.itemId.toLong),
@@ -51,7 +50,8 @@ trait CartJsonSupport {
     )
 
     override def reads(json: JsValue): JsResult[CartItemJson] =
-      ((__ \ 'no).read[Long] and
+      ((__ \ 'id).read[Long] and
+        (__ \ 'no).read[Long] and
         (__ \ 'itemId).read[String] and
         (__ \ 'quantity).read[Int] and
         (__ \ 'inStock).read[Boolean])(CartItemJson.apply _).reads(json)

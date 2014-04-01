@@ -4,7 +4,7 @@ import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFound
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItem, Cart, CartId}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, CartItem, Cart, CartId}
 import com.github.j5ik2o.spetstore.infrastructure.db.{CartItemRecord, CartRecord}
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
@@ -73,6 +73,7 @@ class CartRepositoryOnJDBC
 
     def convertToRecord(cartId: CartId, model: CartItem): CartItemRecord = {
       CartItemRecord(
+        id = model.id.value,
         no = model.no,
         status = model.status.id,
         cartId = cartId.value,
@@ -83,6 +84,7 @@ class CartRepositoryOnJDBC
     }
 
     def convertToEntity(record: CartItemRecord): CartItem = CartItem(
+      id = CartItemId(record.id),
       no = record.no,
       status = StatusType(record.status),
       itemId = ItemId(record.itemId),
@@ -97,12 +99,13 @@ class CartRepositoryOnJDBC
   override def storeEntity(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
     implicit s =>
       CartRecordService.insertOrUpdate(entity.id, entity).map {
-        result =>
+        entity =>
+          val cartItemRecordService = CartItemRecordService(entity.id)
           entity.cartItems.foreach {
             cartItem =>
-              CartItemRecordService(result.id).insertOrUpdate(cartItem.no, cartItem).get
+              cartItemRecordService.insertOrUpdate(cartItem.no, cartItem).get
           }
-          (this.asInstanceOf[This], result)
+          (this.asInstanceOf[This], entity)
       }
   }
 
@@ -110,9 +113,10 @@ class CartRepositoryOnJDBC
     implicit s =>
       CartRecordService.findById(identifier).flatMap {
         entity =>
+          val cartItemRecordService = CartItemRecordService(entity.id)
           entity.cartItems.foreach {
             cartItem =>
-              CartItemRecordService(entity.id).deleteById(cartItem.no).get
+              cartItemRecordService.deleteById(cartItem.no).get
           }
           CartRecordService.deleteById(identifier).map {
             _ =>

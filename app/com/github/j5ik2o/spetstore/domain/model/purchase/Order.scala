@@ -7,6 +7,7 @@ import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, PostalAddress
 import com.github.nscala_time.time.Imports._
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 /**
  * 注文を表すエンティティ。
@@ -106,9 +107,9 @@ object Order {
    * @param cart [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]
    */
-  def fromCart(orderId: OrderId, cart: Cart)(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
+  def fromCart(orderId: OrderId, cart: Cart)(implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
-    val orderItems = cart.cartItems.map(OrderItem.fromCartItem)
+    val orderItems = cart.cartItems.map(e => OrderItem.fromCartItem(OrderItemId(is.generate), e))
     Order(orderId, cart.status, OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
   }
 
