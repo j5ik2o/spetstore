@@ -1,15 +1,16 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.json
 
 import BasicFormats._
-import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, PostalAddress}
-import com.github.j5ik2o.spetstore.domain.model.customer.{CustomerConfig, CustomerProfile, Customer}
+import com.github.j5ik2o.spetstore.domain.model.basic.{SexType, StatusType, Contact, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.customer.{CustomerId, CustomerConfig, CustomerProfile, Customer}
 import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import org.json4s.DefaultReaders._
 import org.json4s.JsonAST.{JInt, JString, JField, JObject}
 import org.json4s._
-import IdentifierFormats._
 
 object CustomerFormats {
+
+  implicit val categoryIdFormat = IdentifierFormats.categoryIdFormat
 
   implicit object ConfigFormat extends Reader[CustomerConfig] with Writer[CustomerConfig] {
 
@@ -57,7 +58,14 @@ object CustomerFormats {
       )
     }
 
-    def read(value: org.json4s.JValue): Customer = ???
+    def read(value: org.json4s.JValue): Customer = Customer(
+      id = CustomerId((value \ "id").as[Long]),
+      status = StatusType((value \ "status").as[Int]),
+      name = (value \ "name").as[String],
+      sexType = SexType((value \ "sexType").as[Int]),
+      profile = (value \ "profile").as[CustomerProfile],
+      config = (value \ "config").as[CustomerConfig]
+    )
   }
 
 }

@@ -1,15 +1,121 @@
 package com.github.j5ik2o.spetstore.application.controller
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier
-import com.github.tototoshi.play2.json4s.jackson.Json4s
+import com.github.j5ik2o.spetstore.domain.infrastructure.support._
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import org.json4s.DefaultFormats
-import play.api.mvc.Controller
+import play.api.Logger
+import play.api.data.validation.ValidationError
+import play.api.libs.json.Json._
+import play.api.mvc._
+import scala.util.Success
+import scalikejdbc.DB
 
-trait ControllerSupport extends Controller with Json4s {
+trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
+  extends Controller {
+
+  val identifierService: IdentifierService
+
+  val repository: Repository[ID, E]
 
   implicit val formats = DefaultFormats
 
   import play.api.libs.json._
+
+  protected def withTransaction[T](f: EntityIOContext => T): T = {
+    DB.localTx {
+      implicit s =>
+        f(EntityIOContextOnJDBC(s))
+    }
+  }
+
+  protected def convertToEntity(json: J): E
+
+  protected def convertToEntityWithoutId(json: J): E
+
+  protected def createAction(implicit tjs: Writes[E], rds: Reads[J], ctx: EntityIOContext) = Action {
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.validate[J].fold(defaultErrorHandler, {
+            validatedJson =>
+              repository.storeEntity(convertToEntityWithoutId(validatedJson)).map {
+                case (_, entity) =>
+                  Logger.debug(entity.toString)
+                  OkForCreatedEntity(entity.id)
+              }.recover {
+                case ex =>
+                  BadRequestForIOError
+              }.get
+          })
+      }.getOrElse(InternalServerError)
+  }
+
+  protected def getAction(id: Long)(apply: Long => ID)
+                         (implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
+    val identifier = apply(id)
+    repository.resolveEntity(identifier).map {
+      entity =>
+        Ok(prettyPrint(toJson(entity)))
+    }.recoverWith {
+      case ex: EntityNotFoundException =>
+        Success(NotFoundForEntity(identifier))
+    }.getOrElse(InternalServerError)
+  }
+
+  protected def listAction(implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
+    request =>
+      val offset = request.getQueryString("offset").map(_.toInt).getOrElse(0)
+      val limit = request.getQueryString("limit").map(_.toInt).getOrElse(100)
+      repository.resolveEntities(offset, limit).map {
+        entities =>
+          Ok(prettyPrint(JsArray(entities.map(toJson(_)))))
+      }.getOrElse(InternalServerError)
+  }
+
+  protected def updateAction(id: Long)(apply: Long => ID)
+                            (implicit tjs: Writes[E], rds: Reads[J], ctx: EntityIOContext) = Action {
+    request =>
+      withTransaction {
+        implicit ctx =>
+          val identifier = apply(id)
+          repository.existByIdentifier(identifier).map {
+            exist =>
+              if (exist) {
+                request.body.asJson.map {
+                  json =>
+                    json.validate[J].fold(defaultErrorHandler, {
+                      validatedJson =>
+                        repository.storeEntity(convertToEntity(validatedJson)).map {
+                          case (_, entity) =>
+                            OkForCreatedEntity(entity.id)
+                        }.recover {
+                          case ex =>
+                            BadRequestForIOError
+                        }.get
+                    })
+                }.getOrElse(InternalServerError)
+              } else {
+                NotFoundForEntity(identifier)
+              }
+          }.get
+      }
+  }
+
+  protected def deleteAction(id: Long)(apply: Long => ID)(implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
+    val identifier = apply(id)
+    repository.deleteByIdentifier(identifier).map {
+      case (_, entity) =>
+        Ok(prettyPrint(toJson(entity)))
+    }.recoverWith {
+      case ex: EntityNotFoundException =>
+        Success(NotFoundForEntity(identifier))
+    }.getOrElse(InternalServerError)
+  }
+
+  protected val defaultErrorHandler = {
+    error: Seq[(JsPath, Seq[ValidationError])] =>
+      BadRequestForValidate(JsError.toFlatJson(error))
+  }
 
   protected def createErrorResponse(message: String) = JsObject(
     Seq(
@@ -18,13 +124,14 @@ trait ControllerSupport extends Controller with Json4s {
   )
 
   protected val OkForCreatedEntity = {
-    id: Identifier[Long] => Ok(
-      JsObject(
-        Seq(
-          "id" -> JsNumber(id.value)
+    id: Identifier[Long] =>
+      Ok(
+        JsObject(
+          Seq(
+            "id" -> JsString(id.value.toString)
+          )
         )
       )
-    )
   }
 
   protected val BadRequestForIOError = BadRequest(createErrorResponse("IO Error"))

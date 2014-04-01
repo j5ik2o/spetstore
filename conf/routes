@@ -2,12 +2,19 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+# Customer
 POST    /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.create
 GET     /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
 GET     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.get(id: Long)
 PUT     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.update(id: Long)
 DELETE  /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.delete(id: Long)
+
+# Category
+POST    /categories     @com.github.j5ik2o.spetstore.application.controller.CategoryController.create
+GET     /categories     @com.github.j5ik2o.spetstore.application.controller.CategoryController.list
+GET     /category/:id   @com.github.j5ik2o.spetstore.application.controller.CategoryController.get(id: Long)
+PUT     /category/:id   @com.github.j5ik2o.spetstore.application.controller.CategoryController.update(id: Long)
+DELETE  /categories     @com.github.j5ik2o.spetstore.application.controller.CategoryController.delete(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 # GET     /assets/*file               controllers.Assets.at(path="/public", file)

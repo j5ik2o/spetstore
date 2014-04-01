@@ -1,30 +1,85 @@
 package com.github.j5ik2o.spetstore.application.json
 
+import com.github.j5ik2o.spetstore.application.controller.CustomerController
+import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer.Customer
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-trait CustomerJsonSupport {
+case class CustomerJson(id: Option[String],
+                        name: String,
+                        sexType: Int,
+                        zipCode1: String,
+                        zipCode2: String,
+                        prefCode: Int,
+                        cityName: String,
+                        addressName: String,
+                        buildingName: Option[String],
+                        email: String,
+                        phone: String,
+                        loginName: String,
+                        password: String,
+                        favoriteCategoryId: Option[String])
 
-  case class CustomerJson(id: Option[Long],
-                          name: String,
-                          sexType: Int,
-                          zipCode1: String,
-                          zipCode2: String,
-                          prefCode: Int,
-                          cityName: String,
-                          addressName: String,
-                          buildingName: Option[String],
-                          email: String,
-                          phone: String,
-                          loginName: String,
-                          password: String,
-                          favoriteCategoryId: Option[String])
+trait CustomerJsonSupport {
+  this: CustomerController =>
+
+  protected def convertToEntity(customerJson: CustomerJson): Customer =
+    Customer(
+      id = CustomerId(customerJson.id.map(_.toLong).get),
+      status = StatusType.Enabled,
+      name = customerJson.name,
+      sexType = SexType(customerJson.sexType),
+      profile = CustomerProfile(
+        postalAddress = PostalAddress(
+          ZipCode(customerJson.zipCode1, customerJson.zipCode2),
+          Pref(customerJson.prefCode),
+          customerJson.cityName,
+          customerJson.addressName,
+          customerJson.buildingName
+        ),
+        contact = Contact(customerJson.email, customerJson.phone)
+      ),
+      config = CustomerConfig(
+        loginName = customerJson.loginName,
+        password = customerJson.password,
+        favoriteCategoryId = None
+      )
+    )
+
+  protected def convertToEntityWithoutId(customerJson: CustomerJson): Customer =
+    Customer(
+      id = CustomerId(identifierService.generate),
+      status = StatusType.Enabled,
+      name = customerJson.name,
+      sexType = SexType(customerJson.sexType),
+      profile = CustomerProfile(
+        postalAddress = PostalAddress(
+          ZipCode(customerJson.zipCode1, customerJson.zipCode2),
+          Pref(customerJson.prefCode),
+          customerJson.cityName,
+          customerJson.addressName,
+          customerJson.buildingName
+        ),
+        contact = Contact(customerJson.email, customerJson.phone)
+      ),
+      config = CustomerConfig(
+        loginName = customerJson.loginName,
+        password = customerJson.password,
+        favoriteCategoryId = None
+      )
+    )
+
+
+
 
   implicit object CustomerJsonConverter extends Reads[CustomerJson] with Writes[Customer] {
 
     def reads(json: JsValue): JsResult[CustomerJson] = {
-      ((__ \ 'id).readNullable[Long] and
+      ((__ \ 'id).readNullable[String] and
         (__ \ 'name).read[String] and
         (__ \ 'sexType).read[Int] and
         (__ \ 'zipCode1).read[String] and
@@ -43,7 +98,7 @@ trait CustomerJsonSupport {
     override def writes(o: Customer): JsValue = {
       JsObject(
         Seq(
-          "id" -> (if (o.id.isDefined) JsNumber(o.id.value) else JsNull),
+          "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
           "name" -> JsString(o.name),
           "sexType" -> JsNumber(o.sexType.id),
           "zipCode" -> JsString(o.profile.postalAddress.zipCode.asString),

@@ -3,6 +3,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
+import play.Logger
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。
@@ -35,8 +36,8 @@ trait DaoSupport[ID, M, T] {
     mapper.findById(convertToPrimaryKey(id)).map(convertToEntity).getOrElse(throw new EntityNotFoundException(s"$id"))
   }
 
-  def findAllWithLimitOffset(offset: Int, limit: Int)(implicit s: DBSession): Try[Seq[M]] = Try {
-    mapper.findAllWithLimitOffset(offset, limit).map(convertToEntity)
+  def findAllWithLimitOffset(limit: Int, offset: Int)(implicit s: DBSession): Try[Seq[M]] = Try {
+    mapper.findAllWithLimitOffset(limit, offset).map(convertToEntity)
   }
 
   def deleteById(id: ID)(implicit s: DBSession): Try[M] = findById(id).map {
@@ -92,7 +93,10 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
 
   override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[E]] = withDBSession(ctx) {
     implicit s =>
-      MainService.findAllWithLimitOffset(offset, limit)
+      Logger.debug(s"offset = $offset, limit = $limit")
+      val r = MainService.findAllWithLimitOffset(limit, offset)
+      Logger.debug(r.toString)
+      r
   }
 
 }

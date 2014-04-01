@@ -22,9 +22,10 @@ class GuiceModule extends AbstractModule with ScalaModule {
     // domain
     // -> customer
     bind[CustomerRepository].toInstance(CustomerRepository.ofJDBC)
+    // -> category
+    bind[CategoryRepository].toInstance(CategoryRepository.ofJDBC)
 
     // -> item
-    bind[CategoryRepository].toInstance(CategoryRepository.ofMemory())
     bind[ItemTypeRepository].toInstance(ItemTypeRepository.ofMemory())
     bind[ItemRepository].toInstance(ItemRepository.ofMemory())
     bind[InventoryRepository].toInstance(InventoryRepository.ofMemory())
