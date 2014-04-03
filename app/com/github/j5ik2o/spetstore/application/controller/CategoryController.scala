@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.json.{CategoryJsonSupport, CategoryJson}
+import com.github.j5ik2o.spetstore.application.controller.json.{CategoryJsonSupport, CategoryJson}
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService

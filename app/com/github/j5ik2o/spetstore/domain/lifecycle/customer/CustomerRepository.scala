@@ -32,7 +32,7 @@ object CustomerRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[customer.CustomerRepository]]
+   * @return [[CustomerRepository]]
    */
   def ofMemory(entities: Map[CustomerId, Customer] = Map.empty): CustomerRepository =
     new CustomerRepositoryOnMemory(entities)
@@ -40,7 +40,7 @@ object CustomerRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository]]
+   * @return [[CustomerRepository]]
    */
   def ofJDBC: CustomerRepository =
     new CustomerRepositoryOnJDBC

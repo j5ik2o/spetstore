@@ -5,7 +5,7 @@ import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import scala.util.Try
 
 /**
- * [[customer.CustomerRepository]]のためのオンメモリリポジトリ。
+ * [[CustomerRepository]]のためのオンメモリリポジトリ。
  *
  * @param entities エンティティの集合
  */

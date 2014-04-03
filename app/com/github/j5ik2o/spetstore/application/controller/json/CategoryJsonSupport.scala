@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.application.json
+package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CategoryController
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
@@ -6,10 +6,20 @@ import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, Category}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
+/**
+ * [[Category]]のJSON表現を表したモデル。
+ *
+ * @param id ID
+ * @param name 名前
+ * @param description 説明
+ */
 case class CategoryJson(id: Option[String],
                         name: String,
                         description: Option[String])
 
+/**
+ * [[CategoryJson]]のためのトレイト。
+ */
 trait CategoryJsonSupport {
   this: CategoryController =>
 

@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.application.json
+package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CustomerController
 import com.github.j5ik2o.spetstore.domain.model.basic._
@@ -9,6 +9,24 @@ import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
+/**
+ * [[Customer]]のJSONを表現したモデル。
+ *
+ * @param id ID
+ * @param name 名前
+ * @param sexType 性別
+ * @param zipCode1 郵便番号1
+ * @param zipCode2 郵便番号2
+ * @param prefCode 都道府県コード
+ * @param cityName 市区町村名
+ * @param addressName 地番名
+ * @param buildingName 建物名
+ * @param email メールアドレス
+ * @param phone 電話番号
+ * @param loginName ログイン名
+ * @param password パスワード
+ * @param favoriteCategoryId お気に入りカテゴリID
+ */
 case class CustomerJson(id: Option[String],
                         name: String,
                         sexType: Int,

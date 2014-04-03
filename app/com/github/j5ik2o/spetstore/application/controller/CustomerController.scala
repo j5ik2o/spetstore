@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.json.{CustomerJson, CustomerJsonSupport}
+import com.github.j5ik2o.spetstore.application.controller.json.{CustomerJson, CustomerJsonSupport}
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService

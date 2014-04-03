@@ -1,4 +1,4 @@
-package com.github.j5ik2o.spetstore.application.json
+package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CartController
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
@@ -12,6 +12,9 @@ case class CartItemJson(id: Long, no: Long, itemId: String, quantity: Int, inSto
 
 case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson])
 
+/**
+ * [[CartJson]]のためのトレイト。
+ */
 trait CartJsonSupport {
   this: CartController =>
 
