@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.model.purchase
 import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
-import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, StatusType, PostalAddress}
 import com.github.nscala_time.time.Imports._
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
@@ -16,6 +16,7 @@ import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
  * @param orderDate 注文日時
  * @param userName 購入者名
  * @param shippingAddress 出荷先の住所
+ * @param shippingContact 出荷先の連絡先
  * @param orderItems [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]のリスト
  */
 case class Order
@@ -25,6 +26,7 @@ case class Order
  orderDate: DateTime,
  userName: String,
  shippingAddress: PostalAddress,
+ shippingContact: Contact,
  orderItems: List[OrderItem])
   extends Entity[OrderId] {
 
@@ -107,10 +109,20 @@ object Order {
    * @param cart [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]
    */
-  def fromCart(orderId: OrderId, cart: Cart)(implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
+  def fromCart(orderId: OrderId, cart: Cart)
+              (implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
     val orderItems = cart.cartItems.map(e => OrderItem.fromCartItem(OrderItemId(is.generate), e))
-    Order(orderId, cart.status, OrderStatus.Pending, DateTime.now, customer.name, customer.profile.postalAddress, orderItems)
+    Order(
+      orderId,
+      cart.status,
+      OrderStatus.Pending,
+      DateTime.now,
+      customer.name,
+      customer.profile.postalAddress,
+      customer.profile.contact,
+      orderItems
+    )
   }
 
 }

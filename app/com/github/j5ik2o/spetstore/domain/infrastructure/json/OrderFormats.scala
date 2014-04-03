@@ -22,7 +22,7 @@ object OrderFormats {
 
     def read(value: JValue): OrderItem = OrderItem(
       id = OrderItemId((value \ "id").as[String].toLong),
-      no = (value \ "no").as[Long],
+      no = (value \ "no").as[Int],
       status = StatusType((value \ "status").as[Int]),
       itemId = (value \ "itemId").as[ItemId],
       quantity = (value \ "quantity").as[Int]

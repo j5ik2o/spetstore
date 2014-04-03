@@ -13,8 +13,8 @@ object CartFormats {
 
     def read(value: JValue): CartItem = CartItem(
       id = CartItemId((value \ "id").as[Long]),
-      no = (value \ "no").as[Long],
       status = StatusType((value \ "status").as[Int]),
+      no = (value \ "no").as[Int],
       itemId = (value \ "itemId").as[ItemId],
       quantity = (value \ "quantity").as[Int],
       inStock = (value \ "isInStock").as[Boolean]
@@ -22,8 +22,8 @@ object CartFormats {
 
     def write(obj: CartItem): JValue =
       JObject(
-        JField("no", JInt(obj.no)),
         JField("status", JInt(obj.status.id)),
+        JField("no", JInt(obj.no)),
         JField("itemId", obj.itemId.asJValue),
         JField("quantity", JInt(obj.quantity)),
         JField("isInStock", JBool(obj.inStock))

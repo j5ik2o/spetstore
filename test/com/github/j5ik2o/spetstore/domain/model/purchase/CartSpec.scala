@@ -6,9 +6,9 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.customer._
 import com.github.j5ik2o.spetstore.domain.model.item._
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import org.specs2.mutable.Specification
 import scala.util.Success
-import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class CartSpec extends Specification {
 
@@ -54,7 +54,7 @@ class CartSpec extends Specification {
         customerId = customer.id,
         cartItems = List.empty
       )
-      val cartItem = CartItem(CartItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1, false)
+      val cartItem = CartItem(CartItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1, false)
       val newCart = cart.addCartItem(cartItem)
       newCart must_== cart
       newCart.cartItems.contains(cartItem) must beTrue
@@ -71,13 +71,13 @@ class CartSpec extends Specification {
       val cartItemId = CartItemId(identifierService.generate)
       val newCart = cart.addCartItem(cartItemId, item, 1, false)
       newCart must_== cart
-      newCart.cartItems.contains(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false)) must beTrue
+      newCart.cartItems.contains(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false)) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 1
     }
     "add cartItem if contains cartItem" in {
       val cartItemId = CartItemId(identifierService.generate)
-      val cartItem = CartItem(cartItemId, 1, StatusType.Enabled, item.id, 2, false)
+      val cartItem = CartItem(cartItemId, StatusType.Enabled, 1, item.id, 2, false)
       val cart = Cart(
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
@@ -86,7 +86,7 @@ class CartSpec extends Specification {
       )
       val newCart = cart.addCartItem(cartItem)
       newCart must_== cart
-      newCart.cartItems.contains(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 4, false)) must beTrue
+      newCart.cartItems.contains(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 4, false)) must beTrue
       newCart.sizeOfCartItems must_== 1
       newCart.quantityOfCartItems must_== 4
     }
@@ -96,7 +96,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       val newCart = cart.removeCartItemByPetId(item.id)
       newCart must_== cart
@@ -110,7 +110,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       val newCart = cart.incrementQuantityByItemId(item.id)
       newCart must_== cart
@@ -124,7 +124,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       val newCart = cart.updateQuantityByItemId(item.id, 2)
       newCart must_== cart
@@ -138,7 +138,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       cart.containsItemId(item.id) must beTrue
     }
@@ -148,7 +148,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       cart.totalPrice must_== Success(BigDecimal(100))
     }
@@ -158,7 +158,7 @@ class CartSpec extends Specification {
         id = CartId(identifierService.generate),
         status = StatusType.Enabled,
         customerId = customer.id,
-        cartItems = List(CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false))
+        cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory

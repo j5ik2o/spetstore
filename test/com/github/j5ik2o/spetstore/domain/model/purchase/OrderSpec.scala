@@ -9,10 +9,10 @@ import com.github.j5ik2o.spetstore.domain.model.item.Item
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemTypeId
 import com.github.j5ik2o.spetstore.domain.model.item.SupplierId
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 import scala.util.Success
-import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 class OrderSpec extends Specification {
 
@@ -43,16 +43,20 @@ class OrderSpec extends Specification {
           "目黒区下目黒",
           "1-1-1"
         ),
+        shippingContact = Contact(
+          email = "test@test.com",
+          phone = "090-0000-0000"
+        ),
         orderItems = List.empty
       )
-      val orderItem = OrderItem(OrderItemId(identifierService.generate),1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -64,6 +68,10 @@ class OrderSpec extends Specification {
           Pref.東京都,
           "目黒区下目黒",
           "1-1-1"
+        ),
+        shippingContact = Contact(
+          email = "test@test.com",
+          phone = "090-0000-0000"
         ),
         orderItems = List(orderItem)
       )
@@ -73,7 +81,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate),StatusType.Enabled, 1, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -86,6 +94,10 @@ class OrderSpec extends Specification {
           "目黒区下目黒",
           "1-1-1"
         ),
+        shippingContact = Contact(
+          email = "test@test.com",
+          phone = "090-0000-0000"
+        ),
         orderItems = List(orderItem)
       )
       val newOrder = order.removeOrderItemByIndex(0)
@@ -94,7 +106,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), 1, StatusType.Enabled, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -106,6 +118,10 @@ class OrderSpec extends Specification {
           Pref.東京都,
           "目黒区下目黒",
           "1-1-1"
+        ),
+        shippingContact = Contact(
+          email = "test@test.com",
+          phone = "090-0000-0000"
         ),
         orderItems = List(orderItem)
       )
@@ -138,7 +154,7 @@ class OrderSpec extends Specification {
         StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(
-          CartItem(cartItemId, 1, StatusType.Enabled, item.id, 1, false)
+          CartItem(cartItemId, StatusType.Enabled,1,  item.id, 1, false)
         )
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))

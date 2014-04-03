@@ -260,7 +260,7 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
 }
 
-case class CartItemRecord(id: Long, no: Long, status: Int, cartId: Long, itemId: Long, quantity: Int, inStock: Boolean)
+case class CartItemRecord(id: Long, status: Int, cartId: Long, no: Int, itemId: Long, quantity: Int, inStock: Boolean)
 
 object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
@@ -270,11 +270,11 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   override def tableName: String = "cart_item"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord])  = CartItemRecord(
+  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord]) = CartItemRecord(
     id = rs.get(n.id),
-    no = rs.get(n.no),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
+    no = rs.get(n.no),
     itemId = rs.get(n.itemId),
     quantity = rs.get(n.quantity),
     inStock = rs.get(n.inStock)
@@ -282,9 +282,9 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   override def toNamedValues(record: CartItemRecord): Seq[(Symbol, Any)] = Seq(
     'id -> record.id,
-    'no -> record.no,
     'status -> record.status,
     'cartId -> record.cartId,
+    'no -> record.no,
     'itemId -> record.itemId,
     'quantity -> record.quantity,
     'inStock -> record.inStock
@@ -295,6 +295,7 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 case class OrderRecord
 (id: Long,
  status: Int,
+ orderStatus: Int,
  orderDateTime: DateTime,
  userName: String,
  zipCode: String,
@@ -303,7 +304,8 @@ case class OrderRecord
  addressName: String,
  buildingName: Option[String],
  email: String,
- phone: String)
+ phone: String,
+ orderItems: Seq[OrderItemRecord] = Nil)
 
 object OrderRecord extends CRUDMapper[OrderRecord] {
 
@@ -314,6 +316,7 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
   override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderRecord]) = OrderRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
+    orderStatus = rs.get(n.orderStatus),
     orderDateTime = rs.get(n.orderDateTime),
     userName = rs.get(n.userName),
     zipCode = rs.get(n.zipCode),
@@ -328,6 +331,7 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
   override def toNamedValues(record: OrderRecord): Seq[(Symbol, Any)] = Seq(
     'id -> record.id,
     'status -> record.status,
+    'orderStatus -> record.orderStatus,
     'orderDateTime -> record.orderDateTime,
     'zipCode -> record.zipCode,
     'prefCode -> record.prefCode,
@@ -338,20 +342,46 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
     'phone -> record.phone
   )
 
+
+  val orderItemsRef = hasMany[OrderItemRecord](
+    // association's SkinnyMapper and alias
+    many = OrderItemRecord -> OrderItemRecord.orderItemsAlias,
+    // defines join condition by using aliases
+    on = (o, oi) => sqls.eq(o.id, oi.orderId),
+    // function to merge associations to main entity
+    merge = (order, orderItems) => order.copy(orderItems = orderItems)
+  )
+
 }
 
 case class OrderItemRecord
-(id: Long, status: Int, itemId: Long, quantity: Int)
+(id: Long, status: Int, orderId: Long, no: Int, itemId: Long, quantity: Int)
 
 
 object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
+
+  val orderItemsAlias = createAlias("order_items")
 
   override def defaultAlias = createAlias("oi")
 
   override def tableName: String = "order_item"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = ???
+  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
+    id = rs.get(n.id),
+    status = rs.get(n.status),
+    orderId = rs.get(n.orderId),
+    no = rs.get(n.no),
+    itemId = rs.get(n.itemId),
+    quantity = rs.get(n.quantity)
+  )
 
-  override def toNamedValues(record: OrderItemRecord): Seq[(Symbol, Any)] = ???
+  override def toNamedValues(record: OrderItemRecord): Seq[(Symbol, Any)] = Seq(
+    'id -> record.id,
+    'status -> record.status,
+    'orderId -> record.orderId,
+    'no -> record.no,
+    'itemId -> record.itemId,
+    'quantity -> record.quantity
+  )
 
 }

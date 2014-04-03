@@ -82,7 +82,7 @@ case class Cart
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
   def addCartItem(cartItemId: CartItemId, item: Item, quantity: Int, isInStock: Boolean): Cart =
-    addCartItem(CartItem(cartItemId, cartItems.size.toLong + 1, StatusType.Enabled, item.id, quantity, isInStock))
+    addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, item.id, quantity, isInStock))
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って

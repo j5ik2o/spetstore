@@ -3,8 +3,8 @@ package com.github.j5ik2o.spetstore.domain.model.basic
 /**
  * 住所を表す値オブジェクト。
  *
- * @param zipCode [[com.github.j5ik2o.spetstore.domain.basic.ZipCode]]
- * @param pref [[com.github.j5ik2o.spetstore.domain.basic.Pref]]
+ * @param zipCode [[com.github.j5ik2o.spetstore.domain.model.basic.ZipCode]]
+ * @param pref [[com.github.j5ik2o.spetstore.domain.model.basic.Pref]]
  * @param cityName 市区町村名
  * @param addressName 地番名
  * @param buildingName 建物名

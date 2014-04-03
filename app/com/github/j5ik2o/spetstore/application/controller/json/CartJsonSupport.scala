@@ -8,7 +8,7 @@ import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, Cart, Cart
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class CartItemJson(id: Long, no: Long, itemId: String, quantity: Int, inStock: Boolean)
+case class CartItemJson(id: Long, no: Int, itemId: String, quantity: Int, inStock: Boolean)
 
 case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson])
 
@@ -54,7 +54,7 @@ trait CartJsonSupport {
 
     override def reads(json: JsValue): JsResult[CartItemJson] =
       ((__ \ 'id).read[Long] and
-        (__ \ 'no).read[Long] and
+        (__ \ 'no).read[Int] and
         (__ \ 'itemId).read[String] and
         (__ \ 'quantity).read[Int] and
         (__ \ 'inStock).read[Boolean])(CartItemJson.apply _).reads(json)
