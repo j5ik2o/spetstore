@@ -8,6 +8,7 @@ import com.github.j5ik2o.spetstore.infrastructure.db.{OrderItemRecord, OrderReco
 import scala.util.Try
 import scalikejdbc.DBSession
 import scalikejdbc.SQLInterpolation._
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 
 class OrderRepositoryOnJDBC
   extends RepositoryOnJDBC[OrderId, Order] with OrderRepository {
@@ -27,7 +28,8 @@ class OrderRepositoryOnJDBC
       status = StatusType(record.status),
       orderStatus = OrderStatus(record.orderStatus),
       orderDate = record.orderDateTime,
-      userName = record.userName,
+      customerId = CustomerId(record.customerId),
+      customerName = record.customerName,
       shippingAddress = PostalAddress(
         zipCode = ZipCode(record.zipCode),
         pref = Pref(record.prefCode),
@@ -47,7 +49,8 @@ class OrderRepositoryOnJDBC
       status = model.status.id,
       orderStatus = model.orderStatus.id,
       orderDateTime = model.orderDate,
-      userName = model.userName,
+      customerId = model.customerId.value,
+      customerName = model.customerName,
       zipCode = model.shippingAddress.zipCode.asString,
       prefCode = model.shippingAddress.pref.id,
       cityName = model.shippingAddress.cityName,

@@ -8,13 +8,14 @@ import com.github.nscala_time.time.Imports._
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
+import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 
 /**
  * 注文を表すエンティティ。
  *
  * @param id 識別子
  * @param orderDate 注文日時
- * @param userName 購入者名
+ * @param customerName 購入者名
  * @param shippingAddress 出荷先の住所
  * @param shippingContact 出荷先の連絡先
  * @param orderItems [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]のリスト
@@ -24,7 +25,8 @@ case class Order
  status: StatusType.Value,
  orderStatus: OrderStatus.Value,
  orderDate: DateTime,
- userName: String,
+ customerId: CustomerId,
+ customerName: String,
  shippingAddress: PostalAddress,
  shippingContact: Contact,
  orderItems: List[OrderItem])
@@ -118,6 +120,7 @@ object Order {
       cart.status,
       OrderStatus.Pending,
       DateTime.now,
+      customer.id,
       customer.name,
       customer.profile.postalAddress,
       customer.profile.contact,

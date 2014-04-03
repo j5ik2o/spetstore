@@ -30,11 +30,12 @@ case class Customer
   def addCartItem(cart: Cart, cartItem: CartItem): Cart =
     cart.addCartItem(cartItem)
 
-  def removeCartItemByPetId(cart: Cart, itemId: ItemId): Cart =
-    cart.removeCartItemByPetId(itemId)
+  def removeCartItemByItemId(cart: Cart, itemId: ItemId): Cart =
+    cart.removeCartItemByItemId(itemId)
 
   def newOrderFromCart(orderId: OrderId, cart: Cart)
-                      (implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] =
+                      (implicit is: IdentifierService, 
+                       cr: CustomerRepository, ctx: EntityIOContext): Try[Order] =
     Order.fromCart(orderId, cart)
 
 }

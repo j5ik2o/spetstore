@@ -36,7 +36,8 @@ class OrderSpec extends Specification {
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
-        userName = "Junichi Kato",
+        customerId = CustomerId(identifierService.generate),
+        customerName = "Junichi Kato",
         shippingAddress = PostalAddress(
           ZipCode("100", "1000"),
           Pref.東京都,
@@ -62,7 +63,8 @@ class OrderSpec extends Specification {
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
-        userName = "Junichi Kato",
+        customerId = CustomerId(identifierService.generate),
+        customerName = "Junichi Kato",
         shippingAddress = PostalAddress(
           ZipCode("100", "1000"),
           Pref.東京都,
@@ -87,7 +89,8 @@ class OrderSpec extends Specification {
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
-        userName = "Junichi Kato",
+        customerId = CustomerId(identifierService.generate),
+        customerName = "Junichi Kato",
         shippingAddress = PostalAddress(
           ZipCode("100", "1000"),
           Pref.東京都,
@@ -112,7 +115,8 @@ class OrderSpec extends Specification {
         status = StatusType.Enabled,
         orderStatus = OrderStatus.Pending,
         orderDate = DateTime.now,
-        userName = "Junichi Kato",
+        customerId = CustomerId(identifierService.generate),
+        customerName = "Junichi Kato",
         shippingAddress = PostalAddress(
           ZipCode("100", "1000"),
           Pref.東京都,

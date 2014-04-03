@@ -98,7 +98,7 @@ class CartSpec extends Specification {
         customerId = customer.id,
         cartItems = List(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false))
       )
-      val newCart = cart.removeCartItemByPetId(item.id)
+      val newCart = cart.removeCartItemByItemId(item.id)
       newCart must_== cart
       newCart.cartItems.exists(e => e.itemId == item.id && e.quantity == 1) must beFalse
       newCart.sizeOfCartItems must_== 0
