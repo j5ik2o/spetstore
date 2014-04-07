@@ -10,6 +10,7 @@ case class IdentifierService(workerId: Long = 1, datacenterId: Long = 1, var seq
   private[this] val sequenceBits = 12L
   private[this] val workerIdBits = 5L
   private[this] val datacenterIdBits = 5L
+
   private[this] val workerIdShift = sequenceBits
   private[this] val datacenterIdShift = sequenceBits + workerIdBits
   private[this] val timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits
