@@ -109,7 +109,7 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
  * JDBC用リポジトリのための骨格実装。
  */
 abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
-  extends Repository[ID, E] {
+  extends Repository[ID, E] with MultiIOSupport[ID, E] {
 
   type T
 

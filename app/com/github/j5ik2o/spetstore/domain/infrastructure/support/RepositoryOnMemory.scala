@@ -16,7 +16,7 @@ case object EntityIOContextOnMemory extends EntityIOContext
  */
 abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
 (entities: Map[ID, E])
-  extends Repository[ID, E] {
+  extends Repository[ID, E] with MultiIOSupport[ID, E] {
 
   /**
    * 新しいインスタンスを生成する。
