@@ -15,7 +15,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
 
   val identifierService: IdentifierService
 
-  val repository: Repository[ID, E]
+  val repository: Repository[ID, E] with MultiIOSupport[ID, E]
 
   implicit val formats = DefaultFormats
 
