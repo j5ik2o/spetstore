@@ -1,13 +1,13 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Repository}
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{MultiIOSupport, EntityIOContext, Repository}
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import scala.util.Try
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]のためのリポジトリ責務。
  */
-trait CustomerRepository extends Repository[CustomerId, Customer] {
+trait CustomerRepository extends Repository[CustomerId, Customer] with MultiIOSupport[CustomerId, Customer] {
 
   type This = CustomerRepository
 

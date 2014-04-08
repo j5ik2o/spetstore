@@ -6,6 +6,28 @@ import scala.util.{Failure, Success, Try}
 trait MultiIOSupport[ID <: Identifier[_], E <: Entity[ID]] {
   this: Repository[ID, E] =>
 
+  def storeMulti(entities: E*)(implicit ctx: Ctx): Try[(This, Seq[E])] = {
+    // asInstanceOf is required
+    traverseWithThis(entities) {
+      (repo, entity) => repo.store(entity).asInstanceOf[Try[(This, E)]]
+    }
+  }
+
+  def resolveByIds(ids: ID*)(implicit ctx: Ctx): Try[Seq[E]] = traverse(ids)(resolveById)
+
+  def resolveByOffsetWithLimit(offset: Int, limit: Int = 100)(implicit ctx: Ctx): Try[Seq[E]]
+
+  def existByIds(ids: ID*)(implicit ctx: Ctx): Try[Boolean] = {
+    traverse(ids)(existById).map(_.forall(_ == true))
+  }
+
+  def deleteByIds(ids: ID*)(implicit ctx: Ctx): Try[(This, Seq[E])] = {
+    // asInstanceOf is required
+    traverseWithThis(ids) {
+      (repo, id) => repo.deleteById(id).asInstanceOf[Try[(This, E)]]
+    }
+  }
+
   protected final def traverseWithThis[A](values: Seq[A])
                                          (processor: (This, A) => Try[(This, E)])
                                          (implicit ctx: Ctx): Try[(This, Seq[E])] = Try {
@@ -29,28 +51,6 @@ trait MultiIOSupport[ID <: Identifier[_], E <: Entity[ID]] {
     }
   }
 
-  def existByIdentifiers(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = {
-    traverse(identifiers)(existByIdentifier).map(_.forall(_ == true))
-  }
-
-  def resolveEntities(identifiers: ID*)(implicit ctx: Ctx): Try[Seq[E]] = traverse(identifiers)(resolveEntity)
-
-  def resolveEntities(offset: Int, limit: Int = 100)(implicit ctx: Ctx): Try[Seq[E]]
-
-  def storeEntities(entities: E*)(implicit ctx: Ctx): Try[(This, Seq[E])] = {
-    // asInstanceOf is required
-    traverseWithThis(entities) {
-      (repo, entity) => repo.storeEntity(entity).asInstanceOf[Try[(This, E)]]
-    }
-  }
-
-  def deleteByIdentifiers(identifiers: ID*)(implicit ctx: Ctx): Try[(This, Seq[E])] = {
-    // asInstanceOf is required
-    traverseWithThis(identifiers) {
-      (repo, id) => repo.deleteByIdentifier(id).asInstanceOf[Try[(This, E)]]
-    }
-  }
-
 }
 
 
@@ -69,12 +69,12 @@ trait Repository[ID <: Identifier[_], E <: Entity[ID]] {
 
   type Ctx = EntityIOContext
 
-  def existByIdentifier(identifier: ID)(implicit ctx: Ctx): Try[Boolean]
+  def store(entity: E)(implicit ctx: Ctx): Try[(This, E)]
 
-  def resolveEntity(identifier: ID)(implicit ctx: Ctx): Try[E]
+  def resolveById(id: ID)(implicit ctx: Ctx): Try[E]
 
-  def storeEntity(entity: E)(implicit ctx: Ctx): Try[(This, E)]
+  def existById(id: ID)(implicit ctx: Ctx): Try[Boolean]
 
-  def deleteByIdentifier(identifier: ID)(implicit ctx: Ctx): Try[(This, E)]
+  def deleteById(id: ID)(implicit ctx: Ctx): Try[(This, E)]
 
 }

@@ -32,7 +32,7 @@ case class Item
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]
    */
   def itemType(implicit itr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =
-    itr.resolveEntity(itemTypeId)
+    itr.resolveById(itemTypeId)
 
 }
 

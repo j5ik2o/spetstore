@@ -96,7 +96,7 @@ class CartRepositoryOnJDBC
 
   }
 
-  override def storeEntity(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
+  override def store(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
     implicit s =>
       CartRecordService.insertOrUpdate(entity.id, entity).map {
         entity =>
@@ -109,14 +109,14 @@ class CartRepositoryOnJDBC
       }
   }
 
-  override def deleteByIdentifier(identifier: CartId)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
+  override def deleteById(identifier: CartId)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
     implicit s =>
       CartRecordService.findById(identifier).flatMap {
         entity =>
           val cartItemRecordService = CartItemRecordService(entity.id)
           entity.cartItems.foreach {
             cartItem =>
-              cartItemRecordService.deleteById(cartItem.no).get
+              cartItemRecordService.deleteById(cartItem.id.value).get
           }
           CartRecordService.deleteById(identifier).map {
             _ =>
@@ -125,12 +125,12 @@ class CartRepositoryOnJDBC
       }
   }
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Cart]] = withDBSession(ctx) {
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Cart]] = withDBSession(ctx) {
     implicit s =>
-      CartRecordService.findAllWithLimitOffset(offset, limit)
+      CartRecordService.findAllWithLimitOffset(limit, offset)
   }
 
-  override def resolveEntity(identifier: CartId)(implicit ctx: Ctx): Try[Cart] = withDBSession(ctx) {
+  override def resolveById(identifier: CartId)(implicit ctx: Ctx): Try[Cart] = withDBSession(ctx) {
     implicit s =>
       CartRecordService.findById(identifier)
   }

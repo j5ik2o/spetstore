@@ -7,7 +7,7 @@ import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json.Json._
 import play.api.mvc._
-import scala.util.Success
+import scala.util.{Try, Success}
 import scalikejdbc.DB
 
 trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
@@ -38,7 +38,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
         json =>
           json.validate[J].fold(defaultErrorHandler, {
             validatedJson =>
-              repository.storeEntity(convertToEntityWithoutId(validatedJson)).map {
+              repository.store(convertToEntityWithoutId(validatedJson)).map {
                 case (_, entity) =>
                   Logger.debug(entity.toString)
                   OkForCreatedEntity(entity.id)
@@ -53,7 +53,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
   protected def getAction(id: Long)(apply: Long => ID)
                          (implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
     val identifier = apply(id)
-    repository.resolveEntity(identifier).map {
+    repository.resolveById(identifier).map {
       entity =>
         Ok(prettyPrint(toJson(entity)))
     }.recoverWith {
@@ -66,7 +66,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
     request =>
       val offset = request.getQueryString("offset").map(_.toInt).getOrElse(0)
       val limit = request.getQueryString("limit").map(_.toInt).getOrElse(100)
-      repository.resolveEntities(offset, limit).map {
+      repository.resolveByOffsetWithLimit(offset, limit).map {
         entities =>
           Ok(prettyPrint(JsArray(entities.map(toJson(_)))))
       }.getOrElse(InternalServerError)
@@ -78,14 +78,14 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       withTransaction {
         implicit ctx =>
           val identifier = apply(id)
-          repository.existByIdentifier(identifier).map {
+          repository.existById(identifier).map {
             exist =>
               if (exist) {
                 request.body.asJson.map {
                   json =>
                     json.validate[J].fold(defaultErrorHandler, {
                       validatedJson =>
-                        repository.storeEntity(convertToEntity(validatedJson)).map {
+                        repository.store(convertToEntity(validatedJson)).map {
                           case (_, entity) =>
                             OkForCreatedEntity(entity.id)
                         }.recover {
@@ -97,14 +97,16 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
               } else {
                 NotFoundForEntity(identifier)
               }
-          }.get
+          }.getOrElse(InternalServerError)
       }
   }
 
   protected def deleteAction(id: Long)(apply: Long => ID)(implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
     val identifier = apply(id)
-    repository.deleteByIdentifier(identifier).map {
+    Logger.debug("delete id = "+identifier)
+    repository.deleteById(identifier).map {
       case (_, entity) =>
+        Logger.debug("deleted id = "+identifier)
         Ok(prettyPrint(toJson(entity)))
     }.recoverWith {
       case ex: EntityNotFoundException =>

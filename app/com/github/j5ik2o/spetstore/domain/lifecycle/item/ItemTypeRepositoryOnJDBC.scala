@@ -14,11 +14,11 @@ class ItemTypeRepositoryOnJDBC
 
   override protected val mapper = ItemTypeRecord
 
-  override def deleteByIdentifier(identifier: ItemTypeId)(implicit ctx: Ctx): Try[(This, ItemType)] = ???
+  override def deleteById(identifier: ItemTypeId)(implicit ctx: Ctx): Try[(This, ItemType)] = ???
 
-  override def storeEntity(entity: ItemType)(implicit ctx: Ctx): Try[(This, ItemType)] = ???
+  override def store(entity: ItemType)(implicit ctx: Ctx): Try[(This, ItemType)] = ???
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[ItemType]] = ???
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[ItemType]] = ???
 
-  override def resolveEntity(identifier: ItemTypeId)(implicit ctx: Ctx): Try[ItemType] = ???
+  override def resolveById(identifier: ItemTypeId)(implicit ctx: Ctx): Try[ItemType] = ???
 }

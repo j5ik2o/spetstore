@@ -23,7 +23,7 @@ class RepositoryOnMemorySpec extends Specification {
       val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory().
-        storeEntity(person) must beSuccessfulTry.like {
+        store(person) must beSuccessfulTry.like {
         case (PersonRepositoryOnMemory(entities), _) =>
           entities.contains(personId) must beTrue
       }
@@ -35,7 +35,7 @@ class RepositoryOnMemorySpec extends Specification {
       val entities = Map(personId -> person)
       entities.contains(personId) must beTrue
       PersonRepositoryOnMemory(entities).
-        existByIdentifier(personId) must beSuccessfulTry.like {
+        existById(personId) must beSuccessfulTry.like {
         case result =>
           result must beTrue
       }
@@ -45,7 +45,7 @@ class RepositoryOnMemorySpec extends Specification {
       val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory(Map(personId -> person)).
-        resolveEntity(personId) must beSuccessfulTry.like {
+        resolveById(personId) must beSuccessfulTry.like {
         case entity =>
           entity must_== person
       }
@@ -55,7 +55,7 @@ class RepositoryOnMemorySpec extends Specification {
       val personId = PersonId(identifierService.generate)
       val person = Person(personId, "Junichi", "Kato")
       PersonRepositoryOnMemory(Map(personId -> person)).
-        deleteByIdentifier(personId) must beSuccessfulTry.like {
+        deleteById(personId) must beSuccessfulTry.like {
         case (PersonRepositoryOnMemory(entities), _) =>
           entities.contains(personId) must beFalse
       }

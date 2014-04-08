@@ -26,22 +26,22 @@ abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
    */
   protected def createInstance(entities: Map[ID, E]): This
 
-  def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] =
+  def existById(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] =
     Success(entities.contains(identifier))
 
-  def resolveEntity(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = Try {
+  def resolveById(identifier: ID)(implicit ctx: EntityIOContext): Try[E] = Try {
     entities.get(identifier).getOrElse(throw EntityNotFoundException(identifier))
   }
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[E]] = Try {
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: EntityIOContext): Try[Seq[E]] = Try {
     entities.map(_._2).toList.slice(offset, offset + limit)
   }
 
-  def storeEntity(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = Success {
+  def store(entity: E)(implicit ctx: EntityIOContext): Try[(This, E)] = Success {
     (createInstance(entities + (entity.id -> entity)), entity)
   }
 
-  def deleteByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = Try {
+  def deleteById(identifier: ID)(implicit ctx: EntityIOContext): Try[(This, E)] = Try {
     entities.get(identifier).map {
       entity =>
         (createInstance(entities - identifier), entity)

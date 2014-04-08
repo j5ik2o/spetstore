@@ -116,18 +116,18 @@ class OrderRepositoryOnJDBC
   }
 
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Order]] = withDBSession(ctx) {
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Order]] = withDBSession(ctx) {
     implicit s =>
       OrderRecordService.findAllWithLimitOffset(offset, limit)
   }
 
-  override def resolveEntity(identifier: OrderId)(implicit ctx: Ctx): Try[Order] = withDBSession(ctx) {
+  override def resolveById(identifier: OrderId)(implicit ctx: Ctx): Try[Order] = withDBSession(ctx) {
     implicit s =>
       OrderRecordService.findById(identifier)
   }
 
 
-  override def deleteByIdentifier(identifier: OrderId)(implicit ctx: Ctx): Try[(This, Order)] = withDBSession(ctx) {
+  override def deleteById(identifier: OrderId)(implicit ctx: Ctx): Try[(This, Order)] = withDBSession(ctx) {
     implicit s =>
       OrderRecordService.findById(identifier).flatMap {
         entity =>
@@ -144,7 +144,7 @@ class OrderRepositoryOnJDBC
   }
 
 
-  override def storeEntity(entity: Order)(implicit ctx: Ctx): Try[(This, Order)] = withDBSession(ctx) {
+  override def store(entity: Order)(implicit ctx: Ctx): Try[(This, Order)] = withDBSession(ctx) {
     implicit s =>
       OrderRecordService.insertOrUpdate(entity.id, entity).map {
         entity =>

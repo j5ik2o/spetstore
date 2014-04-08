@@ -45,7 +45,7 @@ class CartSpec extends Specification {
       supplierId = SupplierId(identifierService.generate)
     )
     implicit val ctx = EntityIOContextOnMemory
-    implicit val itemRepository = ItemRepository.ofMemory().storeEntity(item).get._1
+    implicit val itemRepository = ItemRepository.ofMemory().store(item).get._1
 
     "add cartItem" in {
       val cart = Cart(
@@ -69,7 +69,7 @@ class CartSpec extends Specification {
         cartItems = List.empty
       )
       val cartItemId = CartItemId(identifierService.generate)
-      val newCart = cart.addCartItem(cartItemId, item, 1, false)
+      val newCart = cart.addCartItem(cartItemId, item.id, 1, false)
       newCart must_== cart
       newCart.cartItems.contains(CartItem(cartItemId, StatusType.Enabled, 1, item.id, 1, false)) must beTrue
       newCart.sizeOfCartItems must_== 1

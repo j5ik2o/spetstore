@@ -19,7 +19,7 @@ case class CartItem(id: CartItemId, status: StatusType.Value, no: Int, itemId: I
    * 小計。
    */
   def subTotalPrice(implicit ir: ItemRepository, ctx: EntityIOContext): Try[BigDecimal] =
-    ir.resolveEntity(itemId).map(_.price * quantity)
+    ir.resolveById(itemId).map(_.price * quantity)
 
   /**
    * 数量をインクリメントする。

@@ -80,7 +80,7 @@ create table person (
         implicit ctx =>
           val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
-          PersonRepositoryOnJDBC().storeEntity(person) must beSuccessfulTry
+          PersonRepositoryOnJDBC().store(person) must beSuccessfulTry
       }
     }
     "contains a entity" in new PersonAutoRollback {
@@ -89,8 +89,8 @@ create table person (
           val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
-          repository.storeEntity(person) must beSuccessfulTry
-          repository.existByIdentifier(personId) must beSuccessfulTry.like {
+          repository.store(person) must beSuccessfulTry
+          repository.existById(personId) must beSuccessfulTry.like {
             case result =>
               result must beTrue
           }
@@ -102,8 +102,8 @@ create table person (
           val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
-          repository.storeEntity(person) must beSuccessfulTry
-          repository.resolveEntity(personId) must beSuccessfulTry.like {
+          repository.store(person) must beSuccessfulTry
+          repository.resolveById(personId) must beSuccessfulTry.like {
             case entity =>
               entity must_== person
           }
@@ -116,8 +116,8 @@ create table person (
           val personId = PersonId(idValue)
           val person = Person(personId, "Junichi", "Kato")
           val repository = PersonRepositoryOnJDBC()
-          repository.storeEntity(person) must beSuccessfulTry
-          repository.deleteByIdentifier(personId) must beSuccessfulTry
+          repository.store(person) must beSuccessfulTry
+          repository.deleteById(personId) must beSuccessfulTry
       }
     }
 

@@ -22,6 +22,7 @@ object CartFormats {
 
     def write(obj: CartItem): JValue =
       JObject(
+        JField("id", JString(obj.id.value.toString)),
         JField("status", JInt(obj.status.id)),
         JField("no", JInt(obj.no)),
         JField("itemId", obj.itemId.asJValue),

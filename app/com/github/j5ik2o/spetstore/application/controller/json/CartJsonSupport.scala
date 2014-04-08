@@ -8,7 +8,7 @@ import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, Cart, Cart
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class CartItemJson(id: Long, no: Int, itemId: String, quantity: Int, inStock: Boolean)
+case class CartItemJson(id: Option[String], no: Int, itemId: String, quantity: Int, inStock: Boolean)
 
 case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson])
 
@@ -19,7 +19,16 @@ trait CartJsonSupport {
   this: CartController =>
 
   protected def convertToEntity(json: CartItemJson): CartItem = CartItem(
-    id = CartItemId(json.id),
+    id = CartItemId(json.id.map(_.toLong).get),
+    no = json.no,
+    status = StatusType.Enabled,
+    itemId = ItemId(json.itemId.toLong),
+    quantity = json.quantity,
+    inStock = json.inStock
+  )
+
+  protected def convertToEntityWithoutId(json: CartItemJson): CartItem = CartItem(
+    id = CartItemId(identifierService.generate),
     no = json.no,
     status = StatusType.Enabled,
     itemId = ItemId(json.itemId.toLong),
@@ -38,13 +47,14 @@ trait CartJsonSupport {
     id = CartId(identifierService.generate),
     status = StatusType.Enabled,
     customerId = CustomerId(json.customerId.toLong),
-    cartItems = json.cartItems.map(convertToEntity).toList
+    cartItems = json.cartItems.map(convertToEntityWithoutId).toList
   )
 
   implicit object ItemConverter extends Reads[CartItemJson] with Writes[CartItem] {
 
     override def writes(o: CartItem): JsValue = JsObject(
       Seq(
+        "id" -> JsString(o.id.value.toString),
         "no" -> JsNumber(o.no),
         "itemId" -> JsNumber(o.itemId.value),
         "quantity" -> JsNumber(o.quantity),
@@ -53,7 +63,7 @@ trait CartJsonSupport {
     )
 
     override def reads(json: JsValue): JsResult[CartItemJson] =
-      ((__ \ 'id).read[Long] and
+      ((__ \ 'id).readNullable[String] and
         (__ \ 'no).read[Int] and
         (__ \ 'itemId).read[String] and
         (__ \ 'quantity).read[Int] and

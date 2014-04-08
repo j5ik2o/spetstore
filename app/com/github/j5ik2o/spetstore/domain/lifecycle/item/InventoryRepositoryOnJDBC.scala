@@ -12,11 +12,11 @@ class InventoryRepositoryOnJDBC
 
   override protected val mapper = InventoryRecord
 
-  override def deleteByIdentifier(identifier: InventoryId)(implicit ctx: Ctx): Try[(This, Inventory)] = ???
+  override def deleteById(identifier: InventoryId)(implicit ctx: Ctx): Try[(This, Inventory)] = ???
 
-  override def storeEntity(entity: Inventory)(implicit ctx: Ctx): Try[(InventoryRepositoryOnJDBC#This, Inventory)] = ???
+  override def store(entity: Inventory)(implicit ctx: Ctx): Try[(InventoryRepositoryOnJDBC#This, Inventory)] = ???
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Inventory]] = ???
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Inventory]] = ???
 
-  override def resolveEntity(identifier: InventoryId)(implicit ctx: Ctx): Try[Inventory] = ???
+  override def resolveById(identifier: InventoryId)(implicit ctx: Ctx): Try[Inventory] = ???
 }

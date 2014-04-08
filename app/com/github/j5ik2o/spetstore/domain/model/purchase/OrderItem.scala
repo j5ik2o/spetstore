@@ -18,7 +18,7 @@ case class OrderItem(id: OrderItemId, status: StatusType.Value, no: Int, itemId:
    * 小計。
    */
   def subTotalPrice(implicit ir: ItemRepository, ctx: EntityIOContext): Try[BigDecimal] =
-    ir.resolveEntity(itemId).map(_.price * quantity)
+    ir.resolveById(itemId).map(_.price * quantity)
 
 }
 

@@ -29,7 +29,7 @@ class OrderSpec extends Specification {
       supplierId = SupplierId(identifierService.generate)
     )
     implicit val ctx = EntityIOContextOnMemory
-    implicit val itemRepository = ItemRepository.ofMemory().storeEntity(item).get._1
+    implicit val itemRepository = ItemRepository.ofMemory().store(item).get._1
     "add orderItem" in {
       val order = Order(
         id = OrderId(identifierService.generate),
@@ -163,7 +163,7 @@ class OrderSpec extends Specification {
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory
-      val order = Order.fromCart(OrderId(identifierService.generate), cart).get
+      val order = Order.clearUp(cart).get
       order.orderItems.exists(e => e.itemId == item.id && e.quantity == 1) must beTrue
     }
 

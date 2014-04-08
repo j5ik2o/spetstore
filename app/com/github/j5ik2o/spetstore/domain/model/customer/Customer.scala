@@ -5,8 +5,8 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, SexType}
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderId, Order, Cart, CartItem}
-import scala.util.Try
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
+import scala.util.Try
 
 /**
  * ペットストアの顧客を表すエンティティ。
@@ -33,10 +33,10 @@ case class Customer
   def removeCartItemByItemId(cart: Cart, itemId: ItemId): Cart =
     cart.removeCartItemByItemId(itemId)
 
-  def newOrderFromCart(orderId: OrderId, cart: Cart)
-                      (implicit is: IdentifierService, 
+  def clearUpCart(cart: Cart)
+                      (implicit is: IdentifierService,
                        cr: CustomerRepository, ctx: EntityIOContext): Try[Order] =
-    Order.fromCart(orderId, cart)
+    Order.clearUp(cart)
 
 }
 

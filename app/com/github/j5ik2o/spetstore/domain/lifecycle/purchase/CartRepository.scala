@@ -1,12 +1,12 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{MultiIOSupport, Repository}
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId}
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]のためのリポジトリ責務。
  */
-trait CartRepository extends Repository[CartId, Cart] {
+trait CartRepository extends Repository[CartId, Cart] with MultiIOSupport[CartId, Cart] {
 
   type This = CartRepository
 

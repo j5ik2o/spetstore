@@ -56,7 +56,7 @@ CREATE TABLE `cart` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
   `status`      INT           NOT NULL,
-  `customer_id` BIGINT,
+  `customer_id` BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
@@ -74,6 +74,41 @@ CREATE TABLE `cart_item` (
   PRIMARY KEY(`pk`),
   UNIQUE(`id`),
   UNIQUE(`cart_id`,`no`)
+);
+
+""".execute().apply()
+                sql"""
+CREATE TABLE `order` (
+  `pk`            BIGINT        NOT NULL AUTO_INCREMENT,
+  `id`            BIGINT        NOT NULL,
+  `status`        INT           NOT NULL,
+  `order_status`  INT           NOT NULL,
+  `order_date`    TIMESTAMP     NOT NULL,
+  `customer_id`   BIGINT        NOT NULL,
+  `customer_name` VARCHAR(256)  NOT NULL,
+  `zip_code`      VARCHAR(20)   NOT NULL,
+  `pref_code`     INT           NOT NULL,
+  `city_name`     VARCHAR(256)  NOT NULL,
+  `address_name`  VARCHAR(256)  NOT NULL,
+  `building_name` VARCHAR(256),
+  `email`         VARCHAR(64)   NOT NULL,
+  `phone`         VARCHAR(64)   NOT NULL,
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`)
+);
+""".execute().apply()
+                sql"""
+CREATE TABLE `order_item` (
+  `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
+  `id`          BIGINT        NOT NULL,
+  `status`      INT           NOT NULL,
+  `order_id`    BIGINT        NOT NULL,
+  `no`          INT           NOT NULL,
+  `item_id`     BIGINT        NOT NULL,
+  `quantity`    INT           NOT NULL,
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`),
+  UNIQUE(`order_id`,`no`)
 );
 
 """.execute().apply()

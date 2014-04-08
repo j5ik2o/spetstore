@@ -1,12 +1,12 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.Repository
+import com.github.j5ik2o.spetstore.domain.infrastructure.support.{MultiIOSupport, Repository}
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.item.Category]]のためのリポジトリ責務。
  */
-trait CategoryRepository extends Repository[CategoryId, Category] {
+trait CategoryRepository extends Repository[CategoryId, Category] with MultiIOSupport[CategoryId, Category] {
 
   type This = CategoryRepository
 

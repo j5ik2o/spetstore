@@ -5,7 +5,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
-import com.github.j5ik2o.spetstore.domain.model.item.{ItemId, Item}
+import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import scala.util.Try
 
 /**
@@ -26,7 +26,7 @@ case class Cart
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]
    */
   def customer(implicit cr: CustomerRepository, ctx: EntityIOContext): Try[Customer] =
-    cr.resolveEntity(customerId)
+    cr.resolveById(customerId)
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]の個数。
@@ -76,13 +76,13 @@ case class Cart
   /**
    * このカートに[[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]を追加する。
    *
-   * @param item [[com.github.j5ik2o.spetstore.domain.model.item.Item]]
+   * @param itemId [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]
    * @param quantity 個数
    * @param isInStock ストックする場合true
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
-  def addCartItem(cartItemId: CartItemId, item: Item, quantity: Int, isInStock: Boolean): Cart =
-    addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, item.id, quantity, isInStock))
+  def addCartItem(cartItemId: CartItemId, itemId: ItemId, quantity: Int, isInStock: Boolean = false): Cart =
+    addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, itemId, quantity, isInStock))
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って

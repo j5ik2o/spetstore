@@ -73,12 +73,12 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
 
   protected def convertToRecord(entity: E): T
 
-  override def resolveEntity(identifier: ID)(implicit ctx: Ctx): Try[E] = withDBSession(ctx) {
+  override def resolveById(identifier: ID)(implicit ctx: Ctx): Try[E] = withDBSession(ctx) {
     implicit s =>
       MainService.findById(identifier)
   }
 
-  override def storeEntity(entity: E)(implicit ctx: Ctx): Try[(This, E)] = withDBSession(ctx) {
+  override def store(entity: E)(implicit ctx: Ctx): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
       MainService.insertOrUpdate(entity.id, entity).map {
         entity =>
@@ -86,7 +86,7 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
       }
   }
 
-  override def deleteByIdentifier(identifier: ID)(implicit ctx: Ctx): Try[(This, E)] = withDBSession(ctx) {
+  override def deleteById(identifier: ID)(implicit ctx: Ctx): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
       MainService.deleteById(identifier).map {
         entity =>
@@ -95,7 +95,7 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
   }
 
 
-  override def resolveEntities(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[E]] = withDBSession(ctx) {
+  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[E]] = withDBSession(ctx) {
     implicit s =>
       Logger.debug(s"offset = $offset, limit = $limit")
       val r = MainService.findAllWithLimitOffset(limit, offset)
@@ -124,7 +124,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
     }
   }
 
-  def existByIdentifier(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
+  def existById(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
     implicit s => Try {
       val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(idName), identifier.value))
       if (count == 0) false
@@ -133,7 +133,7 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
     }
   }
 
-  override def existByIdentifiers(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = withDBSession(ctx) {
+  override def existByIds(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = withDBSession(ctx) {
     implicit s =>
       Try(mapper.countBy(sqls.in(mapper.defaultAlias.field(idName), identifiers.map(_.value))) > 0)
   }

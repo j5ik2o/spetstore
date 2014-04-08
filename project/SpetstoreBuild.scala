@@ -7,8 +7,19 @@ object SpetstoreBuild extends Build {
   val appName = "spetstore"
   val appVersion = "1.0.0"
 
+  val finagleVersion = "6.4.1"
+
+
+  val finagleMemcached = "com.twitter" %% "finagle-memcached" % finagleVersion excludeAll(
+    ExclusionRule(organization = "log4j", name = "log4j"),
+    ExclusionRule(organization = "org.slf4j", name = "slf4j-api"),
+    ExclusionRule(organization = "org.slf4j", name = "slf4j-jdk14"),
+    ExclusionRule(organization = "org.slf4j", name = "slf4j-log4j12")
+    )
+
   val appDependencies = Seq(
     jdbc,
+/*        finagleMemcached, */
         "org.scala-lang"          % "scala-reflect"               % "2.10.3",
         "junit"                   % "junit"                       % "4.8.1" % "test",
         "org.hamcrest"            % "hamcrest-all"                % "1.3" % "test",
@@ -20,7 +31,7 @@ object SpetstoreBuild extends Build {
         "org.scalikejdbc"         %% "scalikejdbc-test"           % "1.7.4" % "test",
         "org.scalikejdbc"         %% "scalikejdbc-interpolation"  % "1.7.4",
         "org.scalikejdbc"         %% "scalikejdbc-play-plugin"    % "1.7.4",
-    "org.skinny-framework"    %% "skinny-orm"                 % "1.0.0-RC11"  % "compile",
+        "org.skinny-framework"    %% "skinny-orm"                 % "1.0.5",
         "com.h2database"          %  "h2"                         % "1.3.175",
         "ch.qos.logback"          %  "logback-classic"            % "[1.0,)",
         "org.json4s"              %% "json4s-ext"                 % "3.2.4",
@@ -33,8 +44,16 @@ object SpetstoreBuild extends Build {
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-      scalaVersion in ThisBuild := "2.10.3",
+      scalaVersion in ThisBuild := "2.10.4",
       conflictWarning := ConflictWarning.disable,
+/**
+      resolvers ++= Seq(
+        "Typesafe Repository"           at "http://repo.typesafe.com/typesafe/releases/",
+        "Twitter Repository" at "http://maven.twttr.com/",
+        "Sonatype Release Repository"   at "https://oss.sonatype.org/content/repositories/releases/",
+        "Sonatype Snapshot Repository"  at "https://oss.sonatype.org/content/repositories/snapshots/"
+      ),
+    */
     initialCommands := """
   import scalikejdbc._,config._,SQLInterpolation._
   DBs.setupAll

@@ -21,7 +21,7 @@ case class CustomerRecord
 
 object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
-  override def defaultAlias = createAlias("c")
+  override def defaultAlias = createAlias("customer")
 
   override def tableName: String = "customer"
 
@@ -233,7 +233,7 @@ case class CartRecord(id: Long, status: Int, customerId: Long, cartItems: Seq[Ca
 
 object CartRecord extends CRUDMapper[CartRecord] {
 
-  override def defaultAlias = createAlias("c")
+  override def defaultAlias = createAlias("cart")
 
   override def tableName: String = "cart"
 
@@ -266,7 +266,7 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   val cartItemsAlias = createAlias("cart_items")
 
-  override def defaultAlias = createAlias("ci")
+  override def defaultAlias = createAlias("cart_item")
 
   override def tableName: String = "cart_item"
 
