@@ -68,7 +68,7 @@ case class CategoryRecord
 
 object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
-  override def defaultAlias = createAlias("c")
+  override def defaultAlias = createAlias("category")
 
   override def tableName: String = "category"
 
@@ -95,7 +95,7 @@ case class InventoryRecord
 
 object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
-  override def defaultAlias = createAlias("i")
+  override def defaultAlias = createAlias("inventory")
 
   override def tableName: String = "inventory"
 
@@ -126,7 +126,7 @@ case class ItemRecord
 
 object ItemRecord extends CRUDMapper[ItemRecord] {
 
-  override def defaultAlias = createAlias("i")
+  override def defaultAlias = createAlias("item")
 
   override def tableName: String = "item"
 
@@ -161,7 +161,7 @@ case class ItemTypeRecord
 
 object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
-  override def defaultAlias = createAlias("it")
+  override def defaultAlias = createAlias("item_type")
 
   override def tableName: String = "item_type"
 
@@ -197,7 +197,7 @@ case class SupplierRecord
 
 object SupplierRecord extends CRUDMapper[SupplierRecord] {
 
-  override def defaultAlias = createAlias("s")
+  override def defaultAlias = createAlias("supplier")
 
   override def tableName: String = "supplier"
 
@@ -310,7 +310,7 @@ case class OrderRecord
 
 object OrderRecord extends CRUDMapper[OrderRecord] {
 
-  override def defaultAlias = createAlias("o")
+  override def defaultAlias = createAlias("order")
 
   override def tableName: String = "order"
 
@@ -366,7 +366,7 @@ object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
 
   val orderItemsAlias = createAlias("order_items")
 
-  override def defaultAlias = createAlias("oi")
+  override def defaultAlias = createAlias("order_item")
 
   override def tableName: String = "order_item"
 
