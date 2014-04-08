@@ -3,8 +3,10 @@ package com.github.j5ik2o.spetstore
 import play.api.test.{WithServer, PlaySpecification}
 import play.api.libs.ws.WS
 import play.api.libs.json.Json
+import com.github.j5ik2o.spetstore.infrastructure.db.DBInitializer
 
 class CartIntegrationSpec extends PlaySpecification {
+
 
   private def createCart(port: Int): Long = {
     val body = """

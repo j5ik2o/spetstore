@@ -1,21 +1,29 @@
 package com.github.j5ik2o.spetstore.infrastructure.db
 
+import com.typesafe.config.ConfigFactory
 import scalikejdbc._, SQLInterpolation._
 
 object DBInitializer {
   def run() {
+    val config = ConfigFactory.load()
+    val driverClassName = config.getString("db.default.driver")
+    val url = config.getString("db.default.url")
+    val user = config.getString("db.default.user")
+    val password = config.getString("db.default.password")
+    Class.forName(driverClassName)
+    ConnectionPool.singleton(url, user, password)
     DB readOnly {
       implicit s =>
         try {
           sql"select 1 from customer limit 1".map(_.long(1)).single().apply()
         } catch {
           case e: java.sql.SQLException =>
-            DB autoCommit {
+            DB.localTx {
               implicit s =>
                 sql"""
 DROP TABLE IF EXISTS `customer`;
 """.execute().apply()
-sql"""
+                sql"""
 CREATE TABLE `customer` (
   `pk`                    BIGINT        NOT NULL AUTO_INCREMENT,
   `id`                    BIGINT        NOT NULL,
@@ -37,10 +45,10 @@ CREATE TABLE `customer` (
 );
 """.execute().apply()
 
-              sql"""
+                sql"""
 DROP TABLE IF EXISTS `category`;
 """.execute().apply()
-sql"""
+                sql"""
 CREATE TABLE `category` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -51,7 +59,7 @@ CREATE TABLE `category` (
   UNIQUE(`id`)
 );
 """.execute().apply()
-sql"""
+                sql"""
 CREATE TABLE `cart` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -96,8 +104,6 @@ CREATE TABLE `order` (
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
-""".execute().apply()
-                sql"""
 CREATE TABLE `order_item` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -110,7 +116,6 @@ CREATE TABLE `order_item` (
   UNIQUE(`id`),
   UNIQUE(`order_id`,`no`)
 );
-
 """.execute().apply()
             }
         }

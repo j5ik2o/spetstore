@@ -3,8 +3,10 @@ package com.github.j5ik2o.spetstore
 import play.api.libs.ws.WS
 import play.api.test._
 import play.api.libs.json.Json
+import com.github.j5ik2o.spetstore.infrastructure.db.DBInitializer
 
 class CustomerIntegrationSpec extends PlaySpecification {
+
 
   private def createCustomer(port: Int): Long = {
     val body = """
