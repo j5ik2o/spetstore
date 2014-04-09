@@ -27,7 +27,8 @@ class CartRepositoryOnJDBC
       CartRecord(
         id = model.id.value,
         status = model.status.id,
-        customerId = model.customerId.value
+        customerId = model.customerId.value,
+        version = model.version.getOrElse(1)
       )
     }
 
@@ -35,7 +36,8 @@ class CartRepositoryOnJDBC
       id = CartId(record.id),
       status = StatusType(record.status),
       customerId = CustomerId(record.customerId),
-      cartItems = record.cartItems.map(CartItemRecordService.convertToEntity).toList
+      cartItems = record.cartItems.map(CartItemRecordService.convertToEntity).toList,
+      version = Some(record.version)
     )
 
     override def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
@@ -79,7 +81,8 @@ class CartRepositoryOnJDBC
         cartId = cartId.value,
         itemId = model.itemId.value,
         quantity = model.quantity,
-        inStock = model.inStock
+        inStock = model.inStock,
+        version = model.version.getOrElse(1)
       )
     }
 
@@ -89,7 +92,8 @@ class CartRepositoryOnJDBC
       status = StatusType(record.status),
       itemId = ItemId(record.itemId),
       quantity = record.quantity,
-      inStock = record.inStock
+      inStock = record.inStock,
+      version = Some(record.version)
     )
 
     def convertToPrimaryKey(id: Long): Long = id
@@ -98,12 +102,12 @@ class CartRepositoryOnJDBC
 
   override def store(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
     implicit s =>
-      CartRecordService.insertOrUpdate(entity.id, entity).map {
+      CartRecordService.insertOrUpdate(entity.id, entity.version, entity).map {
         entity =>
           val cartItemRecordService = CartItemRecordService(entity.id)
           entity.cartItems.foreach {
             cartItem =>
-              cartItemRecordService.insertOrUpdate(cartItem.no, cartItem).get
+              cartItemRecordService.insertOrUpdate(cartItem.no, cartItem.version, cartItem).get
           }
           (this.asInstanceOf[This], entity)
       }

@@ -26,7 +26,8 @@ class OrderSpec extends Specification {
       name = "ぽち",
       description = None,
       price = BigDecimal(100),
-      supplierId = SupplierId(identifierService.generate)
+      supplierId = SupplierId(identifierService.generate),
+      None
     )
     implicit val ctx = EntityIOContextOnMemory
     implicit val itemRepository = ItemRepository.ofMemory().store(item).get._1
@@ -48,16 +49,17 @@ class OrderSpec extends Specification {
           email = "test@test.com",
           phone = "090-0000-0000"
         ),
-        orderItems = List.empty
+        orderItems = List.empty,
+        None
       )
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1, None)
       val newOrder = order.addOrderItem(orderItem)
       newOrder must_== order
       newOrder.orderItems.contains(orderItem) must beTrue
       newOrder.sizeOfOrderItems must_== 1
     }
     "remove orderItem" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1, None)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -75,7 +77,8 @@ class OrderSpec extends Specification {
           email = "test@test.com",
           phone = "090-0000-0000"
         ),
-        orderItems = List(orderItem)
+        orderItems = List(orderItem),
+        None
       )
       val newOrder = order.removeOrderItem(orderItem)
       newOrder must_== order
@@ -83,7 +86,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "remove orderItem by index" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate),StatusType.Enabled, 1, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate),StatusType.Enabled, 1, item.id, 1, None)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -101,7 +104,8 @@ class OrderSpec extends Specification {
           email = "test@test.com",
           phone = "090-0000-0000"
         ),
-        orderItems = List(orderItem)
+        orderItems = List(orderItem),
+        None
       )
       val newOrder = order.removeOrderItemByIndex(0)
       newOrder must_== order
@@ -109,7 +113,7 @@ class OrderSpec extends Specification {
       newOrder.sizeOfOrderItems must_== 0
     }
     "get totalPrice" in {
-      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1)
+      val orderItem = OrderItem(OrderItemId(identifierService.generate), StatusType.Enabled, 1, item.id, 1, None)
       val order = Order(
         id = OrderId(identifierService.generate),
         status = StatusType.Enabled,
@@ -127,7 +131,8 @@ class OrderSpec extends Specification {
           email = "test@test.com",
           phone = "090-0000-0000"
         ),
-        orderItems = List(orderItem)
+        orderItems = List(orderItem),
+        None
       )
       order.totalPrice must_== Success(BigDecimal(100))
     }
@@ -150,7 +155,8 @@ class OrderSpec extends Specification {
           loginName = "fugafuga",
           password = "hogehoge",
           favoriteCategoryId = None
-        )
+        ),
+        None
       )
       val cartItemId = CartItemId(identifierService.generate)
       val cart = Cart(
@@ -158,8 +164,9 @@ class OrderSpec extends Specification {
         StatusType.Enabled,
         customerId = customer.id,
         cartItems = List(
-          CartItem(cartItemId, StatusType.Enabled,1,  item.id, 1, false)
-        )
+          CartItem(cartItemId, StatusType.Enabled,1,  item.id, 1, false, None)
+        ),
+        None
       )
       implicit val ar = CustomerRepository.ofMemory(Map(customer.id -> customer))
       implicit val ctx = EntityIOContextOnMemory

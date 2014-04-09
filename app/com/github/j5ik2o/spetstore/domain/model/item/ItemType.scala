@@ -16,6 +16,12 @@ case class ItemType
  status: StatusType.Value,
  categoryId: CategoryId,
  name: String,
- description: Option[String] = None)
-  extends Entity[ItemTypeId]
+ description: Option[String] = None,
+ version: Option[Long])
+  extends Entity[ItemTypeId]{
+
+  override def withVersion(version: Long): Entity[ItemTypeId] =
+    copy(version = Some(version))
+
+}
 

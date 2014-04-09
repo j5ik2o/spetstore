@@ -17,7 +17,8 @@ object OrderFormats {
         JField("no", JInt(obj.no)),
         JField("status", JInt(obj.status.id)),
         JField("itemId", obj.itemId.asJValue),
-        JField("quantity", JInt(obj.quantity))
+        JField("quantity", JInt(obj.quantity)),
+        JField("version", obj.version.map(e => JString(e.toString)).getOrElse(JNull))
       )
 
     def read(value: JValue): OrderItem = OrderItem(
@@ -25,7 +26,8 @@ object OrderFormats {
       no = (value \ "no").as[Int],
       status = StatusType((value \ "status").as[Int]),
       itemId = (value \ "itemId").as[ItemId],
-      quantity = (value \ "quantity").as[Int]
+      quantity = (value \ "quantity").as[Int],
+      version = (value \ "version").as[Option[String]].map(_.toLong)
     )
 
   }

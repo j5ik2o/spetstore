@@ -26,14 +26,21 @@ trait DaoSupport[ID, M, T] {
 
   def convertToEntity(record: T): M
 
-  def insertOrUpdate(id: ID, model: M)(implicit s: DBSession) = Try {
-    val count = mapper.updateBy(sqls.eq(mapper.column.field(idName), convertToPrimaryKey(id)))
-      .withAttributes(mapper.toNamedValues(convertToRecord(model)).filterNot {
-      case (k, _) => k.name == mapper.primaryKeyFieldName
-    }: _*)
-    if (count == 0) mapper.createWithAttributes(mapper.toNamedValues(convertToRecord(model)): _*)
-    else if (count > 1) throw new IllegalStateException(s"$count tables are found for identifier: $id")
-    model
+  def insertOrUpdate(id: ID, version: Option[Long], model: M)(implicit s: DBSession) = Try {
+    if (version.isDefined) {
+      val where = sqls.eq(mapper.column.field(idName), convertToPrimaryKey(id)).and.eq(mapper.column.field("version"), version)
+      val count = mapper.updateBy(where)
+        .withAttributes(mapper.toNamedValues(convertToRecord(model)).filterNot {
+        case (k, _) => k.name == mapper.primaryKeyFieldName
+      }: _*)
+      if (count == 0) {
+        throw new IllegalStateException(s"The entity has illegal version(id = $id)")
+      }
+      model
+    } else {
+      mapper.createWithAttributes(mapper.toNamedValues(convertToRecord(model)): _*)
+      model
+    }
   }
 
   def findById(id: ID)(implicit s: DBSession): Try[M] = Try {
@@ -80,9 +87,9 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
 
   override def store(entity: E)(implicit ctx: Ctx): Try[(This, E)] = withDBSession(ctx) {
     implicit s =>
-      MainService.insertOrUpdate(entity.id, entity).map {
+      MainService.insertOrUpdate(entity.id, entity.version, entity).map {
         entity =>
-          (this.asInstanceOf[This], entity)
+          (this.asInstanceOf[This], entity.withVersion(1).asInstanceOf[E])
       }
   }
 

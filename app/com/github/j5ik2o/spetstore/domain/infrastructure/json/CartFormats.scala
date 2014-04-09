@@ -12,12 +12,13 @@ object CartFormats {
   implicit object CartItemFormat extends Writer[CartItem] with Reader[CartItem] {
 
     def read(value: JValue): CartItem = CartItem(
-      id = CartItemId((value \ "id").as[Long]),
+      id = CartItemId((value \ "id").as[String].toLong),
       status = StatusType((value \ "status").as[Int]),
       no = (value \ "no").as[Int],
       itemId = (value \ "itemId").as[ItemId],
       quantity = (value \ "quantity").as[Int],
-      inStock = (value \ "isInStock").as[Boolean]
+      inStock = (value \ "isInStock").as[Boolean],
+      version = (value \ "version").as[Option[String]].map(_.toLong)
     )
 
     def write(obj: CartItem): JValue =
@@ -27,7 +28,8 @@ object CartFormats {
         JField("no", JInt(obj.no)),
         JField("itemId", obj.itemId.asJValue),
         JField("quantity", JInt(obj.quantity)),
-        JField("isInStock", JBool(obj.inStock))
+        JField("isInStock", JBool(obj.inStock)),
+        JField("version", obj.version.map(e => JString(e.toString)).getOrElse(JNull))
       )
 
   }

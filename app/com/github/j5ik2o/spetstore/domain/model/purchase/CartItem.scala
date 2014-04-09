@@ -13,7 +13,14 @@ import scala.util.Try
  * @param quantity 数量
  * @param inStock 後で購入する場合true
  */
-case class CartItem(id: CartItemId, status: StatusType.Value, no: Int, itemId: ItemId, quantity: Int, inStock: Boolean) {
+case class CartItem
+(id: CartItemId,
+ status: StatusType.Value,
+ no: Int,
+ itemId: ItemId,
+ quantity: Int,
+ inStock: Boolean,
+ version: Option[Long]) {
 
   /**
    * 小計。

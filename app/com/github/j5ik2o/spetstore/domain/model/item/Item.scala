@@ -21,7 +21,8 @@ case class Item
  name: String,
  description: Option[String] = None,
  price: BigDecimal,
- supplierId: SupplierId)
+ supplierId: SupplierId,
+ version: Option[Long])
   extends Entity[ItemId] {
 
   /**
@@ -33,6 +34,8 @@ case class Item
    */
   def itemType(implicit itr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =
     itr.resolveById(itemTypeId)
+
+  override def withVersion(version: Long): Entity[ItemId] = copy(version = Some(version))
 
 }
 

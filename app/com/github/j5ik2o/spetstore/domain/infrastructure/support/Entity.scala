@@ -19,4 +19,7 @@ trait Entity[ID <: Identifier[_]] {
 
   override def hashCode: Int = 31 * id.##
 
+  val version: Option[Long]
+
+  def withVersion(version: Long): Entity[ID]
 }

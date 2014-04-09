@@ -12,7 +12,13 @@ import scala.util.Try
  * @param itemId [[com.github.j5ik2o.spetstore.domain.model.item.Item]]のI
  * @param quantity 数量
  */
-case class OrderItem(id: OrderItemId, status: StatusType.Value, no: Int, itemId: ItemId, quantity: Int) {
+case class OrderItem
+(id: OrderItemId,
+ status: StatusType.Value,
+ no: Int,
+ itemId: ItemId,
+ quantity: Int,
+ version: Option[Long]) {
 
   /**
    * 小計。
@@ -36,7 +42,7 @@ object OrderItem {
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]
    */
   def fromCartItem(orderItemId: OrderItemId, cartItem: CartItem): OrderItem =
-    OrderItem(orderItemId, cartItem.status,cartItem.no,  cartItem.itemId, cartItem.quantity)
+    OrderItem(orderItemId, cartItem.status,cartItem.no,  cartItem.itemId, cartItem.quantity, None)
 
 
 }

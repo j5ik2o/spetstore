@@ -43,7 +43,8 @@ class CustomerRepositoryOnJDBC
       config = CustomerConfig(
         loginName = record.loginName,
         password = record.password
-      )
+      ),
+      version = Some(record.version)
     )
 
   override protected def convertToRecord(entity: Customer) = CustomerRecord(
@@ -60,7 +61,8 @@ class CustomerRepositoryOnJDBC
     phone = entity.profile.contact.phone,
     loginName = entity.config.loginName,
     password = entity.config.password,
-    favoriteCategoryId = entity.config.favoriteCategoryId.map(_.value)
+    favoriteCategoryId = entity.config.favoriteCategoryId.map(_.value),
+    version = entity.version.getOrElse(1)
   )
 
   def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]] = withDBSession(ctx) {

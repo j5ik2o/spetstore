@@ -17,7 +17,8 @@ case class CustomerRecord
  phone: String,
  loginName: String,
  password: String,
- favoriteCategoryId: Option[Long] = None)
+ favoriteCategoryId: Option[Long] = None,
+ version: Long)
 
 object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
@@ -25,7 +26,8 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
   override def tableName: String = "customer"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CustomerRecord]) = CustomerRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[CustomerRecord]) = CustomerRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -39,7 +41,8 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
     phone = rs.get(n.phone),
     loginName = rs.get(n.loginName),
     password = rs.get(n.password),
-    favoriteCategoryId = rs.get(n.favoriteCategoryId)
+    favoriteCategoryId = rs.get(n.favoriteCategoryId),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: CustomerRecord): Seq[(Symbol, Any)] = Seq(
@@ -56,7 +59,8 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
     'phone -> record.phone,
     'loginName -> record.loginName,
     'password -> record.password,
-    'favoriteCategoryId -> record.favoriteCategoryId
+    'favoriteCategoryId -> record.favoriteCategoryId,
+    'version -> record.version
   )
 }
 
@@ -64,7 +68,8 @@ case class CategoryRecord
 (id: Long,
  status: Int,
  name: String,
- description: Option[String] = None)
+ description: Option[String] = None,
+ version: Long)
 
 object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
@@ -72,18 +77,21 @@ object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
   override def tableName: String = "category"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CategoryRecord]) = CategoryRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[CategoryRecord]) = CategoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
-    description = rs.get(n.description)
+    description = rs.get(n.description),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: CategoryRecord): Seq[(Symbol, Any)] = Seq(
     'id -> record.id,
     'status -> record.status,
     'name -> record.name,
-    'description -> record.description
+    'description -> record.description,
+    'version -> record.version
   )
 }
 
@@ -91,7 +99,8 @@ case class InventoryRecord
 (id: Long,
  status: Int,
  itemId: Long,
- quantity: Int)
+ quantity: Int,
+ version: Long)
 
 object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
@@ -99,18 +108,21 @@ object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
   override def tableName: String = "inventory"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[InventoryRecord]) = InventoryRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[InventoryRecord]) = InventoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemId = rs.get(n.itemId),
-    quantity = rs.get(n.quantity)
+    quantity = rs.get(n.quantity),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: InventoryRecord): Seq[(Symbol, Any)] = Seq(
     'id -> record.id,
     'status -> record.status,
     'itemId -> record.itemId,
-    'quantity -> record.quantity
+    'quantity -> record.quantity,
+    'version -> record.version
   )
 
 }
@@ -122,7 +134,8 @@ case class ItemRecord
  name: String,
  description: Option[String] = None,
  price: BigDecimal,
- supplierId: Long)
+ supplierId: Long,
+ version: Long)
 
 object ItemRecord extends CRUDMapper[ItemRecord] {
 
@@ -130,14 +143,16 @@ object ItemRecord extends CRUDMapper[ItemRecord] {
 
   override def tableName: String = "item"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[ItemRecord]) = ItemRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[ItemRecord]) = ItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemTypeId = rs.get(n.itemTypeId),
     name = rs.get(n.name),
     description = rs.get(n.description),
     price = rs.get(n.price),
-    supplierId = rs.get(n.supplierId)
+    supplierId = rs.get(n.supplierId),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: ItemRecord) = Seq(
@@ -147,7 +162,8 @@ object ItemRecord extends CRUDMapper[ItemRecord] {
     'name -> record.name,
     'description -> record.description,
     'price -> record.price,
-    'supplierId -> record.supplierId
+    'supplierId -> record.supplierId,
+    'version -> record.version
   )
 
 }
@@ -157,7 +173,8 @@ case class ItemTypeRecord
  status: Int,
  categoryId: Long,
  name: String,
- description: Option[String] = None)
+ description: Option[String] = None,
+ version: Long)
 
 object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
@@ -165,12 +182,14 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
   override def tableName: String = "item_type"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     categoryId = rs.get(n.categoryId),
     name = rs.get(n.name),
-    description = rs.get(n.description)
+    description = rs.get(n.description),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: ItemTypeRecord): Seq[(Symbol, Any)] = Seq(
@@ -178,7 +197,8 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
     'status -> record.status,
     'categoryId -> record.categoryId,
     'name -> record.name,
-    'description -> record.description
+    'description -> record.description,
+    'version -> record.version
   )
 
 }
@@ -193,7 +213,8 @@ case class SupplierRecord
  addressName: String,
  buildingName: Option[String],
  email: String,
- phone: String)
+ phone: String,
+ version: Long)
 
 object SupplierRecord extends CRUDMapper[SupplierRecord] {
 
@@ -201,7 +222,8 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
 
   override def tableName: String = "supplier"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -211,7 +233,8 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
     addressName = rs.get(n.addressName),
     buildingName = rs.get(n.buildingName),
     email = rs.get(n.email),
-    phone = rs.get(n.phone)
+    phone = rs.get(n.phone),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: SupplierRecord): Seq[(Symbol, Any)] = Seq(
@@ -224,12 +247,18 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
     'addressName -> record.addressName,
     'buildingName -> record.buildingName,
     'email -> record.email,
-    'phone -> record.phone
+    'phone -> record.phone,
+    'version -> record.version
   )
 }
 
 
-case class CartRecord(id: Long, status: Int, customerId: Long, cartItems: Seq[CartItemRecord] = Nil)
+case class CartRecord
+(id: Long,
+ status: Int,
+ customerId: Long,
+ cartItems: Seq[CartItemRecord] = Nil,
+ version: Long)
 
 object CartRecord extends CRUDMapper[CartRecord] {
 
@@ -237,16 +266,19 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
   override def tableName: String = "cart"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartRecord]): CartRecord = CartRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[CartRecord]): CartRecord = CartRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
-    customerId = rs.get(n.customerId)
+    customerId = rs.get(n.customerId),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: CartRecord): Seq[(Symbol, Any)] = Seq(
     'id -> record.id,
     'status -> record.status,
-    'customerId -> record.customerId
+    'customerId -> record.customerId,
+    'version -> record.version
   )
 
   val cartItemsRef = hasMany[CartItemRecord](
@@ -260,7 +292,15 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
 }
 
-case class CartItemRecord(id: Long, status: Int, cartId: Long, no: Int, itemId: Long, quantity: Int, inStock: Boolean)
+case class CartItemRecord
+(id: Long,
+ status: Int,
+ cartId: Long,
+ no: Int,
+ itemId: Long,
+ quantity: Int,
+ inStock: Boolean,
+ version: Long)
 
 object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
@@ -270,14 +310,16 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   override def tableName: String = "cart_item"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[CartItemRecord]) = CartItemRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[CartItemRecord]) = CartItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
     no = rs.get(n.no),
     itemId = rs.get(n.itemId),
     quantity = rs.get(n.quantity),
-    inStock = rs.get(n.inStock)
+    inStock = rs.get(n.inStock),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: CartItemRecord): Seq[(Symbol, Any)] = Seq(
@@ -287,7 +329,8 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
     'no -> record.no,
     'itemId -> record.itemId,
     'quantity -> record.quantity,
-    'inStock -> record.inStock
+    'inStock -> record.inStock,
+    'version -> record.version
   )
 
 }
@@ -306,7 +349,8 @@ case class OrderRecord
  buildingName: Option[String],
  email: String,
  phone: String,
- orderItems: Seq[OrderItemRecord] = Nil)
+ orderItems: Seq[OrderItemRecord] = Nil,
+ version: Long)
 
 object OrderRecord extends CRUDMapper[OrderRecord] {
 
@@ -314,7 +358,8 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 
   override def tableName: String = "order"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderRecord]) = OrderRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[OrderRecord]) = OrderRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderStatus = rs.get(n.orderStatus),
@@ -327,7 +372,8 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
     addressName = rs.get(n.addressName),
     buildingName = rs.get(n.buildingName),
     email = rs.get(n.email),
-    phone = rs.get(n.phone)
+    phone = rs.get(n.phone),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: OrderRecord): Seq[(Symbol, Any)] = Seq(
@@ -343,7 +389,8 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
     'addressName -> record.addressName,
     'buildingName -> record.buildingName,
     'email -> record.email,
-    'phone -> record.phone
+    'phone -> record.phone,
+    'version -> record.version
   )
 
 
@@ -359,8 +406,13 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 }
 
 case class OrderItemRecord
-(id: Long, status: Int, orderId: Long, no: Int, itemId: Long, quantity: Int)
-
+(id: Long,
+ status: Int,
+ orderId: Long,
+ no: Int,
+ itemId: Long,
+ quantity: Int,
+ version: Long)
 
 object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
 
@@ -370,13 +422,15 @@ object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
 
   override def tableName: String = "order_item"
 
-  override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
+  override def extract(rs: WrappedResultSet,
+                       n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderId = rs.get(n.orderId),
     no = rs.get(n.no),
     itemId = rs.get(n.itemId),
-    quantity = rs.get(n.quantity)
+    quantity = rs.get(n.quantity),
+    version = rs.get(n.version)
   )
 
   override def toNamedValues(record: OrderItemRecord): Seq[(Symbol, Any)] = Seq(
@@ -385,7 +439,8 @@ object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
     'orderId -> record.orderId,
     'no -> record.no,
     'itemId -> record.itemId,
-    'quantity -> record.quantity
+    'quantity -> record.quantity,
+    'version -> record.version
   )
 
 }

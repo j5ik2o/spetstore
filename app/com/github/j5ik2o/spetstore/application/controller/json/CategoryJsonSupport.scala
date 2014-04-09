@@ -15,7 +15,8 @@ import play.api.libs.json._
  */
 case class CategoryJson(id: Option[String],
                         name: String,
-                        description: Option[String])
+                        description: Option[String],
+                        version: Option[Long])
 
 /**
  * [[CategoryJson]]のためのトレイト。
@@ -28,7 +29,8 @@ trait CategoryJsonSupport {
       id = CategoryId(json.id.map(_.toLong).get),
       status = StatusType.Enabled,
       name = json.name,
-      description = json.description
+      description = json.description,
+      version = json.version
     )
 
   protected def convertToEntityWithoutId(json: CategoryJson): Category =
@@ -36,7 +38,8 @@ trait CategoryJsonSupport {
       id = CategoryId(identifierService.generate),
       status = StatusType.Enabled,
       name = json.name,
-      description = json.description
+      description = json.description,
+      version = json.version
     )
 
 
@@ -46,14 +49,16 @@ trait CategoryJsonSupport {
       Seq(
         "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
         "name" -> JsString(o.name),
-        "description" -> o.description.map(JsString).getOrElse(JsNull)
+        "description" -> o.description.map(JsString).getOrElse(JsNull),
+        "version" -> o.version.map(e => JsString(e.toString)).getOrElse(JsNull)
       )
     )
 
     override def reads(json: JsValue): JsResult[CategoryJson] =
       ((__ \ 'id).readNullable[String] and
         (__ \ 'name).read[String] and
-        (__ \ 'description).readNullable[String])(CategoryJson.apply _).reads(json)
+        (__ \ 'description).readNullable[String] and
+        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CategoryJson.apply _).reads(json)
 
   }
 

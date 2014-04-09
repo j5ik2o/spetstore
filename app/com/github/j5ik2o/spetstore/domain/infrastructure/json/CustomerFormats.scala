@@ -54,17 +54,19 @@ object CustomerFormats {
         JField("name", JString(obj.name)),
         JField("sexType", JInt(obj.sexType.id)),
         JField("profile", obj.profile.asJValue),
-        JField("config", obj.config.asJValue)
+        JField("config", obj.config.asJValue),
+        JField("version", obj.version.map(e => JString(e.toString)).getOrElse(JNull))
       )
     }
 
     def read(value: org.json4s.JValue): Customer = Customer(
-      id = CustomerId((value \ "id").as[Long]),
+      id = CustomerId((value \ "id").as[String].toLong),
       status = StatusType((value \ "status").as[Int]),
       name = (value \ "name").as[String],
       sexType = SexType((value \ "sexType").as[Int]),
       profile = (value \ "profile").as[CustomerProfile],
-      config = (value \ "config").as[CustomerConfig]
+      config = (value \ "config").as[CustomerConfig],
+      version = (value \ "version").as[Option[String]].map(_.toLong)
     )
   }
 

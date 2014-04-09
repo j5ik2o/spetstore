@@ -40,7 +40,8 @@ case class CustomerJson(id: Option[String],
                         phone: String,
                         loginName: String,
                         password: String,
-                        favoriteCategoryId: Option[String])
+                        favoriteCategoryId: Option[String],
+                        version: Option[Long])
 
 trait CustomerJsonSupport {
   this: CustomerController =>
@@ -65,7 +66,8 @@ trait CustomerJsonSupport {
         loginName = customerJson.loginName,
         password = customerJson.password,
         favoriteCategoryId = None
-      )
+      ),
+      version = customerJson.version
     )
 
   protected def convertToEntityWithoutId(customerJson: CustomerJson): Customer =
@@ -88,7 +90,8 @@ trait CustomerJsonSupport {
         loginName = customerJson.loginName,
         password = customerJson.password,
         favoriteCategoryId = None
-      )
+      ),
+      version = customerJson.version
     )
 
 
@@ -110,7 +113,8 @@ trait CustomerJsonSupport {
         (__ \ 'phone).read[String] and
         (__ \ 'loginName).read[String] and
         (__ \ 'password).read[String] and
-        (__ \ 'favoriteCategoryId).readNullable[String])(CustomerJson.apply _).reads(json)
+        (__ \ 'favoriteCategoryId).readNullable[String] and
+        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CustomerJson.apply _).reads(json)
     }
 
     override def writes(o: Customer): JsValue = {
@@ -128,7 +132,8 @@ trait CustomerJsonSupport {
           "phone" -> JsString(o.profile.contact.phone),
           "loginName" -> JsString(o.config.loginName),
           "password" -> JsString(o.config.password),
-          "favoriteCategoryId" -> o.config.favoriteCategoryId.map(e => JsString(e.value.toString)).getOrElse(JsNull)
+          "favoriteCategoryId" -> o.config.favoriteCategoryId.map(e => JsString(e.value.toString)).getOrElse(JsNull),
+          "version" -> o.version.map(e => JsString(e.toString)).getOrElse(JsNull)
         )
       )
     }

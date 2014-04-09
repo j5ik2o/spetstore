@@ -18,14 +18,16 @@ class CategoryRepositoryOnJDBC
     id = CategoryId(record.id),
     status = StatusType(record.status),
     name = record.name,
-    description = record.description
+    description = record.description,
+    version = Some(record.version)
   )
 
   override protected def convertToRecord(entity: Category) = CategoryRecord(
     id = entity.id.value,
     status = entity.status.id,
     name = entity.name,
-    description = entity.description
+    description = entity.description,
+    version = entity.version.getOrElse(1)
   )
 
 }

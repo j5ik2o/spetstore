@@ -41,7 +41,8 @@ class OrderRepositoryOnJDBC
         email = record.email,
         phone = record.phone
       ),
-      orderItems = record.orderItems.map(OrderItemRecordService.convertToEntity).toList
+      orderItems = record.orderItems.map(OrderItemRecordService.convertToEntity).toList,
+      version = Some(record.version)
     )
 
     override def convertToRecord(model: Order): OrderRecord = OrderRecord(
@@ -57,7 +58,8 @@ class OrderRepositoryOnJDBC
       addressName = model.shippingAddress.addressName,
       buildingName = model.shippingAddress.buildingName,
       email = model.shippingContact.email,
-      phone = model.shippingContact.phone
+      phone = model.shippingContact.phone,
+      version = model.version.getOrElse(1)
     )
 
     override def convertToPrimaryKey(id: Identifier[Long]): Long = id.value
@@ -102,7 +104,8 @@ class OrderRepositoryOnJDBC
       orderId = _orderId.value,
       no = orderItem.no,
       itemId = orderItem.itemId.value,
-      quantity = orderItem.quantity
+      quantity = orderItem.quantity,
+      version = orderItem.version.getOrElse(1)
     )
 
     def convertToEntity(record: OrderItemRecord): OrderItem = OrderItem(
@@ -110,7 +113,8 @@ class OrderRepositoryOnJDBC
       status = StatusType(record.status),
       no = record.no,
       itemId = ItemId(record.itemId),
-      quantity = record.quantity
+      quantity = record.quantity,
+      version = Some(record.version)
     )
 
   }
@@ -146,12 +150,12 @@ class OrderRepositoryOnJDBC
 
   override def store(entity: Order)(implicit ctx: Ctx): Try[(This, Order)] = withDBSession(ctx) {
     implicit s =>
-      OrderRecordService.insertOrUpdate(entity.id, entity).map {
+      OrderRecordService.insertOrUpdate(entity.id, entity.version, entity).map {
         entity =>
           val orderItemRecordService = OrderItemRecordService(entity.id)
           entity.orderItems.foreach {
             orderItem =>
-              orderItemRecordService.insertOrUpdate(orderItem.no, orderItem).get
+              orderItemRecordService.insertOrUpdate(orderItem.no, orderItem.version, orderItem).get
           }
           (this.asInstanceOf[This], entity)
       }

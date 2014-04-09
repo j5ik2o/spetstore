@@ -16,7 +16,13 @@ case class Supplier
  status: StatusType.Value,
  name: String,
  postalAddress: PostalAddress,
- contact: Contact)
-  extends Entity[SupplierId]
+ contact: Contact,
+ version: Option[Long])
+  extends Entity[SupplierId]{
+
+  override def withVersion(version: Long): Entity[SupplierId] =
+    copy(version = Some(version))
+
+}
 
 

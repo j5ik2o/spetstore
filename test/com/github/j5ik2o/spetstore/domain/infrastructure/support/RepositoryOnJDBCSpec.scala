@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.infrastructure.support
 
-import org.specs2.mutable.Specification
-import scalikejdbc._, SQLInterpolation._
 import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
+import org.specs2.mutable.Specification
+import scalikejdbc._, SQLInterpolation._
 
 class RepositoryOnJDBCSpec extends Specification {
 
@@ -11,7 +11,7 @@ class RepositoryOnJDBCSpec extends Specification {
 
   val identifierService = IdentifierService()
 
-  case class PersonRecord(id: Long, firstName: String, lastName: String)
+  case class PersonRecord(id: Long, firstName: String, lastName: String, version: Long)
 
   object PersonRecord extends CRUDMapper[PersonRecord] {
 
@@ -22,13 +22,15 @@ class RepositoryOnJDBCSpec extends Specification {
     override def extract(rs: WrappedResultSet, n: SQLInterpolation.ResultName[PersonRecord]) = PersonRecord(
       id = rs.get(n.id),
       firstName = rs.get(n.firstName),
-      lastName = rs.get(n.lastName)
+      lastName = rs.get(n.lastName),
+      version = rs.get(n.version)
     )
 
     override def toNamedValues(record: PersonRecord): Seq[(Symbol, Any)] = Seq(
       'id -> record.id,
       'firstName -> record.firstName,
-      'lastName -> record.lastName
+      'lastName -> record.lastName,
+      'version -> record.version
     )
 
   }
@@ -45,13 +47,15 @@ class RepositoryOnJDBCSpec extends Specification {
     override protected def convertToRecord(entity: Person) = PersonRecord(
       id = entity.id.value,
       firstName = entity.firstName,
-      lastName = entity.lastName
+      lastName = entity.lastName,
+      version = entity.version.getOrElse(1)
     )
 
-    override protected def convertToEntity(record: T): Person = Person(
+    override protected def convertToEntity(record: PersonRecord): Person = Person(
       id = PersonId(record.id),
       firstName = record.firstName,
-      lastName = record.lastName
+      lastName = record.lastName,
+      version = Some(record.version)
     )
   }
 
@@ -66,11 +70,11 @@ create table person (
   pk bigint not null auto_increment primary key,
   id bigint not null unique,
   first_name varchar(64),
-  last_name varchar(64)
-)
+  last_name varchar(64),
+  version bigint not null)
 """.execute().apply()
   }
-  val idValue = identifierService.generate
+
   def withContext[A](session: DBSession)(f: (EntityIOContext) => A): A =
     f(EntityIOContextOnJDBC(session))
 
@@ -78,16 +82,21 @@ create table person (
     "store entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
+          val idValue = identifierService.generate
           val personId = PersonId(idValue)
-          val person = Person(personId, "Junichi", "Kato")
-          PersonRepositoryOnJDBC().store(person) must beSuccessfulTry
+          val person = Person(personId, "Junichi", "Kato", None)
+          val result = PersonRepositoryOnJDBC().store(person)
+          result must beSuccessfulTry
+//          val _person = Person(personId, "Junichi", "Kato", Some(1))
+//          PersonRepositoryOnJDBC().store(_person)
       }
     }
     "contains a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
+          val idValue = identifierService.generate
           val personId = PersonId(idValue)
-          val person = Person(personId, "Junichi", "Kato")
+          val person = Person(personId, "Junichi", "Kato", None)
           val repository = PersonRepositoryOnJDBC()
           repository.store(person) must beSuccessfulTry
           repository.existById(personId) must beSuccessfulTry.like {
@@ -99,8 +108,9 @@ create table person (
     "get a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
+          val idValue = identifierService.generate
           val personId = PersonId(idValue)
-          val person = Person(personId, "Junichi", "Kato")
+          val person = Person(personId, "Junichi", "Kato", None)
           val repository = PersonRepositoryOnJDBC()
           repository.store(person) must beSuccessfulTry
           repository.resolveById(personId) must beSuccessfulTry.like {
@@ -113,8 +123,9 @@ create table person (
     "delete a entity" in new PersonAutoRollback {
       withContext(session) {
         implicit ctx =>
+          val idValue = identifierService.generate
           val personId = PersonId(idValue)
-          val person = Person(personId, "Junichi", "Kato")
+          val person = Person(personId, "Junichi", "Kato", None)
           val repository = PersonRepositoryOnJDBC()
           repository.store(person) must beSuccessfulTry
           repository.deleteById(personId) must beSuccessfulTry

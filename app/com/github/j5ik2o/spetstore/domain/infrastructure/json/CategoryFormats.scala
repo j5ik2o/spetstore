@@ -12,14 +12,16 @@ object CategoryFormats {
       id = CategoryId((value \ "id").as[Long]),
       status = StatusType((value \ "status").as[Int]),
       name = (value \ "name").as[String],
-      description = (value \ "description").getAs[String]
+      description = (value \ "description").getAs[String],
+      version = (value \ "version").as[Option[String]].map(_.toLong)
     )
 
     override def write(obj: Category): JValue = JObject(
       JField("id", JInt(obj.id.value)),
       JField("status", JInt(obj.status.id)),
       JField("name", JString(obj.name)),
-      JField("description", obj.description.map(JString).getOrElse(JNull))
+      JField("description", obj.description.map(JString).getOrElse(JNull)),
+      JField("version", obj.version.map(e => JString(e.toString)).getOrElse(JNull))
     )
   }
 

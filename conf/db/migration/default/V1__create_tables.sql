@@ -1,3 +1,5 @@
+use spetstore;
+
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `pk`                    BIGINT        NOT NULL AUTO_INCREMENT,
@@ -15,6 +17,7 @@ CREATE TABLE `customer` (
   `login_name`            VARCHAR(64)   NOT NULL,
   `password`              VARCHAR(64)   NOT NULL,
   `favorite_category_id`  BIGINT,
+  `version`               BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
@@ -26,6 +29,7 @@ CREATE TABLE `category` (
   `status`      INT           NOT NULL,
   `name`        VARCHAR(256)  NOT NULL,
   `description` VARCHAR(1024),
+  `version`     BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
@@ -36,6 +40,7 @@ CREATE TABLE `cart` (
   `id`          BIGINT        NOT NULL,
   `status`      INT           NOT NULL,
   `customer_id` BIGINT        NOT NULL,
+  `version`     BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
@@ -50,6 +55,7 @@ CREATE TABLE `cart_item` (
   `item_id`     BIGINT        NOT NULL,
   `quantity`    INT           NOT NULL,
   `in_stock`    INT           NOT NULL,
+  `version`     BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`),
   UNIQUE(`cart_id`,`no`)
@@ -72,6 +78,7 @@ CREATE TABLE `order` (
   `building_name` VARCHAR(256),
   `email`         VARCHAR(64)   NOT NULL,
   `phone`         VARCHAR(64)   NOT NULL,
+  `version`       BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)
 );
@@ -85,6 +92,7 @@ CREATE TABLE `order_item` (
   `no`          INT           NOT NULL,
   `item_id`     BIGINT        NOT NULL,
   `quantity`    INT           NOT NULL,
+  `version`     BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`),
   UNIQUE(`order_id`,`no`)

@@ -14,6 +14,12 @@ case class Inventory
 (id: InventoryId,
  status: StatusType.Value,
  itemId: ItemId,
- quantity: Int)
-  extends Entity[InventoryId]
+ quantity: Int,
+ version: Option[Long])
+  extends Entity[InventoryId]{
+
+  override def withVersion(version: Long): Entity[InventoryId] =
+    copy(version = Some(version))
+
+}
 

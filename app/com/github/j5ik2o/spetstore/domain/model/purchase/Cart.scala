@@ -17,7 +17,8 @@ case class Cart
 (id: CartId,
  status: StatusType.Value,
  customerId: CustomerId,
- cartItems: List[CartItem]) extends Entity[CartId] {
+ cartItems: List[CartItem],
+ version: Option[Long]) extends Entity[CartId] {
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]を取得する。
@@ -82,7 +83,7 @@ case class Cart
    * @return 新しい[[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    */
   def addCartItem(cartItemId: CartItemId, itemId: ItemId, quantity: Int, isInStock: Boolean = false): Cart =
-    addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, itemId, quantity, isInStock))
+    addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, itemId, quantity, isInStock, None))
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って
@@ -128,4 +129,5 @@ case class Cart
     }.getOrElse(this)
   }
 
+  override def withVersion(version: Long): Entity[CartId] = copy(version = Some(version))
 }

@@ -8,9 +8,9 @@ import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, Cart, Cart
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class CartItemJson(id: Option[String], no: Int, itemId: String, quantity: Int, inStock: Boolean)
+case class CartItemJson(id: Option[String], no: Int, itemId: String, quantity: Int, inStock: Boolean, version: Option[Long])
 
-case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson])
+case class CartJson(id: Option[String], customerId: String, cartItems: Seq[CartItemJson], version: Option[Long])
 
 /**
  * [[CartJson]]のためのトレイト。
@@ -24,7 +24,8 @@ trait CartJsonSupport {
     status = StatusType.Enabled,
     itemId = ItemId(json.itemId.toLong),
     quantity = json.quantity,
-    inStock = json.inStock
+    inStock = json.inStock,
+    version = json.version
   )
 
   protected def convertToEntityWithoutId(json: CartItemJson): CartItem = CartItem(
@@ -33,21 +34,24 @@ trait CartJsonSupport {
     status = StatusType.Enabled,
     itemId = ItemId(json.itemId.toLong),
     quantity = json.quantity,
-    inStock = json.inStock
+    inStock = json.inStock,
+    version = json.version
   )
 
   protected def convertToEntity(json: CartJson): Cart = Cart(
     id = CartId(json.id.map(_.toLong).get),
     status = StatusType.Enabled,
     customerId = CustomerId(json.customerId.toLong),
-    cartItems = json.cartItems.map(convertToEntity).toList
+    cartItems = json.cartItems.map(convertToEntity).toList,
+    version = json.version
   )
 
   protected def convertToEntityWithoutId(json: CartJson): Cart = Cart(
     id = CartId(identifierService.generate),
     status = StatusType.Enabled,
     customerId = CustomerId(json.customerId.toLong),
-    cartItems = json.cartItems.map(convertToEntityWithoutId).toList
+    cartItems = json.cartItems.map(convertToEntityWithoutId).toList,
+    version = json.version
   )
 
   implicit object ItemConverter extends Reads[CartItemJson] with Writes[CartItem] {
@@ -58,7 +62,8 @@ trait CartJsonSupport {
         "no" -> JsNumber(o.no),
         "itemId" -> JsNumber(o.itemId.value),
         "quantity" -> JsNumber(o.quantity),
-        "inStock" -> JsBoolean(o.inStock)
+        "inStock" -> JsBoolean(o.inStock),
+        "version" -> o.version.map(e => JsString(e.toString)).getOrElse(JsNull)
       )
     )
 
@@ -67,7 +72,8 @@ trait CartJsonSupport {
         (__ \ 'no).read[Int] and
         (__ \ 'itemId).read[String] and
         (__ \ 'quantity).read[Int] and
-        (__ \ 'inStock).read[Boolean])(CartItemJson.apply _).reads(json)
+        (__ \ 'inStock).read[Boolean] and
+        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CartItemJson.apply _).reads(json)
 
   }
 
@@ -77,14 +83,16 @@ trait CartJsonSupport {
       Seq(
         "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
         "customerId" -> JsString(o.customerId.value.toString),
-        "cartItems" -> JsArray(o.cartItems.map(Json.toJson(_)))
+        "cartItems" -> JsArray(o.cartItems.map(Json.toJson(_))),
+        "version" -> JsString(o.version.toString)
       )
     )
 
     override def reads(json: JsValue): JsResult[CartJson] =
       ((__ \ 'id).readNullable[String] and
         (__ \ 'customerId).read[String] and
-        (__ \ 'cartItems).read[Seq[CartItemJson]])(CartJson.apply _).reads(json)
+        (__ \ 'cartItems).read[Seq[CartItemJson]] and
+        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CartJson.apply _).reads(json)
   }
 
 }

@@ -29,7 +29,8 @@ case class Order
  customerName: String,
  shippingAddress: PostalAddress,
  shippingContact: Contact,
- orderItems: List[OrderItem])
+ orderItems: List[OrderItem],
+ version: Option[Long])
   extends Entity[OrderId] {
 
   /**
@@ -96,6 +97,7 @@ case class Order
     copy(orderItems = lb.result())
   }
 
+  override def withVersion(version: Long): Entity[OrderId] = copy(version = Some(version))
 }
 
 /**
@@ -126,7 +128,8 @@ object Order {
       customer.name,
       customer.profile.postalAddress,
       customer.profile.contact,
-      orderItems
+      orderItems,
+      None
     )
   }
 

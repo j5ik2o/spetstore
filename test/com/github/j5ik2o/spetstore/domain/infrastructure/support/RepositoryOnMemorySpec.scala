@@ -21,7 +21,7 @@ class RepositoryOnMemorySpec extends Specification {
     implicit val ctx = EntityIOContextOnMemory
     "store a entity" in {
       val personId = PersonId(identifierService.generate)
-      val person = Person(personId, "Junichi", "Kato")
+      val person = Person(personId, "Junichi", "Kato", None)
       PersonRepositoryOnMemory().
         store(person) must beSuccessfulTry.like {
         case (PersonRepositoryOnMemory(entities), _) =>
@@ -31,7 +31,7 @@ class RepositoryOnMemorySpec extends Specification {
 
     "contains a entity" in {
       val personId = PersonId(identifierService.generate)
-      val person = Person(personId, "Junichi", "Kato")
+      val person = Person(personId, "Junichi", "Kato", None)
       val entities = Map(personId -> person)
       entities.contains(personId) must beTrue
       PersonRepositoryOnMemory(entities).
@@ -43,7 +43,7 @@ class RepositoryOnMemorySpec extends Specification {
 
     "get a entity" in {
       val personId = PersonId(identifierService.generate)
-      val person = Person(personId, "Junichi", "Kato")
+      val person = Person(personId, "Junichi", "Kato", None)
       PersonRepositoryOnMemory(Map(personId -> person)).
         resolveById(personId) must beSuccessfulTry.like {
         case entity =>
@@ -53,7 +53,7 @@ class RepositoryOnMemorySpec extends Specification {
 
     "delete a entity" in {
       val personId = PersonId(identifierService.generate)
-      val person = Person(personId, "Junichi", "Kato")
+      val person = Person(personId, "Junichi", "Kato", None)
       PersonRepositoryOnMemory(Map(personId -> person)).
         deleteById(personId) must beSuccessfulTry.like {
         case (PersonRepositoryOnMemory(entities), _) =>
