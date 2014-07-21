@@ -35,7 +35,7 @@ DDDのレイヤー化アーキテクチャに従い、次のとおりのレイ�
 
 - [Customer Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/model/customer) = 顧客モジュール
     - [Customer](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/Customer.scala) (GE,A) = ペットストアの顧客
-        - [CustomerStatus](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerStatus.scala) (VO)
+        - [StatusType](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/basic/StatusType.scala) (VO)
         - [CustomerProfile](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerProfile.scala) (VO)
         - [CustomerConfig](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/model/customer/CustomerConfig.scala) (VO)
 - [Item Module](https://github.com/j5ik2o/spetstore/tree/master/app/com/github/j5ik2o/spetstore/domain/model/item) = 商品モジュール
@@ -67,8 +67,8 @@ A  = 集約
 ## インフラストラクチャ層
 ### DDD基盤コード
 わかりやすくするために、特別なライブラリを用意せず、簡単な基盤コードを含めています。
-- [Entity](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
-- [Repository](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/infrastructure/support/Repository.scala) = DDDにおけるリポジトリの責務
+- [Entity](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/infrastructure/support/Entity.scala) = DDDにおけるエンティティの責務
+- [Repository](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/infrastructure/support/Repository.scala) = DDDにおけるリポジトリの責務
     - [RepositoryOnJDBC](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnJDBC.scala)  
     JDBCに対応したリポジトリの骨格実装。[ScalikeJDBC](http://scalikejdbc.org/)で実装。ちなみに、1エンティティが複数テーブルにマッピングされるような実装は今のところ作っていません。そのうち作ります。Specは[こちら](https://github.com/j5ik2o/spetstore/blob/master/test/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnJDBCSpec.scala)
     - [RepositoryOnMemory](https://github.com/j5ik2o/spetstore/blob/master/app/com/github/j5ik2o/spetstore/domain/infrastructure/support/RepositoryOnMemory.scala)
