@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.infrastructure.support
 import com.github.j5ik2o.spetstore.infrastructure.db.CRUDMapper
 import play.Logger
 import scala.util.Try
-import scalikejdbc._, SQLInterpolation._
+import scalikejdbc._
 
 /**
  * JDBC用[[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]。
@@ -44,7 +44,7 @@ trait DaoSupport[ID, M, T] {
   }
 
   def findById(id: ID)(implicit s: DBSession): Try[M] = Try {
-    mapper.findBy(sqls.eq(mapper.defaultAlias.field(idName), convertToPrimaryKey(id))).map(convertToEntity).getOrElse(throw new EntityNotFoundException(s"$id"))
+    mapper.findBy(sqls.eq(mapper.defaultAlias.field(idName), convertToPrimaryKey(id))).map(convertToEntity _).getOrElse(throw new EntityNotFoundException(s"$id"))
   }
 
   def findAllWithLimitOffset(limit: Int, offset: Int)(implicit s: DBSession): Try[Seq[M]] = Try {

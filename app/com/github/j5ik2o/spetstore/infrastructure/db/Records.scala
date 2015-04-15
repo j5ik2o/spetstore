@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.infrastructure.db
 
 import org.joda.time.DateTime
-import scalikejdbc._, SQLInterpolation._
+import scalikejdbc._
 
 case class CustomerRecord
 (id: Long,
@@ -27,7 +27,7 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
   override def tableName: String = "customer"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[CustomerRecord]) = CustomerRecord(
+                       n: ResultName[CustomerRecord]) = CustomerRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -78,7 +78,7 @@ object CategoryRecord extends CRUDMapper[CategoryRecord] {
   override def tableName: String = "category"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[CategoryRecord]) = CategoryRecord(
+                       n: ResultName[CategoryRecord]) = CategoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -109,7 +109,7 @@ object InventoryRecord extends CRUDMapper[InventoryRecord] {
   override def tableName: String = "inventory"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[InventoryRecord]) = InventoryRecord(
+                       n: ResultName[InventoryRecord]) = InventoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemId = rs.get(n.itemId),
@@ -144,7 +144,7 @@ object ItemRecord extends CRUDMapper[ItemRecord] {
   override def tableName: String = "item"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[ItemRecord]) = ItemRecord(
+                       n: ResultName[ItemRecord]) = ItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemTypeId = rs.get(n.itemTypeId),
@@ -183,7 +183,7 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
   override def tableName: String = "item_type"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
+                       n: ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     categoryId = rs.get(n.categoryId),
@@ -223,7 +223,7 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
   override def tableName: String = "supplier"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
+                       n: ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -267,7 +267,7 @@ object CartRecord extends CRUDMapper[CartRecord] {
   override def tableName: String = "cart"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[CartRecord]): CartRecord = CartRecord(
+                       n: ResultName[CartRecord]): CartRecord = CartRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     customerId = rs.get(n.customerId),
@@ -311,7 +311,7 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
   override def tableName: String = "cart_item"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[CartItemRecord]) = CartItemRecord(
+                       n: ResultName[CartItemRecord]) = CartItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
@@ -359,7 +359,7 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
   override def tableName: String = "order"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[OrderRecord]) = OrderRecord(
+                       n: ResultName[OrderRecord]) = OrderRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderStatus = rs.get(n.orderStatus),
@@ -423,7 +423,7 @@ object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
   override def tableName: String = "order_item"
 
   override def extract(rs: WrappedResultSet,
-                       n: SQLInterpolation.ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
+                       n: ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderId = rs.get(n.orderId),
