@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext
+import com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 import com.github.j5ik2o.spetstore.domain.model.item.{Category,CategoryId}
 import scala.util.Try
@@ -21,7 +21,7 @@ case class CustomerConfig
    * お気に入りのカテゴリを取得する。
    *
    * @param cr [[com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository]]
-   * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
+   * @param ctx [[com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.item.Category]]
    */
   def favoriteCategory(implicit cr: CategoryRepository, ctx: EntityIOContext): Try[Category] =

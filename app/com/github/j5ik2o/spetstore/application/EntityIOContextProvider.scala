@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.application
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContextOnJDBC, EntityIOContextOnMemory, EntityIOContext}
+import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContextOnJDBC, EntityIOContextOnMemory, EntityIOContext}
 import scalikejdbc.DBSession
 
 trait EntityIOContextProvider {

@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support._
+import com.github.j5ik2o.spetstore.domain.support.support._
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase._

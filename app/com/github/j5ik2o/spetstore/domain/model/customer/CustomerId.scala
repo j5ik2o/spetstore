@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.Identifier
+import com.github.j5ik2o.spetstore.domain.support.support.Identifier
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]のための識別子。

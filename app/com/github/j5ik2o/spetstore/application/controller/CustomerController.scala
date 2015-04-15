@@ -6,7 +6,9 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import com.google.inject.Inject
+import com.wordnik.swagger.annotations.Api
 
+@Api(value="/customers", description = "カスタマー用API")
 case class CustomerController @Inject()
 (identifierService: IdentifierService,
  entityIOContextProvider: EntityIOContextProvider,

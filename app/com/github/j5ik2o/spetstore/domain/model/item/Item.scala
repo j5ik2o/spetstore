@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, Entity}
+import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, Entity}
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemTypeRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import scala.util.Try
@@ -29,7 +29,7 @@ case class Item
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]を取得する。
    *
    * @param itr [[com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemTypeRepository]]
-   * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
+   * @param ctx [[com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]
    */
   def itemType(implicit itr: ItemTypeRepository, ctx: EntityIOContext): Try[ItemType] =

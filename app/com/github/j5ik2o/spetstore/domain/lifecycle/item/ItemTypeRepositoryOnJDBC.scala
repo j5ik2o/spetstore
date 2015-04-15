@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityIOContext, RepositoryOnJDBC}
+import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.item.{ItemType, ItemTypeId}
 import com.github.j5ik2o.spetstore.infrastructure.db.ItemTypeRecord
 import scala.util.Try

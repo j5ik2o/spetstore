@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{EntityNotFoundException, Identifier, DaoSupport, RepositoryOnJDBC}
+import com.github.j5ik2o.spetstore.domain.support.support.{EntityNotFoundException, Identifier, DaoSupport, RepositoryOnJDBC}
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId

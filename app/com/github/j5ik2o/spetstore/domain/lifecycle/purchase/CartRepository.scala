@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{MultiIOSupport, Repository}
+import com.github.j5ik2o.spetstore.domain.support.support.{MultiIOSupport, Repository}
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId}
 
 /**

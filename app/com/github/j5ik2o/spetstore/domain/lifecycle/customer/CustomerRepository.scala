@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.{MultiIOSupport, EntityIOContext, Repository}
+import com.github.j5ik2o.spetstore.domain.support.support.{MultiIOSupport, EntityIOContext, Repository}
 import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
 import scala.util.Try
 
@@ -15,7 +15,7 @@ trait CustomerRepository extends Repository[CustomerId, Customer] with MultiIOSu
    * 指定したログイン名に該当する顧客を解決する。
    *
    * @param loginName ログイン名
-   * @param ctx [[com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityIOContext]]
+   * @param ctx [[com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]
    */
   def resolveByLoginName(loginName: String)

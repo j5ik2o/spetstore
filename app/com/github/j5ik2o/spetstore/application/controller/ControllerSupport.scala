@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.application.controller
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support._
+import com.github.j5ik2o.spetstore.domain.support.support._
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import org.json4s.DefaultFormats
 import play.api.Logger

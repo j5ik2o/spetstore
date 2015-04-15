@@ -2,26 +2,38 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+GET     /api-docs.json          controllers.ApiHelpController.getResources
+GET     /api-docs/customers     controllers.ApiHelpController.getResource(path = "/customers")
+GET     /api-docs/categories    controllers.ApiHelpController.getResource(path = "/categories")
+
 # Customer
-POST    /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.create
-GET     /customers      @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
-GET     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.get(id: Long)
-PUT     /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.update(id: Long)
-DELETE  /customer/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.delete(id: Long)
+POST    /customers       @com.github.j5ik2o.spetstore.application.controller.CustomerController.create
+GET     /customers       @com.github.j5ik2o.spetstore.application.controller.CustomerController.list
+GET     /customers/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.get(id: Long)
+PUT     /customers/:id   @com.github.j5ik2o.spetstore.application.controller.CustomerController.update(id: Long)
+DELETE  /customers/:id    @com.github.j5ik2o.spetstore.application.controller.CustomerController.delete(id: Long)
 
 # Category
-POST    /categories     @com.github.j5ik2o.spetstore.application.controller.CategoryController.create
-GET     /categories     @com.github.j5ik2o.spetstore.application.controller.CategoryController.list
-GET     /category/:id   @com.github.j5ik2o.spetstore.application.controller.CategoryController.get(id: Long)
-PUT     /category/:id   @com.github.j5ik2o.spetstore.application.controller.CategoryController.update(id: Long)
-DELETE  /category/:id   @com.github.j5ik2o.spetstore.application.controller.CategoryController.delete(id: Long)
+POST    /categories      @com.github.j5ik2o.spetstore.application.controller.CategoryController.create
+GET     /categories      @com.github.j5ik2o.spetstore.application.controller.CategoryController.list
+GET     /categories/:id  @com.github.j5ik2o.spetstore.application.controller.CategoryController.get(id: Long)
+PUT     /categories/:id  @com.github.j5ik2o.spetstore.application.controller.CategoryController.update(id: Long)
+DELETE  /categories/:id  @com.github.j5ik2o.spetstore.application.controller.CategoryController.delete(id: Long)
 
 # Cart
-POST    /carts          @com.github.j5ik2o.spetstore.application.controller.CartController.create
-GET     /carts          @com.github.j5ik2o.spetstore.application.controller.CartController.list
-GET     /cart/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.get(id: Long)
-PUT     /cart/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.update(id: Long)
-DELETE  /cart/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.delete(id: Long)
+POST    /carts           @com.github.j5ik2o.spetstore.application.controller.CartController.create
+GET     /carts           @com.github.j5ik2o.spetstore.application.controller.CartController.list
+GET     /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.get(id: Long)
+PUT     /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.update(id: Long)
+DELETE  /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.delete(id: Long)
+
+# Item
+POST    /items           @com.github.j5ik2o.spetstore.application.controller.ItemController.create
+GET     /items           @com.github.j5ik2o.spetstore.application.controller.ItemController.list
+GET     /items/:id       @com.github.j5ik2o.spetstore.application.controller.ItemController.get(id: Long)
+PUT     /items/:id       @com.github.j5ik2o.spetstore.application.controller.ItemController.update(id: Long)
+DELETE  /items/:id       @com.github.j5ik2o.spetstore.application.controller.ItemController.delete(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-# GET     /assets/*file               controllers.Assets.at(path="/public", file)
+#GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /swagger-ui/*file  controllers.Assets.at(path = "/public/swagger-ui", file)

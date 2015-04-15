@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.SimpleRepositoryOnJDBC
+import com.github.j5ik2o.spetstore.domain.support.support.SimpleRepositoryOnJDBC
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 import com.github.j5ik2o.spetstore.infrastructure.db.CategoryRecord

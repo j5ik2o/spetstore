@@ -1,17 +1,18 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.controller.json.CartJson
-import com.github.j5ik2o.spetstore.application.controller.json.CartJsonSupport
-import com.github.j5ik2o.spetstore.domain.infrastructure.support.EntityNotFoundException
+import com.github.j5ik2o.spetstore.application.controller.json.{CartJson, CartJsonSupport}
 import com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{CartItemId, Cart, CartId}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId, CartItemId}
+import com.github.j5ik2o.spetstore.domain.support.support.EntityNotFoundException
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import com.google.inject.Inject
+import com.wordnik.swagger.annotations.Api
 import play.api.libs.json.Json._
 import play.api.mvc.Action
 
+@Api(value = "/carts", description = "カート用API")
 case class CartController @Inject()
 (identifierService: IdentifierService,
  entityIOContextProvider: EntityIOContextProvider,

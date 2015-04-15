@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.infrastructure.support._
+import com.github.j5ik2o.spetstore.domain.support.support._
 import com.github.j5ik2o.spetstore.domain.model.basic.Contact
 import com.github.j5ik2o.spetstore.domain.model.basic.PostalAddress
 import com.github.j5ik2o.spetstore.domain.model.basic._

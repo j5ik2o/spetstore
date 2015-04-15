@@ -2,10 +2,7 @@ package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CustomerController
 import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.customer.Customer
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerConfig
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
-import com.github.j5ik2o.spetstore.domain.model.customer.CustomerProfile
+import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerConfig, CustomerId, CustomerProfile}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -41,7 +38,7 @@ case class CustomerJson(id: Option[String],
                         loginName: String,
                         password: String,
                         favoriteCategoryId: Option[String],
-                        version: Option[Long])
+                        version: Option[String])
 
 trait CustomerJsonSupport {
   this: CustomerController =>
@@ -67,7 +64,7 @@ trait CustomerJsonSupport {
         password = customerJson.password,
         favoriteCategoryId = None
       ),
-      version = customerJson.version
+      version = customerJson.version.map(_.toLong)
     )
 
   protected def convertToEntityWithoutId(customerJson: CustomerJson): Customer =
@@ -91,11 +88,8 @@ trait CustomerJsonSupport {
         password = customerJson.password,
         favoriteCategoryId = None
       ),
-      version = customerJson.version
+      version = customerJson.version.map(_.toLong)
     )
-
-
-
 
   implicit object JsonConverter extends Reads[CustomerJson] with Writes[Customer] {
 
@@ -114,7 +108,7 @@ trait CustomerJsonSupport {
         (__ \ 'loginName).read[String] and
         (__ \ 'password).read[String] and
         (__ \ 'favoriteCategoryId).readNullable[String] and
-        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CustomerJson.apply _).reads(json)
+        (__ \ 'version).readNullable[String])(CustomerJson.apply _).reads(json)
     }
 
     override def writes(o: Customer): JsValue = {

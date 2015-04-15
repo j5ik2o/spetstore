@@ -6,6 +6,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
 import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import com.google.inject.Inject
+import com.wordnik.swagger.annotations.Api
 
 /**
  * [[Category]]のためのコントローラ。
@@ -14,6 +15,7 @@ import com.google.inject.Inject
  * @param entityIOContextProvider [[]]
  * @param repository
  */
+@Api(value="/categories", description = "カテゴリ用API")
 case class CategoryController @Inject()
 (identifierService: IdentifierService,
  entityIOContextProvider: EntityIOContextProvider,
