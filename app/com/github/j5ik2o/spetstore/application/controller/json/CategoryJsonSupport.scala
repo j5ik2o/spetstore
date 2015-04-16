@@ -3,6 +3,7 @@ package com.github.j5ik2o.spetstore.application.controller.json
 import com.github.j5ik2o.spetstore.application.controller.CategoryController
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, Category}
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -22,7 +23,8 @@ case class CategoryJson(id: Option[String],
  * [[CategoryJson]]のためのトレイト。
  */
 trait CategoryJsonSupport {
-  this: CategoryController =>
+
+  val identifierService: IdentifierService
 
   protected def convertToEntity(json: CategoryJson): Category =
     Category(
@@ -50,7 +52,7 @@ trait CategoryJsonSupport {
         "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
         "name" -> JsString(o.name),
         "description" -> o.description.map(JsString).getOrElse(JsNull),
-        "version" -> o.version.map(e => JsString(e.toString)).getOrElse(JsNull)
+        "version" -> o.version.fold[JsValue](JsNull)(e => JsString(e.toString))
       )
     )
 

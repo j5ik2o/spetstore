@@ -38,7 +38,7 @@ case class CustomerJson(id: Option[String],
                         loginName: String,
                         password: String,
                         favoriteCategoryId: Option[String],
-                        version: Option[String])
+                        version: Option[Long])
 
 trait CustomerJsonSupport {
   this: CustomerController =>
@@ -64,7 +64,7 @@ trait CustomerJsonSupport {
         password = customerJson.password,
         favoriteCategoryId = None
       ),
-      version = customerJson.version.map(_.toLong)
+      version = customerJson.version
     )
 
   protected def convertToEntityWithoutId(customerJson: CustomerJson): Customer =
@@ -88,7 +88,7 @@ trait CustomerJsonSupport {
         password = customerJson.password,
         favoriteCategoryId = None
       ),
-      version = customerJson.version.map(_.toLong)
+      version = customerJson.version
     )
 
   implicit object JsonConverter extends Reads[CustomerJson] with Writes[Customer] {
@@ -108,7 +108,7 @@ trait CustomerJsonSupport {
         (__ \ 'loginName).read[String] and
         (__ \ 'password).read[String] and
         (__ \ 'favoriteCategoryId).readNullable[String] and
-        (__ \ 'version).readNullable[String])(CustomerJson.apply _).reads(json)
+        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CustomerJson.apply _).reads(json)
     }
 
     override def writes(o: Customer): JsValue = {
@@ -127,7 +127,7 @@ trait CustomerJsonSupport {
           "loginName" -> JsString(o.config.loginName),
           "password" -> JsString(o.config.password),
           "favoriteCategoryId" -> o.config.favoriteCategoryId.map(e => JsString(e.value.toString)).getOrElse(JsNull),
-          "version" -> o.version.map(e => JsString(e.toString)).getOrElse(JsNull)
+          "version" -> o.version.fold[JsValue](JsNull)(e => JsString(e.toString))
         )
       )
     }
