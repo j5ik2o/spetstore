@@ -85,6 +85,12 @@ case class Cart
   def addCartItem(cartItemId: CartItemId, itemId: ItemId, quantity: Int, isInStock: Boolean = false): Cart =
     addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, itemId, quantity, isInStock, None))
 
+
+  def removeCartItemId(cartItemId: CartItemId): Cart =
+    copy(
+      cartItems = cartItems.filterNot(_.id == cartItemId)
+    )
+
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemId]]を使って
    * [[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]を

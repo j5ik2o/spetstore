@@ -27,7 +27,7 @@ class GuiceModule extends AbstractModule with ScalaModule {
 
     // -> item
     bind[ItemTypeRepository].toInstance(ItemTypeRepository.ofMemory())
-    bind[ItemRepository].toInstance(ItemRepository.ofMemory())
+    bind[ItemRepository].toInstance(ItemRepository.ofJDBC)
     bind[InventoryRepository].toInstance(InventoryRepository.ofMemory())
     bind[SupplierRepository].toInstance(SupplierRepository.ofMemory())
     // -> purchase

@@ -21,11 +21,13 @@ PUT     /categories/:id  @com.github.j5ik2o.spetstore.application.controller.Cat
 DELETE  /categories/:id  @com.github.j5ik2o.spetstore.application.controller.CategoryController.delete(id: Long)
 
 # Cart
-POST    /carts           @com.github.j5ik2o.spetstore.application.controller.CartController.create
-GET     /carts           @com.github.j5ik2o.spetstore.application.controller.CartController.list
-GET     /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.get(id: Long)
-PUT     /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.update(id: Long)
-DELETE  /carts/:id       @com.github.j5ik2o.spetstore.application.controller.CartController.delete(id: Long)
+POST    /carts                              @com.github.j5ik2o.spetstore.application.controller.CartController.create
+GET     /carts                              @com.github.j5ik2o.spetstore.application.controller.CartController.list
+GET     /carts/:id                          @com.github.j5ik2o.spetstore.application.controller.CartController.get(id: Long)
+PUT     /carts/:id                          @com.github.j5ik2o.spetstore.application.controller.CartController.update(id: Long)
+DELETE  /carts/:id                          @com.github.j5ik2o.spetstore.application.controller.CartController.delete(id: Long)
+POST    /carts/:id/cart_items               @com.github.j5ik2o.spetstore.application.controller.CartController.addCartItem(id: Long)
+DELETE  /carts/:id/cart_items/:cartItemId   @com.github.j5ik2o.spetstore.application.controller.CartController.removeCartItem(id: Long, cartItemId: Long)
 
 # Item
 POST    /items           @com.github.j5ik2o.spetstore.application.controller.ItemController.create

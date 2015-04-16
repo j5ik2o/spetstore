@@ -1,23 +1,38 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.item
 
-import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, RepositoryOnJDBC}
-import com.github.j5ik2o.spetstore.domain.model.item.{Item, ItemId}
+import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
+import com.github.j5ik2o.spetstore.domain.model.item.{Item, ItemId, ItemTypeId, SupplierId}
+import com.github.j5ik2o.spetstore.domain.support.support.SimpleRepositoryOnJDBC
 import com.github.j5ik2o.spetstore.infrastructure.db.ItemRecord
-import scala.util.Try
 
 private[item]
 class ItemRepositoryOnJDBC
-  extends RepositoryOnJDBC[ItemId, Item] with ItemRepository {
+  extends SimpleRepositoryOnJDBC[ItemId, Item] with ItemRepository {
 
   override type T = ItemRecord
 
   override protected val mapper = ItemRecord
 
-  override def deleteById(identifier: ItemId)(implicit ctx: Ctx): Try[(This, Item)] = ???
+  override protected def convertToEntity(record: ItemRecord): Item = Item(
+    id = ItemId(record.id),
+    status = StatusType.Enabled,
+    itemTypeId = ItemTypeId(record.itemTypeId),
+    name = record.name,
+    description = record.description,
+    price = record.price,
+    supplierId = SupplierId(record.supplierId),
+    version = Some(record.version)
+  )
 
-  override def store(entity: Item)(implicit ctx: Ctx): Try[(ItemRepositoryOnJDBC#This, Item)] = ???
+  override protected def convertToRecord(entity: Item): ItemRecord = ItemRecord(
+    id = entity.id.value,
+    status = entity.status.id,
+    itemTypeId = entity.itemTypeId.value,
+    name = entity.name,
+    description = entity.description,
+    price = entity.price,
+    supplierId = entity.supplierId.value,
+    version = entity.version.getOrElse(1)
+  )
 
-  override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Item]] = ???
-
-  override def resolveById(identifier: ItemId)(implicit ctx: Ctx): Try[Item] = ???
 }
