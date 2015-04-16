@@ -7,8 +7,9 @@ import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json.Json._
 import play.api.mvc._
-import scala.util.{Try, Success}
 import scalikejdbc.DB
+
+import scala.util.{Success, Try}
 
 trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
   extends Controller {
@@ -21,10 +22,12 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
 
   import play.api.libs.json._
 
-  protected def withTransaction[T](f: EntityIOContext => T): T = {
-    DB.localTx {
-      implicit s =>
-        f(EntityIOContextOnJDBC(s))
+  protected def withTransaction[T](f: EntityIOContext => Try[T]): Try[T] = {
+    Try {
+      DB.localTx[T] {
+        implicit s =>
+          f(EntityIOContextOnJDBC(s)).get
+      }
     }
   }
 
@@ -38,13 +41,17 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
         json =>
           json.validate[J].fold(defaultErrorHandler, {
             validatedJson =>
-              repository.store(convertToEntityWithoutId(validatedJson)).map {
-                case (_, entity) =>
-                  Logger.debug(entity.toString)
-                  OkForCreatedEntity(entity.id)
-              }.recover {
-                case ex =>
-                  BadRequestForIOError(ex)
+              println(validatedJson)
+              withTransaction {
+                implicit ctx =>
+                  repository.store(convertToEntityWithoutId(validatedJson)).map {
+                    case (_, entity) =>
+                      Logger.debug(entity.toString)
+                      OkForCreatedEntity(entity.id)
+                  }.recover {
+                    case ex =>
+                      BadRequestForIOError(ex)
+                  }
               }.get
           })
       }.getOrElse(InternalServerError)
@@ -75,38 +82,38 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
   protected def updateAction(id: Long)(apply: Long => ID)
                             (implicit tjs: Writes[E], rds: Reads[J], ctx: EntityIOContext) = Action {
     request =>
-      withTransaction {
-        implicit ctx =>
-          val identifier = apply(id)
-          repository.existById(identifier).map {
-            exist =>
-              if (exist) {
-                request.body.asJson.map {
-                  json =>
-                    json.validate[J].fold(defaultErrorHandler, {
-                      validatedJson =>
+      val identifier = apply(id)
+      repository.existById(identifier).map {
+        exist =>
+          if (exist) {
+            request.body.asJson.map {
+              json =>
+                json.validate[J].fold(defaultErrorHandler, {
+                  validatedJson =>
+                    withTransaction {
+                      implicit ctx =>
                         repository.store(convertToEntity(validatedJson)).map {
                           case (_, entity) =>
                             OkForCreatedEntity(entity.id)
                         }.recover {
                           case ex =>
                             BadRequestForIOError(ex)
-                        }.get
-                    })
-                }.getOrElse(InternalServerError)
-              } else {
-                NotFoundForEntity(identifier)
-              }
-          }.getOrElse(InternalServerError)
-      }
+                        }
+                    }.get
+                })
+            }.getOrElse(InternalServerError)
+          } else {
+            NotFoundForEntity(identifier)
+          }
+      }.getOrElse(InternalServerError)
   }
 
   protected def deleteAction(id: Long)(apply: Long => ID)(implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
     val identifier = apply(id)
-    Logger.debug("delete id = "+identifier)
+    Logger.debug("delete id = " + identifier)
     repository.deleteById(identifier).map {
       case (_, entity) =>
-        Logger.debug("deleted id = "+identifier)
+        Logger.debug("deleted id = " + identifier)
         Ok(prettyPrint(toJson(entity)))
     }.recoverWith {
       case ex: EntityNotFoundException =>
@@ -136,7 +143,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       )
   }
 
-  protected val BadRequestForIOError = { ex: Throwable => BadRequest(createErrorResponse("IO Error : "+ex.toString)) }
+  protected val BadRequestForIOError = { ex: Throwable => BadRequest(createErrorResponse("IO Error : " + ex.toString))}
 
   protected val BadRequestForValidate = {
     param: JsObject => BadRequest(createErrorResponse(s"Validate Error: $param"))

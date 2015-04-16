@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.application.controller
 
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.controller.json.{CartJson, CartJsonSupport}
+import com.github.j5ik2o.spetstore.application.controller.json.{CartItemJson, CartJson, CartJsonSupport}
 import com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId, CartItemId}
@@ -31,31 +31,62 @@ case class CartController @Inject()
 
   def delete(id: Long) = deleteAction(id)(CartId)
 
-  def addCartItem(id: Long, itemId: Long, quantity: Int) = Action {
+  def addCartItem(id: Long) = Action {
     request =>
-      val identifier = CartId(id)
-      repository.resolveById(identifier).flatMap {
-        cart =>
-          val newCart = cart.addCartItem(
-            CartItemId(identifierService.generate),
-            ItemId(itemId), quantity
-          )
-          repository.store(newCart).map(_._2).map {
-            entity =>
-              Ok(prettyPrint(toJson(entity)))
-          }.recover {
-            case ex =>
-              BadRequestForIOError(ex)
-          }
-      }.recover {
-        case ex: EntityNotFoundException =>
-          NotFoundForEntity(identifier)
+      request.body.asJson.map {
+        json =>
+          json.validate[CartItemJson].fold(defaultErrorHandler, {
+            validatedJson =>
+              withTransaction {
+                implicit ctx =>
+                  val identifier = CartId(id)
+                  repository.resolveById(identifier).flatMap {
+                    cart =>
+                      val newCart = cart.addCartItem(
+                        CartItemId(identifierService.generate),
+                        ItemId(validatedJson.itemId.toLong),
+                        validatedJson.quantity,
+                        validatedJson.inStock
+                      )
+                      repository.store(newCart).map(_._2).map {
+                        entity =>
+                          Ok(prettyPrint(toJson(entity)))
+                      }.recover {
+                        case ex =>
+                          BadRequestForIOError(ex)
+                      }
+                  }.recover {
+                    case ex: EntityNotFoundException =>
+                      NotFoundForEntity(identifier)
+                  }
+              }.get
+          })
       }.getOrElse(InternalServerError)
   }
 
   def removeCartItem(id: Long, cartItemId: Long) = Action {
     request =>
-      Ok
+      withTransaction {
+        implicit ctx =>
+          withTransaction {
+            implicit ctx =>
+              val identifier = CartId(id)
+              repository.resolveById(identifier).flatMap {
+                cart =>
+                  val newCart = cart.removeCartItemId(CartItemId(cartItemId))
+                  repository.store(newCart).map(_._2).map {
+                    entity =>
+                      Ok(prettyPrint(toJson(entity)))
+                  }.recover {
+                    case ex =>
+                      BadRequestForIOError(ex)
+                  }
+              }.recover {
+                case ex: EntityNotFoundException =>
+                  NotFoundForEntity(identifier)
+              }
+          }
+      }.getOrElse(InternalServerError)
   }
 
 }
