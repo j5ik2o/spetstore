@@ -7,11 +7,14 @@ import play.api.test._
 
 class ItemIntegrationSpec extends PlaySpecification {
 
-  private def createCategory(port: Int): Long = {
+  private def createItem(port: Int): Long = {
     val body = """
     {
+      "itemTypeId": "453409080963371008",
       "name": "hoge",
-      "description": "fuga"
+      "description": "fuga",
+      "price": "123",
+      "supplierId": "453409080963371008"
     }
     """
     val f = WS.url(s"http://localhost:${port}/items").post(Json.parse(body))
@@ -20,11 +23,14 @@ class ItemIntegrationSpec extends PlaySpecification {
     (Json.parse(r.body) \ "id").as[String].toLong
   }
 
-  private def updateCategory(port: Int, id: Long): Long = {
+  private def updateItem(port: Int, id: Long): Long = {
     val body = s"""
     {
+      "itemTypeId": "453409080963371008",
       "name": "hoge",
-      "description": "hoge"
+      "description": "fuga",
+      "price": "123",
+      "supplierId": "453409080963371008"
     }
     """
     val f = WS.url(s"http://localhost:${port}/items/${id}").put(Json.parse(body))
@@ -33,19 +39,20 @@ class ItemIntegrationSpec extends PlaySpecification {
     (Json.parse(r.body) \ "id").as[String].toLong
   }
 
-  "CategoryController" should {
+  "ItemController" should {
 
     "create the model" in new WithServer {
-      createCategory(port) must not beNull
+      createItem(port) must not beNull
     }
 
     "update the model by id" in new WithServer {
-      val id = createCategory(port)
-      updateCategory(port, id) must not beNull
+      val id = createItem(port)
+      updateItem(port, id) must not beNull
     }
 
     "get the model" in new WithServer {
-      val id = createCategory(port)
+      val id = createItem(port)
+      println(id)
       id must not beNull
       val f = WS.url(s"http://localhost:${port}/items/${id}").get
       val r = await(f)
@@ -59,7 +66,8 @@ class ItemIntegrationSpec extends PlaySpecification {
     }
 
     "delete the model by id" in new WithServer {
-      val id = createCategory(port)
+      val id = createItem(port)
+      println(id)
       id must not beNull
       val f = WS.url(s"http://localhost:${port}/items/${id}").delete()
       val r = await(f)
