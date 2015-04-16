@@ -8,8 +8,8 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 ## 特徴
 - DDDに準拠した設計方針
 - 対象ドメインはペットストア
-- Scala 2.10対応
-- Play 2.2.1 + Google Guice対応
+- Scala 2.11対応
+- Play 2.3.x + Google Guice対応
 - アプリケーションとしては REST like API
 
 ## 対象ドメイン
@@ -85,9 +85,9 @@ A  = 集約
 
 ## 利用している主なフレームワーク/ライブラリ
 
-- Play Framework 2.2.1
+- Play Framework 2.3.x
 - Google Guice
-- ScalikeJDBC
+- ScalikeJDBC 2.x
 - json4s
 - nscala-time
 - specs2
