@@ -9,7 +9,7 @@ DDDに基づいた、一つの実装を示すこと(DDDは設計思想なので�
 - DDDに準拠した設計方針
 - 対象ドメインはペットストア
 - Scala 2.11対応
-- Play 2.3.x + Google Guice対応
+- Play 2.5.x対応
 - アプリケーションとしては REST like API
 
 ## 対象ドメイン
