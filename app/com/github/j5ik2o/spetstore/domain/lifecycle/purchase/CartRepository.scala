@@ -1,10 +1,10 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
-import com.github.j5ik2o.spetstore.domain.support.support.{MultiIOSupport, Repository}
-import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId}
+import com.github.j5ik2o.spetstore.domain.support.support.{ MultiIOSupport, Repository }
+import com.github.j5ik2o.spetstore.domain.model.purchase.{ Cart, CartId }
 
 /**
- * [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]のためのリポジトリ責務。
+ * [[Cart]]のためのリポジトリ責務。
  */
 trait CartRepository extends Repository[CartId, Cart] with MultiIOSupport[CartId, Cart] {
 
@@ -21,7 +21,7 @@ object CartRepository {
    * メモリ用リポジトリを生成する。
    *
    * @param entities エンティティの集合
-   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository]]
+   * @return [[CartRepository]]
    */
   def ofMemory(entities: Map[CartId, Cart] = Map.empty): CartRepository =
     new CartRepositoryOnMemory(entities)
@@ -29,7 +29,7 @@ object CartRepository {
   /**
    * JDBC用リポジトリを生成する。
    *
-   * @return [[com.github.j5ik2o.spetstore.domain.lifecycle.purchase.CartRepository]]
+   * @return [[CartRepository]]
    */
   def ofJDBC: CartRepository = new CartRepositoryOnJDBC
 

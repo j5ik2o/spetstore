@@ -26,7 +26,6 @@ trait Identifier[+A] {
 
 }
 
-
 object EmptyIdentifier extends EmptyIdentifier
 
 trait EmptyIdentifier extends Identifier[Nothing] {

@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.support.support
 
-import com.github.j5ik2o.spetstore.infrastructure.db.{DaoSupport, CRUDMapper}
+import com.github.j5ik2o.spetstore.infrastructure.db.{ DaoSupport, CRUDMapper }
 import play.Logger
 import scala.util.Try
 import scalikejdbc._
@@ -56,7 +56,7 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
  * JDBC用リポジトリのための骨格実装。
  */
 abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
-  extends Repository[ID, E] with MultiIOSupport[ID, E] {
+    extends Repository[ID, E] with MultiIOSupport[ID, E] {
 
   type T
 
@@ -72,12 +72,13 @@ abstract class RepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]]
   }
 
   def existById(identifier: ID)(implicit ctx: EntityIOContext): Try[Boolean] = withDBSession(ctx) {
-    implicit s => Try {
-      val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(idName), identifier.value))
-      if (count == 0) false
-      else if (count == 1) true
-      else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
-    }
+    implicit s =>
+      Try {
+        val count = mapper.countBy(sqls.eq(mapper.defaultAlias.field(idName), identifier.value))
+        if (count == 0) false
+        else if (count == 1) true
+        else throw new IllegalStateException(s"$count entities are found for identifier: $identifier")
+      }
   }
 
   override def existByIds(identifiers: ID*)(implicit ctx: Ctx): Try[Boolean] = withDBSession(ctx) {

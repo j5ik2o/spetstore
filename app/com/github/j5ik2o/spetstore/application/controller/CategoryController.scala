@@ -1,12 +1,14 @@
 package com.github.j5ik2o.spetstore.application.controller
 
+import javax.inject.{ Inject, Singleton }
+
 import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.controller.json.{CategoryJsonSupport, CategoryJson}
+import com.github.j5ik2o.spetstore.application.controller.json.{ CategoryJson, CategoryJsonSupport }
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
-import com.github.j5ik2o.spetstore.domain.model.item.{Category, CategoryId}
+import com.github.j5ik2o.spetstore.domain.model.item.{ Category, CategoryId }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
-import com.google.inject.Inject
-import com.wordnik.swagger.annotations.Api
+//import io.swagger.annotations.Api
+import play.api.mvc.{ Action, AnyContent }
 
 /**
  * [[Category]]のためのコントローラ。
@@ -15,23 +17,25 @@ import com.wordnik.swagger.annotations.Api
  * @param entityIOContextProvider [[]]
  * @param repository
  */
-@Api(value="/categories", description = "カテゴリ用API")
-case class CategoryController @Inject()
-(identifierService: IdentifierService,
- entityIOContextProvider: EntityIOContextProvider,
- repository: CategoryRepository)
-  extends ControllerSupport[CategoryId, Category, CategoryJson] with CategoryJsonSupport {
+//@Api(value = "/categories")
+@Singleton
+case class CategoryController @Inject() (
+  identifierService: IdentifierService,
+  entityIOContextProvider: EntityIOContextProvider,
+  repository: CategoryRepository
+)
+    extends ControllerSupport[CategoryId, Category, CategoryJson] with CategoryJsonSupport {
 
   implicit val ctx = entityIOContextProvider.get
 
-  def list = listAction
+  def list: Action[AnyContent] = listAction
 
-  def create = createAction
+  def create: Action[AnyContent] = createAction
 
-  def get(id: Long) = getAction(id)(CategoryId)
+  def get(id: Long): Action[AnyContent] = getAction(id)(CategoryId)
 
-  def update(id: Long) = updateAction(id)(CategoryId)
+  def update(id: Long): Action[AnyContent] = updateAction(id)(CategoryId)
 
-  def delete(id: Long) = deleteAction(id)(CategoryId)
+  def delete(id: Long): Action[AnyContent] = deleteAction(id)(CategoryId)
 
 }

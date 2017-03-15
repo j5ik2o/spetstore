@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.domain.support.json
 import IdentifierFormats._
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{OrderItemId, OrderItem}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{ OrderItemId, OrderItem }
 import org.json4s.DefaultReaders._
 import org.json4s._
 

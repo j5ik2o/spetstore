@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.infrastructure.db
 
-import com.github.j5ik2o.spetstore.domain.support.support.{EntityNotFoundException, RepositoryIOException}
+import com.github.j5ik2o.spetstore.domain.support.support.{ EntityNotFoundException, RepositoryIOException }
 import scalikejdbc._
 
 import scala.util.Try
@@ -18,22 +18,21 @@ trait DaoSupport[T] {
 
   protected val idName: String = "id"
 
-
   def insertOrUpdate(id: Long, version: Option[Long], record: T)(implicit s: DBSession): Try[T] = Try {
     if (version.isDefined) {
       val where = sqls.eq(mapper.column.field(idName), id).and.eq(mapper.column.field("version"), version)
       println(where)
       val count = mapper.updateBy(where)
         .withAttributes(mapper.toNamedValues(record).filterNot {
-        case (k, _) => k.name == mapper.primaryKeyFieldName
-      }: _*)
+          case (k, _) => k.name == mapper.primaryKeyFieldName
+        }: _*)
       if (count == 0) {
         throw new IllegalStateException(s"The entity has illegal version(id = $id)")
       }
       findById(id).get
     } else {
       val result = mapper.updateById(id).withAttributes(mapper.toNamedValues(record): _*)
-      if (result == 0){
+      if (result == 0) {
         mapper.createWithAttributes(mapper.toNamedValues(record): _*)
       }
       findById(id).get

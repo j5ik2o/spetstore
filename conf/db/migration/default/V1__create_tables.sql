@@ -1,6 +1,4 @@
-use spetstore;
-
-DROP TABLE IF EXISTS `customer`;
+-- DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `pk`                    BIGINT        NOT NULL AUTO_INCREMENT,
   `id`                    BIGINT        NOT NULL,
@@ -22,7 +20,7 @@ CREATE TABLE `customer` (
   UNIQUE(`id`)
 );
 
-DROP TABLE IF EXISTS `category`;
+-- DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -34,7 +32,7 @@ CREATE TABLE `category` (
   UNIQUE(`id`)
 );
 
-DROP TABLE IF EXISTS `cart`;
+-- DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -45,7 +43,21 @@ CREATE TABLE `cart` (
   UNIQUE(`id`)
 );
 
-DROP TABLE IF EXISTS `cart_item`;
+CREATE TABLE `item` (
+  `pk`            BIGINT        NOT NULL AUTO_INCREMENT,
+  `id`            BIGINT        NOT NULL,
+  `status`        INT           NOT NULL,
+  `item_type_id`  BIGINT        NOT NULL,
+  `name`          VARCHAR(256)  NOT NULL,
+  `description`   VARCHAR(256),
+  `price`         INT           NOT NULL,
+  `supplier_id`   INT           NOT NULL,
+  `version`       BIGINT        NOT NULL,
+  PRIMARY KEY(`pk`),
+  UNIQUE(`id`)
+);
+
+-- DROP TABLE IF EXISTS `cart_item`;
 CREATE TABLE `cart_item` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,
@@ -61,8 +73,7 @@ CREATE TABLE `cart_item` (
   UNIQUE(`cart_id`,`no`)
 );
 
-
-DROP TABLE IF EXISTS `order`;
+-- DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `pk`            BIGINT        NOT NULL AUTO_INCREMENT,
   `id`            BIGINT        NOT NULL,
@@ -83,7 +94,7 @@ CREATE TABLE `order` (
   UNIQUE(`id`)
 );
 
-DROP TABLE IF EXISTS `order_item`;
+-- DROP TABLE IF EXISTS `order_item`;
 CREATE TABLE `order_item` (
   `pk`          BIGINT        NOT NULL AUTO_INCREMENT,
   `id`          BIGINT        NOT NULL,

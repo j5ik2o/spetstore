@@ -5,7 +5,7 @@ import scalikejdbc._
 import scala.util.Try
 
 case class OrderItemDao(orderId: Long)
-  extends DaoSupport[OrderItemRecord] {
+    extends DaoSupport[OrderItemRecord] {
 
   override protected val mapper = OrderItemRecord
 

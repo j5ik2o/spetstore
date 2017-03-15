@@ -1,11 +1,11 @@
 package com.github.j5ik2o.spetstore.domain.support.json
 
 import BasicFormats._
-import com.github.j5ik2o.spetstore.domain.model.basic.{SexType, StatusType, Contact, PostalAddress}
-import com.github.j5ik2o.spetstore.domain.model.customer.{CustomerId, CustomerConfig, CustomerProfile, Customer}
+import com.github.j5ik2o.spetstore.domain.model.basic.{ SexType, StatusType, Contact, PostalAddress }
+import com.github.j5ik2o.spetstore.domain.model.customer.{ CustomerId, CustomerConfig, CustomerProfile, Customer }
 import com.github.j5ik2o.spetstore.domain.model.item.CategoryId
 import org.json4s.DefaultReaders._
-import org.json4s.JsonAST.{JInt, JString, JField, JObject}
+import org.json4s.JsonAST.{ JInt, JString, JField, JObject }
 import org.json4s._
 
 object CustomerFormats {

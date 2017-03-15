@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.support.support
 
-import scala.util.{Success, Try}
+import scala.util.{ Success, Try }
 
 /**
  * メモリ用[[com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext]]。
@@ -14,9 +14,8 @@ case object EntityIOContextOnMemory extends EntityIOContext
  * @tparam ID 識別子の型
  * @tparam E エンティティの型
  */
-abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]]
-(entities: Map[ID, E])
-  extends Repository[ID, E] with MultiIOSupport[ID, E] {
+abstract class RepositoryOnMemory[ID <: Identifier[_], E <: Entity[ID]](entities: Map[ID, E])
+    extends Repository[ID, E] with MultiIOSupport[ID, E] {
 
   /**
    * 新しいインスタンスを生成する。

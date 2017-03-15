@@ -9,10 +9,11 @@ package com.github.j5ik2o.spetstore.domain.model.basic
  * @param addressName 地番名
  * @param buildingName 建物名
  */
-case class PostalAddress
-(zipCode: ZipCode,
- pref: Pref.Value,
- cityName: String,
- addressName: String,
- buildingName: Option[String] = None)
+case class PostalAddress(
+  zipCode: ZipCode,
+  pref: Pref.Value,
+  cityName: String,
+  addressName: String,
+  buildingName: Option[String] = None
+)
 

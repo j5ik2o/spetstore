@@ -3,19 +3,18 @@ package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId, CartItem, CartItemId}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{ Cart, CartId, CartItem, CartItemId }
 import com.github.j5ik2o.spetstore.domain.support.support.RepositoryOnJDBC
-import com.github.j5ik2o.spetstore.infrastructure.db.{CartDao, CartItemDao, CartItemRecord, CartRecord}
+import com.github.j5ik2o.spetstore.infrastructure.db.{ CartDao, CartItemDao, CartItemRecord, CartRecord }
 
 import scala.util.Try
 
-private[purchase]
-class CartRepositoryOnJDBC
-  extends RepositoryOnJDBC[CartId, Cart] with CartRepository {
+private[purchase] class CartRepositoryOnJDBC
+    extends RepositoryOnJDBC[CartId, Cart] with CartRepository {
 
   override type T = CartRecord
 
-  override protected val mapper = CartRecord
+  override protected lazy val mapper = CartRecord
 
   override def store(entity: Cart)(implicit ctx: Ctx): Try[(This, Cart)] = withDBSession(ctx) {
     implicit s =>
@@ -49,11 +48,12 @@ class CartRepositoryOnJDBC
   override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Cart]] = withDBSession(ctx) {
     implicit s =>
       CartDao.findAllWithLimitOffset(limit, offset).map {
-        cartRecords => cartRecords.map { cartItemRecord =>
-          val cartItemDao = CartItemDao(cartItemRecord.id)
-          val cartItemRecords = cartItemDao.findByCartId.get
-          cartItemRecord.copy(cartItems = cartItemRecords)
-        }.map(convertToCart)
+        cartRecords =>
+          cartRecords.map { cartItemRecord =>
+            val cartItemDao = CartItemDao(cartItemRecord.id)
+            val cartItemRecords = cartItemDao.findByCartId.get
+            cartItemRecord.copy(cartItems = cartItemRecords)
+          }.map(convertToCart)
       }
   }
 

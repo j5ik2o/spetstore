@@ -1,9 +1,8 @@
 package com.github.j5ik2o.spetstore.domain.support.json
 
-import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, Pref, ZipCode, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.basic.{ Contact, Pref, ZipCode, PostalAddress }
 import org.json4s.DefaultReaders._
 import org.json4s._
-
 
 object BasicFormats {
 
@@ -61,7 +60,6 @@ object BasicFormats {
         JField("email", JString(obj.email)),
         JField("phone", JString(obj.phone))
       )
-
 
   }
 

@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
 import com.github.j5ik2o.spetstore.domain.support.support.Entity
-import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, Contact, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.basic.{ StatusType, Contact, PostalAddress }
 
 /**
  * 仕入れ先を表すエンティティ。
@@ -11,18 +11,20 @@ import com.github.j5ik2o.spetstore.domain.model.basic.{StatusType, Contact, Post
  * @param postalAddress 住所
  * @param contact 連絡先
  */
-case class Supplier
-(id: SupplierId,
- status: StatusType.Value,
- name: String,
- postalAddress: PostalAddress,
- contact: Contact,
- version: Option[Long])
-  extends Entity[SupplierId]{
+case class Supplier(
+  id: SupplierId,
+  status: StatusType.Value,
+  name: String,
+  postalAddress: PostalAddress,
+  contact: Contact,
+  version: Option[Long]
+)
+    extends Entity[SupplierId] {
+
+  override type This = Supplier
 
   override def withVersion(version: Long): Entity[SupplierId] =
     copy(version = Some(version))
 
 }
-
 

@@ -8,21 +8,12 @@ object OrderStatus extends Enumeration {
   /**
    * 一次保留。
    */
-  val Pending,
-
-  /**
+  val Pending, /**
    * 承認済み。
-   */
-  Approved,
-
-  /**
+   */ Approved, /**
    * キャンセル。
-   */
-  Denied,
-
-  /**
+   */ Denied, /**
    *
-   */
-  Completed = Value
+   */ Completed = Value
 
 }

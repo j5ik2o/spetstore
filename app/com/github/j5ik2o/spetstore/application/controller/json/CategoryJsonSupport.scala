@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CategoryController
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
-import com.github.j5ik2o.spetstore.domain.model.item.{CategoryId, Category}
+import com.github.j5ik2o.spetstore.domain.model.item.{ CategoryId, Category }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -14,10 +14,12 @@ import play.api.libs.json._
  * @param name 名前
  * @param description 説明
  */
-case class CategoryJson(id: Option[String],
-                        name: String,
-                        description: Option[String],
-                        version: Option[Long])
+case class CategoryJson(
+  id: Option[String],
+  name: String,
+  description: Option[String],
+  version: Option[Long]
+)
 
 /**
  * [[CategoryJson]]のためのトレイト。
@@ -43,7 +45,6 @@ trait CategoryJsonSupport {
       description = json.description,
       version = json.version
     )
-
 
   implicit object JsonConverter extends Reads[CategoryJson] with Writes[Category] {
 

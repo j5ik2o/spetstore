@@ -12,14 +12,13 @@ import com.github.j5ik2o.spetstore.infrastructure.db.CustomerRecord
 import scala.util.Try
 import scalikejdbc._, SQLInterpolation._
 
-private[customer]
-class CustomerRepositoryOnJDBC
-  extends SimpleRepositoryOnJDBC[CustomerId, Customer]
-  with CustomerRepository {
+private[customer] class CustomerRepositoryOnJDBC
+    extends SimpleRepositoryOnJDBC[CustomerId, Customer]
+    with CustomerRepository {
 
   type T = CustomerRecord
 
-  override protected val mapper = CustomerRecord
+  override protected lazy val mapper = CustomerRecord
 
   protected def convertToEntity(record: CustomerRecord): Customer =
     Customer(
@@ -66,10 +65,11 @@ class CustomerRepositoryOnJDBC
   )
 
   def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]] = withDBSession(ctx) {
-    implicit s => Try {
-      val c = mapper.defaultAlias
-      mapper.findBy(sqls.eq(c.loginName, loginName)).map(convertToEntity)
-    }
+    implicit s =>
+      Try {
+        val c = mapper.defaultAlias
+        mapper.findBy(sqls.eq(c.loginName, loginName)).map(convertToEntity)
+      }
   }
 
 }

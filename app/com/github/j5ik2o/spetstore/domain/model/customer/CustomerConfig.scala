@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.domain.model.customer
 
 import com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.CategoryRepository
-import com.github.j5ik2o.spetstore.domain.model.item.{Category,CategoryId}
+import com.github.j5ik2o.spetstore.domain.model.item.{ Category, CategoryId }
 import scala.util.Try
 
 /**
@@ -12,10 +12,11 @@ import scala.util.Try
  * @param password パスワード
  * @param favoriteCategoryId お気に入りカテゴリID
  */
-case class CustomerConfig
-(loginName: String,
- password: String,
- favoriteCategoryId: Option[CategoryId] = None) {
+case class CustomerConfig(
+  loginName: String,
+    password: String,
+    favoriteCategoryId: Option[CategoryId] = None
+) {
 
   /**
    * お気に入りのカテゴリを取得する。
@@ -28,5 +29,4 @@ case class CustomerConfig
     Try(favoriteCategoryId.get).flatMap(cr.resolveById(_))
 
 }
-
 

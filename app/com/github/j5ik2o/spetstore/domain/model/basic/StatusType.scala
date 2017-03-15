@@ -8,11 +8,8 @@ object StatusType extends Enumeration {
   /**
    * 有効
    */
-  val Enabled,
-
-  /**
+  val Enabled, /**
    * 無効
-   */
-  Disabled = Value
+   */ Disabled = Value
 
 }

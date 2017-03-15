@@ -1,9 +1,9 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, Entity}
+import com.github.j5ik2o.spetstore.domain.support.support.{ EntityIOContext, Entity }
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
-import com.github.j5ik2o.spetstore.domain.model.basic.{Contact, StatusType, PostalAddress}
+import com.github.j5ik2o.spetstore.domain.model.basic.{ Contact, StatusType, PostalAddress }
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import com.github.nscala_time.time.Imports._
@@ -20,18 +20,21 @@ import scala.util.Try
  * @param shippingContact 出荷先の連絡先
  * @param orderItems [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]のリスト
  */
-case class Order
-(id: OrderId,
- status: StatusType.Value,
- orderStatus: OrderStatus.Value,
- orderDate: DateTime,
- customerId: CustomerId,
- customerName: String,
- shippingAddress: PostalAddress,
- shippingContact: Contact,
- orderItems: List[OrderItem],
- version: Option[Long])
-  extends Entity[OrderId] {
+case class Order(
+  id: OrderId,
+  status: StatusType.Value,
+  orderStatus: OrderStatus.Value,
+  orderDate: DateTime,
+  customerId: CustomerId,
+  customerName: String,
+  shippingAddress: PostalAddress,
+  shippingContact: Contact,
+  orderItems: List[OrderItem],
+  version: Option[Long]
+)
+    extends Entity[OrderId] {
+
+  override type This = Order
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]の個数
@@ -59,7 +62,6 @@ case class Order
         }
     }
   }
-
 
   /**
    * この注文に[[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]を追加する。
@@ -115,8 +117,7 @@ object Order {
    * @param cart [[com.github.j5ik2o.spetstore.domain.model.purchase.Cart]]
    * @return [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]
    */
-  def clearUp(cart: Cart)
-             (implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
+  def clearUp(cart: Cart)(implicit is: IdentifierService, cr: CustomerRepository, ctx: EntityIOContext): Try[Order] = Try {
     val customer = cart.customer.get
     val orderItems = cart.cartItems.map(e => OrderItem.fromCartItem(OrderItemId(is.generate), e))
     Order(

@@ -5,16 +5,16 @@ import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase._
 import com.github.j5ik2o.spetstore.domain.support.support._
-import com.github.j5ik2o.spetstore.infrastructure.db.{OrderItemRecord, OrderDao, OrderItemDao, OrderRecord}
+import com.github.j5ik2o.spetstore.infrastructure.db.{ OrderItemRecord, OrderDao, OrderItemDao, OrderRecord }
 
 import scala.util.Try
 
 class OrderRepositoryOnJDBC
-  extends RepositoryOnJDBC[OrderId, Order] with OrderRepository {
+    extends RepositoryOnJDBC[OrderId, Order] with OrderRepository {
 
   override type T = OrderRecord
 
-  override protected val mapper = OrderRecord
+  override protected lazy val mapper = OrderRecord
 
   override def resolveByOffsetWithLimit(offset: Int, limit: Int)(implicit ctx: Ctx): Try[Seq[Order]] = withDBSession(ctx) {
     implicit s =>

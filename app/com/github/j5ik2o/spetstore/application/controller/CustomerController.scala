@@ -1,31 +1,35 @@
 package com.github.j5ik2o.spetstore.application.controller
 
-import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
-import com.github.j5ik2o.spetstore.application.controller.json.{CustomerJson, CustomerJsonSupport}
-import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
-import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
-import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
-import com.google.inject.Inject
-import com.wordnik.swagger.annotations.Api
+import javax.inject.{ Inject, Singleton }
 
-@Api(value="/customers", description = "カスタマー用API")
-case class CustomerController @Inject()
-(identifierService: IdentifierService,
- entityIOContextProvider: EntityIOContextProvider,
- repository: CustomerRepository)
-  extends ControllerSupport[CustomerId, Customer, CustomerJson]
-  with CustomerJsonSupport {
+import com.github.j5ik2o.spetstore.application.EntityIOContextProvider
+import com.github.j5ik2o.spetstore.application.controller.json.{ CustomerJson, CustomerJsonSupport }
+import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
+import com.github.j5ik2o.spetstore.domain.model.customer.{ Customer, CustomerId }
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
+//import io.swagger.annotations.Api
+import play.api.mvc.{ Action, AnyContent }
+
+//@Api(value = "/customers")
+@Singleton
+case class CustomerController @Inject() (
+  identifierService: IdentifierService,
+  entityIOContextProvider: EntityIOContextProvider,
+  repository: CustomerRepository
+)
+    extends ControllerSupport[CustomerId, Customer, CustomerJson]
+    with CustomerJsonSupport {
 
   implicit val ctx = entityIOContextProvider.get
 
-  def list = listAction
+  def list: Action[AnyContent] = listAction
 
-  def create = createAction
+  def create: Action[AnyContent] = createAction
 
-  def get(id: Long) = getAction(id)(CustomerId)
+  def get(id: Long): Action[AnyContent] = getAction(id)(CustomerId)
 
-  def update(id: Long) = updateAction(id)(CustomerId)
+  def update(id: Long): Action[AnyContent] = updateAction(id)(CustomerId)
 
-  def delete(id: Long) = deleteAction(id)(CustomerId)
+  def delete(id: Long): Action[AnyContent] = deleteAction(id)(CustomerId)
 
 }

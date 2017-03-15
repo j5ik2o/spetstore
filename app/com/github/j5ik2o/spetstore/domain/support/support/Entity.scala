@@ -7,13 +7,17 @@ package com.github.j5ik2o.spetstore.domain.support.support
  */
 trait Entity[ID <: Identifier[_]] {
 
+  type This <: Entity[ID]
+
   /**
    * 識別子。
    */
   val id: ID
 
+  def canEqual(other: Any): Boolean = other.isInstanceOf[This @unchecked]
+
   override def equals(obj: Any): Boolean = this match {
-    case that: Entity[_] => id == that.id
+    case that: Entity[_] => that.canEqual(this) && id == that.id
     case _ => false
   }
 

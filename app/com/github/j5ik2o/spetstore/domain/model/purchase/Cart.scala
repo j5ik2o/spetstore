@@ -1,10 +1,10 @@
 package com.github.j5ik2o.spetstore.domain.model.purchase
 
-import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, Entity}
+import com.github.j5ik2o.spetstore.domain.support.support.{ EntityIOContext, Entity }
 import com.github.j5ik2o.spetstore.domain.lifecycle.customer.CustomerRepository
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
-import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
+import com.github.j5ik2o.spetstore.domain.model.customer.{ Customer, CustomerId }
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import scala.util.Try
 
@@ -13,12 +13,15 @@ import scala.util.Try
  *
  * @param cartItems [[com.github.j5ik2o.spetstore.domain.model.purchase.CartItem]]のリスト
  */
-case class Cart
-(id: CartId,
- status: StatusType.Value,
- customerId: CustomerId,
- cartItems: List[CartItem],
- version: Option[Long]) extends Entity[CartId] {
+case class Cart(
+  id: CartId,
+    status: StatusType.Value,
+    customerId: CustomerId,
+    cartItems: List[CartItem],
+    version: Option[Long]
+) extends Entity[CartId] {
+
+  override type This = Cart
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]を取得する。
@@ -84,7 +87,6 @@ case class Cart
    */
   def addCartItem(cartItemId: CartItemId, itemId: ItemId, quantity: Int, isInStock: Boolean = false): Cart =
     addCartItem(CartItem(cartItemId, StatusType.Enabled, cartItems.size + 1, itemId, quantity, isInStock, None))
-
 
   def removeCartItemId(cartItemId: CartItemId): Cart =
     copy(

@@ -9,10 +9,10 @@ import play.api.libs.json.Json._
 import play.api.mvc._
 import scalikejdbc.DB
 
-import scala.util.{Success, Try}
+import scala.util.{ Success, Try }
 
 trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
-  extends Controller {
+    extends Controller {
 
   val identifierService: IdentifierService
 
@@ -57,8 +57,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       }.getOrElse(InternalServerError)
   }
 
-  protected def getAction(id: Long)(apply: Long => ID)
-                         (implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
+  protected def getAction(id: Long)(apply: Long => ID)(implicit tjs: Writes[E], ctx: EntityIOContext) = Action {
     val identifier = apply(id)
     repository.resolveById(identifier).map {
       entity =>
@@ -79,8 +78,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       }.getOrElse(InternalServerError)
   }
 
-  protected def updateAction(id: Long)(apply: Long => ID)
-                            (implicit tjs: Writes[E], rds: Reads[J], ctx: EntityIOContext) = Action {
+  protected def updateAction(id: Long)(apply: Long => ID)(implicit tjs: Writes[E], rds: Reads[J], ctx: EntityIOContext) = Action {
     request =>
       val identifier = apply(id)
       repository.existById(identifier).map {
@@ -143,7 +141,7 @@ trait ControllerSupport[ID <: Identifier[Long], E <: Entity[ID], J]
       )
   }
 
-  protected val BadRequestForIOError = { ex: Throwable => BadRequest(createErrorResponse("IO Error : " + ex.toString))}
+  protected val BadRequestForIOError = { ex: Throwable => BadRequest(createErrorResponse("IO Error : " + ex.toString)) }
 
   protected val BadRequestForValidate = {
     param: JsObject => BadRequest(createErrorResponse(s"Validate Error: $param"))

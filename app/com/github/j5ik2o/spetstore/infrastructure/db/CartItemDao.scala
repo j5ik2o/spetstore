@@ -5,7 +5,7 @@ import scalikejdbc._
 import scala.util.Try
 
 case class CartItemDao(cartId: Long)
-  extends DaoSupport[CartItemRecord] {
+    extends DaoSupport[CartItemRecord] {
 
   override protected val mapper = CartItemRecord
 

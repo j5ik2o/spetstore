@@ -1,7 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.support.support
 
-import scala.util.{Failure, Success, Try}
-
+import scala.util.{ Failure, Success, Try }
 
 trait MultiIOSupport[ID <: Identifier[_], E <: Entity[ID]] {
   this: Repository[ID, E] =>
@@ -28,9 +27,7 @@ trait MultiIOSupport[ID <: Identifier[_], E <: Entity[ID]] {
     }
   }
 
-  protected final def traverseWithThis[A](values: Seq[A])
-                                         (processor: (This, A) => Try[(This, E)])
-                                         (implicit ctx: Ctx): Try[(This, Seq[E])] = Try {
+  protected final def traverseWithThis[A](values: Seq[A])(processor: (This, A) => Try[(This, E)])(implicit ctx: Ctx): Try[(This, Seq[E])] = Try {
     values.foldLeft((this.asInstanceOf[This], Seq.empty[E])) {
       case ((repo, entities), value) => processor(repo, value).map {
         case (r, e) => (r, entities :+ e)
@@ -45,14 +42,13 @@ trait MultiIOSupport[ID <: Identifier[_], E <: Entity[ID]] {
   protected def traverse[A, R](values: Seq[A], forceSuccess: Boolean = false)(f: (A) => Try[R])(implicit ctx: Ctx): Try[Seq[R]] = {
     values.map(f).foldLeft(Try(Seq.empty[R])) {
       (entitiesTry, entityTry) =>
-        (for {entities <- entitiesTry; entity <- entityTry} yield entities :+ entity).recoverWith {
+        (for { entities <- entitiesTry; entity <- entityTry } yield entities :+ entity).recoverWith {
           case e => if (forceSuccess) Success(entitiesTry.getOrElse(Seq.empty[R])) else Failure(e)
         }
     }
   }
 
 }
-
 
 /**
  * DDDのリポジトリ責務を表すトレイト。

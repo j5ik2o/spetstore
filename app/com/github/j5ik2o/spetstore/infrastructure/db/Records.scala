@@ -3,22 +3,23 @@ package com.github.j5ik2o.spetstore.infrastructure.db
 import org.joda.time.DateTime
 import scalikejdbc._
 
-case class CustomerRecord
-(id: Long,
- status: Int,
- name: String,
- sexType: Int,
- zipCode: String,
- prefCode: Int,
- cityName: String,
- addressName: String,
- buildingName: Option[String],
- email: String,
- phone: String,
- loginName: String,
- password: String,
- favoriteCategoryId: Option[Long] = None,
- version: Long)
+case class CustomerRecord(
+  id: Long,
+  status: Int,
+  name: String,
+  sexType: Int,
+  zipCode: String,
+  prefCode: Int,
+  cityName: String,
+  addressName: String,
+  buildingName: Option[String],
+  email: String,
+  phone: String,
+  loginName: String,
+  password: String,
+  favoriteCategoryId: Option[Long] = None,
+  version: Long
+)
 
 object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
@@ -26,8 +27,10 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
 
   override def tableName: String = "customer"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[CustomerRecord]) = CustomerRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[CustomerRecord]
+  ) = CustomerRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -64,12 +67,13 @@ object CustomerRecord extends CRUDMapper[CustomerRecord] {
   )
 }
 
-case class CategoryRecord
-(id: Long,
- status: Int,
- name: String,
- description: Option[String] = None,
- version: Long)
+case class CategoryRecord(
+  id: Long,
+  status: Int,
+  name: String,
+  description: Option[String] = None,
+  version: Long
+)
 
 object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
@@ -77,8 +81,10 @@ object CategoryRecord extends CRUDMapper[CategoryRecord] {
 
   override def tableName: String = "category"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[CategoryRecord]) = CategoryRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[CategoryRecord]
+  ) = CategoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -95,12 +101,13 @@ object CategoryRecord extends CRUDMapper[CategoryRecord] {
   )
 }
 
-case class InventoryRecord
-(id: Long,
- status: Int,
- itemId: Long,
- quantity: Int,
- version: Long)
+case class InventoryRecord(
+  id: Long,
+  status: Int,
+  itemId: Long,
+  quantity: Int,
+  version: Long
+)
 
 object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
@@ -108,8 +115,10 @@ object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
   override def tableName: String = "inventory"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[InventoryRecord]) = InventoryRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[InventoryRecord]
+  ) = InventoryRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemId = rs.get(n.itemId),
@@ -127,15 +136,16 @@ object InventoryRecord extends CRUDMapper[InventoryRecord] {
 
 }
 
-case class ItemRecord
-(id: Long,
- status: Int,
- itemTypeId: Long,
- name: String,
- description: Option[String] = None,
- price: BigDecimal,
- supplierId: Long,
- version: Long)
+case class ItemRecord(
+  id: Long,
+  status: Int,
+  itemTypeId: Long,
+  name: String,
+  description: Option[String] = None,
+  price: BigDecimal,
+  supplierId: Long,
+  version: Long
+)
 
 object ItemRecord extends CRUDMapper[ItemRecord] {
 
@@ -143,8 +153,10 @@ object ItemRecord extends CRUDMapper[ItemRecord] {
 
   override def tableName: String = "item"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[ItemRecord]) = ItemRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[ItemRecord]
+  ) = ItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     itemTypeId = rs.get(n.itemTypeId),
@@ -168,13 +180,14 @@ object ItemRecord extends CRUDMapper[ItemRecord] {
 
 }
 
-case class ItemTypeRecord
-(id: Long,
- status: Int,
- categoryId: Long,
- name: String,
- description: Option[String] = None,
- version: Long)
+case class ItemTypeRecord(
+  id: Long,
+  status: Int,
+  categoryId: Long,
+  name: String,
+  description: Option[String] = None,
+  version: Long
+)
 
 object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
@@ -182,8 +195,10 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
   override def tableName: String = "item_type"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[ItemTypeRecord]): ItemTypeRecord = ItemTypeRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[ItemTypeRecord]
+  ): ItemTypeRecord = ItemTypeRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     categoryId = rs.get(n.categoryId),
@@ -203,18 +218,19 @@ object ItemTypeRecord extends CRUDMapper[ItemTypeRecord] {
 
 }
 
-case class SupplierRecord
-(id: Long,
- status: Int,
- name: String,
- zipCode: String,
- prefCode: Int,
- cityName: String,
- addressName: String,
- buildingName: Option[String],
- email: String,
- phone: String,
- version: Long)
+case class SupplierRecord(
+  id: Long,
+  status: Int,
+  name: String,
+  zipCode: String,
+  prefCode: Int,
+  cityName: String,
+  addressName: String,
+  buildingName: Option[String],
+  email: String,
+  phone: String,
+  version: Long
+)
 
 object SupplierRecord extends CRUDMapper[SupplierRecord] {
 
@@ -222,8 +238,10 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
 
   override def tableName: String = "supplier"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[SupplierRecord]): SupplierRecord = SupplierRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[SupplierRecord]
+  ): SupplierRecord = SupplierRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     name = rs.get(n.name),
@@ -252,13 +270,13 @@ object SupplierRecord extends CRUDMapper[SupplierRecord] {
   )
 }
 
-
-case class CartRecord
-(id: Long,
- status: Int,
- customerId: Long,
- cartItems: Seq[CartItemRecord] = Nil,
- version: Long)
+case class CartRecord(
+  id: Long,
+  status: Int,
+  customerId: Long,
+  cartItems: Seq[CartItemRecord] = Nil,
+  version: Long
+)
 
 object CartRecord extends CRUDMapper[CartRecord] {
 
@@ -266,8 +284,10 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
   override def tableName: String = "cart"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[CartRecord]): CartRecord = CartRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[CartRecord]
+  ): CartRecord = CartRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     customerId = rs.get(n.customerId),
@@ -292,15 +312,16 @@ object CartRecord extends CRUDMapper[CartRecord] {
 
 }
 
-case class CartItemRecord
-(id: Long,
- status: Int,
- cartId: Long,
- no: Int,
- itemId: Long,
- quantity: Int,
- inStock: Boolean,
- version: Long)
+case class CartItemRecord(
+  id: Long,
+  status: Int,
+  cartId: Long,
+  no: Int,
+  itemId: Long,
+  quantity: Int,
+  inStock: Boolean,
+  version: Long
+)
 
 object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
@@ -310,8 +331,10 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
   override def tableName: String = "cart_item"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[CartItemRecord]) = CartItemRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[CartItemRecord]
+  ) = CartItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     cartId = rs.get(n.cartId),
@@ -335,22 +358,23 @@ object CartItemRecord extends CRUDMapper[CartItemRecord] {
 
 }
 
-case class OrderRecord
-(id: Long,
- status: Int,
- orderStatus: Int,
- orderDateTime: DateTime,
- customerId: Long,
- customerName: String,
- zipCode: String,
- prefCode: Int,
- cityName: String,
- addressName: String,
- buildingName: Option[String],
- email: String,
- phone: String,
- orderItems: Seq[OrderItemRecord] = Nil,
- version: Long)
+case class OrderRecord(
+  id: Long,
+  status: Int,
+  orderStatus: Int,
+  orderDateTime: DateTime,
+  customerId: Long,
+  customerName: String,
+  zipCode: String,
+  prefCode: Int,
+  cityName: String,
+  addressName: String,
+  buildingName: Option[String],
+  email: String,
+  phone: String,
+  orderItems: Seq[OrderItemRecord] = Nil,
+  version: Long
+)
 
 object OrderRecord extends CRUDMapper[OrderRecord] {
 
@@ -358,8 +382,10 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 
   override def tableName: String = "order"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[OrderRecord]) = OrderRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[OrderRecord]
+  ) = OrderRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderStatus = rs.get(n.orderStatus),
@@ -393,7 +419,6 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
     'version -> record.version
   )
 
-
   val orderItemsRef = hasMany[OrderItemRecord](
     // association's SkinnyMapper and alias
     many = OrderItemRecord -> OrderItemRecord.orderItemsAlias,
@@ -405,14 +430,15 @@ object OrderRecord extends CRUDMapper[OrderRecord] {
 
 }
 
-case class OrderItemRecord
-(id: Long,
- status: Int,
- orderId: Long,
- no: Int,
- itemId: Long,
- quantity: Int,
- version: Long)
+case class OrderItemRecord(
+  id: Long,
+  status: Int,
+  orderId: Long,
+  no: Int,
+  itemId: Long,
+  quantity: Int,
+  version: Long
+)
 
 object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
 
@@ -422,8 +448,10 @@ object OrderItemRecord extends CRUDMapper[OrderItemRecord] {
 
   override def tableName: String = "order_item"
 
-  override def extract(rs: WrappedResultSet,
-                       n: ResultName[OrderItemRecord]): OrderItemRecord = OrderItemRecord(
+  override def extract(
+    rs: WrappedResultSet,
+    n: ResultName[OrderItemRecord]
+  ): OrderItemRecord = OrderItemRecord(
     id = rs.get(n.id),
     status = rs.get(n.status),
     orderId = rs.get(n.orderId),

@@ -2,7 +2,7 @@ package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CustomerController
 import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerConfig, CustomerId, CustomerProfile}
+import com.github.j5ik2o.spetstore.domain.model.customer.{ Customer, CustomerConfig, CustomerId, CustomerProfile }
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -24,21 +24,23 @@ import play.api.libs.json._
  * @param password パスワード
  * @param favoriteCategoryId お気に入りカテゴリID
  */
-case class CustomerJson(id: Option[String],
-                        name: String,
-                        sexType: Int,
-                        zipCode1: String,
-                        zipCode2: String,
-                        prefCode: Int,
-                        cityName: String,
-                        addressName: String,
-                        buildingName: Option[String],
-                        email: String,
-                        phone: String,
-                        loginName: String,
-                        password: String,
-                        favoriteCategoryId: Option[String],
-                        version: Option[Long])
+case class CustomerJson(
+  id: Option[String],
+  name: String,
+  sexType: Int,
+  zipCode1: String,
+  zipCode2: String,
+  prefCode: Int,
+  cityName: String,
+  addressName: String,
+  buildingName: Option[String],
+  email: String,
+  phone: String,
+  loginName: String,
+  password: String,
+  favoriteCategoryId: Option[String],
+  version: Option[Long]
+)
 
 trait CustomerJsonSupport {
   this: CustomerController =>
@@ -133,6 +135,5 @@ trait CustomerJsonSupport {
     }
 
   }
-
 
 }

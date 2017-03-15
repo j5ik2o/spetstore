@@ -3,7 +3,7 @@ package com.github.j5ik2o.spetstore.application.controller.json
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
-import com.github.j5ik2o.spetstore.domain.model.purchase.{Cart, CartId, CartItem, CartItemId}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{ Cart, CartId, CartItem, CartItemId }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import play.api.libs.functional.syntax._
 import play.api.libs.json._

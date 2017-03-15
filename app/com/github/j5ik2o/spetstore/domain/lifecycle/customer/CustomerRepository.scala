@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.customer
 
-import com.github.j5ik2o.spetstore.domain.support.support.{MultiIOSupport, EntityIOContext, Repository}
-import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerId}
+import com.github.j5ik2o.spetstore.domain.support.support.{ MultiIOSupport, EntityIOContext, Repository }
+import com.github.j5ik2o.spetstore.domain.model.customer.{ Customer, CustomerId }
 import scala.util.Try
 
 /**
@@ -18,8 +18,7 @@ trait CustomerRepository extends Repository[CustomerId, Customer] with MultiIOSu
    * @param ctx [[com.github.j5ik2o.spetstore.domain.support.support.EntityIOContext]]
    * @return `Try`にラップされた[[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]
    */
-  def resolveByLoginName(loginName: String)
-                        (implicit ctx: EntityIOContext): Try[Option[Customer]]
+  def resolveByLoginName(loginName: String)(implicit ctx: EntityIOContext): Try[Option[Customer]]
 
 }
 

@@ -1,7 +1,7 @@
 package com.github.j5ik2o.spetstore.domain.lifecycle.purchase
 
 import com.github.j5ik2o.spetstore.domain.support.support.Repository
-import com.github.j5ik2o.spetstore.domain.model.purchase.{Order, OrderId}
+import com.github.j5ik2o.spetstore.domain.model.purchase.{ Order, OrderId }
 
 /**
  * [[com.github.j5ik2o.spetstore.domain.model.purchase.Order]]のためのリポジトリ責務。
@@ -34,5 +34,4 @@ object OrderRepository {
   def ofJDBC: OrderRepository = new OrderRepositoryOnJDBC
 
 }
-
 

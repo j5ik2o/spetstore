@@ -1,6 +1,6 @@
 package com.github.j5ik2o.spetstore.domain.model.item
 
-import com.github.j5ik2o.spetstore.domain.support.support.{EntityIOContext, Entity}
+import com.github.j5ik2o.spetstore.domain.support.support.{ EntityIOContext, Entity }
 import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemTypeRepository
 import com.github.j5ik2o.spetstore.domain.model.basic.StatusType
 import scala.util.Try
@@ -14,16 +14,19 @@ import scala.util.Try
  * @param description 説明
  * @param price 価格
  */
-case class Item
-(id: ItemId,
- status: StatusType.Value,
- itemTypeId: ItemTypeId,
- name: String,
- description: Option[String] = None,
- price: BigDecimal,
- supplierId: SupplierId,
- version: Option[Long])
-  extends Entity[ItemId] {
+case class Item(
+  id: ItemId,
+  status: StatusType.Value,
+  itemTypeId: ItemTypeId,
+  name: String,
+  description: Option[String] = None,
+  price: BigDecimal,
+  supplierId: SupplierId,
+  version: Option[Long]
+)
+    extends Entity[ItemId] {
+
+  override type This = Item
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.item.ItemType]]を取得する。
@@ -38,6 +41,4 @@ case class Item
   override def withVersion(version: Long): Entity[ItemId] = copy(version = Some(version))
 
 }
-
-
 

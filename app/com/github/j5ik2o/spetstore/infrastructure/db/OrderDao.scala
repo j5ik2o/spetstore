@@ -6,10 +6,9 @@ import scalikejdbc._
 import scala.util.Try
 
 object OrderDao
-  extends DaoSupport[OrderRecord] {
+    extends DaoSupport[OrderRecord] {
 
   override protected val mapper = OrderRecord
-
 
   override def findById(id: Long)(implicit s: DBSession): Try[OrderRecord] = Try {
     OrderRecord.joins(OrderRecord.orderItemsRef).

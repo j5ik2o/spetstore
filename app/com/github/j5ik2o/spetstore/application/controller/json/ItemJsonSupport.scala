@@ -7,13 +7,15 @@ import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class ItemJson(id: Option[String],
-                    itemTypeId: Long,
-                    name: String,
-                    description: Option[String],
-                    price: String,
-                    supplierId: Long,
-                    version: Option[Long])
+case class ItemJson(
+  id: Option[String],
+  itemTypeId: Long,
+  name: String,
+  description: Option[String],
+  price: String,
+  supplierId: Long,
+  version: Option[Long]
+)
 
 trait ItemJsonSupport {
   val identifierService: IdentifierService
