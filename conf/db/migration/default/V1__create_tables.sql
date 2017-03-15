@@ -51,7 +51,7 @@ CREATE TABLE `item` (
   `name`          VARCHAR(256)  NOT NULL,
   `description`   VARCHAR(256),
   `price`         INT           NOT NULL,
-  `supplier_id`   INT           NOT NULL,
+  `supplier_id`   BIGINT        NOT NULL,
   `version`       BIGINT        NOT NULL,
   PRIMARY KEY(`pk`),
   UNIQUE(`id`)

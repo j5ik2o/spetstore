@@ -7,6 +7,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.11.5"
 
 resolvers += "Sonatype OSS Release Repository" at "https://oss.sonatype.org/content/repositories/releases/"
+resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
+
+val circeVersion = "0.7.0"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -28,15 +31,14 @@ libraryDependencies ++= Seq(
   "org.scalikejdbc"         %% "scalikejdbc-play-dbapi-adapter" % "2.5.+",
   "org.skinny-framework"    %% "skinny-orm"                     % "2.3.5",
   "com.h2database"          %  "h2"                             % "1.4.187",
-  "ch.qos.logback"          %  "logback-classic"                % "1.2.1",
-  "org.json4s"              %% "json4s-ext"                     % "3.5.0",
-  "org.json4s"              %% "json4s-jackson"                 % "3.5.0",
-  "com.github.tototoshi"    %% "play-json4s-jackson"            % "0.5.0",
-  "com.github.tototoshi"    %% "play-json4s-test-jackson"       % "0.5.0"     % Test,
-  "com.github.tototoshi"    %% "play-json4s-native"             % "0.5.0",
+//  "ch.qos.logback"          %  "logback-classic"                % "1.2.1",
   //"io.swagger" %% "swagger-play2" % "1.5.1",
-  "org.flywaydb"            %% "flyway-play"                  % "3.0.1",
-  "mysql"                   % "mysql-connector-java"          % "6.0.5"
+  "org.flywaydb"            %% "flyway-play"                    % "3.0.1",
+  "mysql"                   % "mysql-connector-java"            % "6.0.5",
+  "io.circe"                %% "circe-core"                     % circeVersion,
+  "io.circe"                %% "circe-generic"                  % circeVersion,
+  "io.circe"                %% "circe-parser"                   % circeVersion,
+  "play-circe" %% "play-circe" % "2.5-0.7.0"
 )
 
 routesGenerator := InjectedRoutesGenerator

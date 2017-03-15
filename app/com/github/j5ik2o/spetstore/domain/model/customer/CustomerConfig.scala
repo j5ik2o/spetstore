@@ -13,7 +13,7 @@ import scala.util.Try
  * @param favoriteCategoryId お気に入りカテゴリID
  */
 case class CustomerConfig(
-  loginName: String,
+    loginName: String,
     password: String,
     favoriteCategoryId: Option[CategoryId] = None
 ) {

@@ -7,7 +7,7 @@ import scala.util.Try
 
 @Singleton
 class AuthenticationService @Inject() (
-  val customerRepository: CustomerRepository,
+    val customerRepository: CustomerRepository,
     val entityIOContextProvider: EntityIOContextProvider
 ) {
 

@@ -13,7 +13,7 @@ import scala.util.Try
  * @param quantity 数量
  */
 case class OrderItem(
-  id: OrderItemId,
+    id: OrderItemId,
     status: StatusType.Value,
     no: Int,
     itemId: ItemId,

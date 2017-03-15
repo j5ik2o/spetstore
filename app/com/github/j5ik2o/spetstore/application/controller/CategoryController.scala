@@ -9,6 +9,7 @@ import com.github.j5ik2o.spetstore.domain.model.item.{ Category, CategoryId }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 //import io.swagger.annotations.Api
 import play.api.mvc.{ Action, AnyContent }
+import io.circe.generic.auto._
 
 /**
  * [[Category]]のためのコントローラ。
@@ -30,11 +31,11 @@ case class CategoryController @Inject() (
 
   def list: Action[AnyContent] = listAction
 
-  def create: Action[AnyContent] = createAction
+  def create: Action[CategoryJson] = createAction
 
   def get(id: Long): Action[AnyContent] = getAction(id)(CategoryId)
 
-  def update(id: Long): Action[AnyContent] = updateAction(id)(CategoryId)
+  def update(id: Long): Action[CategoryJson] = updateAction(id)(CategoryId)
 
   def delete(id: Long): Action[AnyContent] = deleteAction(id)(CategoryId)
 

@@ -8,6 +8,7 @@ import com.github.j5ik2o.spetstore.domain.lifecycle.item.ItemRepository
 import com.github.j5ik2o.spetstore.domain.model.item.{ Item, ItemId }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 import play.api.mvc.{ Action, AnyContent }
+import io.circe.generic.auto._
 
 @Singleton
 case class ItemController @Inject() (
@@ -22,11 +23,11 @@ case class ItemController @Inject() (
 
   def list: Action[AnyContent] = listAction
 
-  def create: Action[AnyContent] = createAction
+  def create: Action[ItemJson] = createAction
 
   def get(id: Long): Action[AnyContent] = getAction(id)(ItemId)
 
-  def update(id: Long): Action[AnyContent] = updateAction(id)(ItemId)
+  def update(id: Long): Action[ItemJson] = updateAction(id)(ItemId)
 
   def delete(id: Long): Action[AnyContent] = deleteAction(id)(ItemId)
 

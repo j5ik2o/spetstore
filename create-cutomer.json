@@ -1,0 +1,14 @@
+{
+  "name":"hoge",
+  "sexType":1,
+  "zipCode1":"1000",
+  "zipCode2":"001",
+  "prefCode":1,
+  "cityName":"hoge",
+  "addressName":"fuga",
+  "buildingName":"aaa",
+  "email":"j5ik2o@gmail.com",
+  "phone":"00-0000-0000",
+  "loginName":"hoge",
+  "password":"fuga"
+}

@@ -5,8 +5,6 @@ import com.github.j5ik2o.spetstore.domain.model.customer.CustomerId
 import com.github.j5ik2o.spetstore.domain.model.item.ItemId
 import com.github.j5ik2o.spetstore.domain.model.purchase.{ Cart, CartId, CartItem, CartItemId }
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
 
 case class CartItemJson(id: Option[String], no: Int, itemId: Long, quantity: Int, inStock: Boolean, version: Option[Long])
 
@@ -27,6 +25,15 @@ trait CartJsonSupport {
     quantity = json.quantity,
     inStock = json.inStock,
     version = json.version
+  )
+
+  protected def convertToJson(entity: CartItem): CartItemJson = CartItemJson(
+    id = Some(entity.id.value.toString),
+    no = entity.no,
+    itemId = entity.itemId.value,
+    quantity = entity.quantity,
+    inStock = entity.inStock,
+    version = entity.version
   )
 
   protected def convertToEntityWithoutId(json: CartItemJson): CartItem = CartItem(
@@ -55,45 +62,11 @@ trait CartJsonSupport {
     version = json.version
   )
 
-  implicit object CartItemConverter extends Reads[CartItemJson] with Writes[CartItem] {
-
-    override def writes(o: CartItem): JsValue = JsObject(
-      Seq(
-        "id" -> JsString(o.id.value.toString),
-        "no" -> JsNumber(o.no),
-        "itemId" -> JsString(o.itemId.value.toString),
-        "quantity" -> JsNumber(o.quantity),
-        "inStock" -> JsBoolean(o.inStock),
-        "version" -> o.version.fold[JsValue](JsNull)(e => JsString(e.toString))
-      )
-    )
-
-    override def reads(json: JsValue): JsResult[CartItemJson] =
-      ((__ \ 'id).readNullable[String] and
-        (__ \ 'no).read[Int] and
-        (__ \ 'itemId).read[String].map(_.toLong) and
-        (__ \ 'quantity).read[Int] and
-        (__ \ 'inStock).read[Boolean] and
-        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CartItemJson.apply _).reads(json)
-
-  }
-
-  implicit object CartConverter extends Reads[CartJson] with Writes[Cart] {
-
-    override def writes(o: Cart): JsValue = JsObject(
-      Seq(
-        "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
-        "customerId" -> JsString(o.customerId.value.toString),
-        "cartItems" -> JsArray(o.cartItems.map(Json.toJson(_))),
-        "version" -> o.version.fold[JsValue](JsNull)(e => JsString(e.toString))
-      )
-    )
-
-    override def reads(json: JsValue): JsResult[CartJson] =
-      ((__ \ 'id).readNullable[String] and
-        (__ \ 'customerId).read[String].map(_.toLong) and
-        (__ \ 'cartItems).read[Seq[CartItemJson]] and
-        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(CartJson.apply _).reads(json)
-  }
+  protected def convertToJson(entity: Cart): CartJson = CartJson(
+    id = Some(entity.id.value.toString),
+    customerId = entity.customerId.value,
+    cartItems = entity.cartItems.map(convertToJson),
+    version = entity.version
+  )
 
 }

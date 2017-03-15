@@ -1,11 +1,8 @@
 package com.github.j5ik2o.spetstore.application.controller.json
 
-import com.github.j5ik2o.spetstore.application.controller.ItemController
 import com.github.j5ik2o.spetstore.domain.model.basic._
 import com.github.j5ik2o.spetstore.domain.model.item._
 import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
 
 case class ItemJson(
   id: Option[String],
@@ -44,32 +41,14 @@ trait ItemJsonSupport {
       version = itemJson.version
     )
 
-  implicit object JsonConverter extends Reads[ItemJson] with Writes[Item] {
-
-    def reads(json: JsValue): JsResult[ItemJson] = {
-      ((__ \ 'id).readNullable[String] and
-        (__ \ 'itemTypeId).read[String].map(_.toLong) and
-        (__ \ 'name).read[String] and
-        (__ \ 'description).readNullable[String] and
-        (__ \ 'price).read[String] and
-        (__ \ 'supplierId).read[String].map(_.toLong) and
-        (__ \ 'version).readNullable[String].map(_.map(_.toLong)))(ItemJson.apply _).reads(json)
-    }
-
-    override def writes(o: Item): JsValue = {
-      JsObject(
-        Seq(
-          "id" -> (if (o.id.isDefined) JsString(o.id.value.toString) else JsNull),
-          "itemTypeId" -> JsString(o.itemTypeId.value.toString),
-          "name" -> JsString(o.name),
-          "description" -> o.description.fold[JsValue](JsNull)(JsString),
-          "price" -> JsString(o.price.toString()),
-          "supplierId" -> JsString(o.supplierId.value.toString),
-          "version" -> o.version.fold[JsValue](JsNull)(e => JsString(e.toString))
-        )
-      )
-    }
-
-  }
+  protected def convertToJson(entity: Item): ItemJson = ItemJson(
+    id = Some(entity.id.value.toString),
+    itemTypeId = entity.itemTypeId.value,
+    name = entity.name,
+    description = entity.description,
+    price = entity.price.toString(),
+    supplierId = entity.supplierId.value,
+    version = entity.version
+  )
 
 }

@@ -14,7 +14,7 @@ import scala.util.Try
  * @param inStock 後で購入する場合true
  */
 case class CartItem(
-  id: CartItemId,
+    id: CartItemId,
     status: StatusType.Value,
     no: Int,
     itemId: ItemId,
