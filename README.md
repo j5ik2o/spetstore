@@ -88,7 +88,7 @@ A  = 集約
 - Play Framework 2.5.x
 - Google Guice
 - ScalikeJDBC 2.x
-- json4s
+- play-circe
 - nscala-time
 - specs2
 - mockito
