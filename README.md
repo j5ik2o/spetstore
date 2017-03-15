@@ -85,7 +85,7 @@ A  = 集約
 
 ## 利用している主なフレームワーク/ライブラリ
 
-- Play Framework 2.3.x
+- Play Framework 2.5.x
 - Google Guice
 - ScalikeJDBC 2.x
 - json4s
