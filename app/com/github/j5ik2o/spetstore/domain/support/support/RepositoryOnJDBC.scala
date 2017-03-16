@@ -16,7 +16,7 @@ trait SimpleRepositoryOnJDBC[ID <: Identifier[Long], E <: Entity[ID]] extends Re
   self =>
 
   private object Dao extends DaoSupport[T] {
-    override protected val mapper = self.mapper
+    override protected lazy val mapper = self.mapper
 
   }
 

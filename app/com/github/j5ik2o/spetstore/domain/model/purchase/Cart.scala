@@ -21,7 +21,7 @@ case class Cart(
     version: Option[Long]
 ) extends Entity[CartId] {
 
-  override type This = Cart
+  override def canEqual(other: Any) = other.isInstanceOf[Cart]
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.customer.Customer]]を取得する。

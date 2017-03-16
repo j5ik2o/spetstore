@@ -29,7 +29,7 @@ case class Customer(
 )
     extends Entity[CustomerId] {
 
-  override type This = Customer
+  override def canEqual(other: Any) = other.isInstanceOf[Customer]
 
   def addCartItem(cart: Cart, cartItem: CartItem): Cart =
     cart.addCartItem(cartItem)

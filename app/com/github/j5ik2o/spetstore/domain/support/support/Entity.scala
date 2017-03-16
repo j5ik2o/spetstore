@@ -3,21 +3,20 @@ package com.github.j5ik2o.spetstore.domain.support.support
 /**
  * DDDのエンティティ責務を表すトレイト。
  *
- * @tparam ID [[com.github.j5ik2o.spetstore.domain.support.support.Identifier]]
+ * @tparam ID [[Identifier]]
  */
 trait Entity[ID <: Identifier[_]] {
-
-  type This <: Entity[ID]
 
   /**
    * 識別子。
    */
   val id: ID
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[This @unchecked]
+  def canEqual(other: Any): Boolean
 
-  override def equals(obj: Any): Boolean = this match {
-    case that: Entity[_] => that.canEqual(this) && id == that.id
+  override def equals(obj: Any): Boolean = obj match {
+    case that: Entity[_] =>
+      that.canEqual(this) && id == that.id
     case _ => false
   }
 

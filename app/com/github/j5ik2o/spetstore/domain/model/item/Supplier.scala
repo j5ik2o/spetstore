@@ -21,7 +21,7 @@ case class Supplier(
 )
     extends Entity[SupplierId] {
 
-  override type This = Supplier
+  override def canEqual(other: Any) = other.isInstanceOf[Supplier]
 
   override def withVersion(version: Long): Entity[SupplierId] =
     copy(version = Some(version))

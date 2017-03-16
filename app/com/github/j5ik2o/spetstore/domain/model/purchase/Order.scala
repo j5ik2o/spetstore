@@ -34,7 +34,7 @@ case class Order(
 )
     extends Entity[OrderId] {
 
-  override type This = Order
+  override def canEqual(other: Any) = other.isInstanceOf[Order]
 
   /**
    * [[com.github.j5ik2o.spetstore.domain.model.purchase.OrderItem]]の個数

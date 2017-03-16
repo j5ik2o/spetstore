@@ -2,7 +2,8 @@ package com.github.j5ik2o.spetstore.application.controller.json
 
 import com.github.j5ik2o.spetstore.application.controller.CustomerController
 import com.github.j5ik2o.spetstore.domain.model.basic._
-import com.github.j5ik2o.spetstore.domain.model.customer.{ Customer, CustomerConfig, CustomerId, CustomerProfile }
+import com.github.j5ik2o.spetstore.domain.model.customer.{Customer, CustomerConfig, CustomerId, CustomerProfile}
+import com.github.j5ik2o.spetstore.infrastructure.identifier.IdentifierService
 
 /**
  * [[Customer]]のJSONを表現したモデル。
@@ -41,7 +42,8 @@ case class CustomerJson(
 )
 
 trait CustomerJsonSupport {
-  this: CustomerController =>
+
+  val identifierService: IdentifierService
 
   protected def convertToEntity(customerJson: CustomerJson): Customer =
     Customer(

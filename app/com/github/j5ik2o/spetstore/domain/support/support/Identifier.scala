@@ -22,7 +22,7 @@ trait Identifier[+A] {
     case _ => false
   }
 
-  override def hashCode = 31 * value.##
+  override def hashCode: Int = 31 * value.##
 
 }
 
