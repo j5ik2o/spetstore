@@ -43,8 +43,6 @@ libraryDependencies ++= Seq(
 
 routesGenerator := InjectedRoutesGenerator
 
-scalariformSettings
-
 flywayUrl := "jdbc:mysql://localhost/spetstore?autoReconnect=true&useSSL=false"
 
 flywayUser := "spetstore"
@@ -53,4 +51,6 @@ flywayPassword := "phou8Igh"
 
 flywayLocations := Seq("filesystem:conf/db/migration/default")
 
+scalafmtOnCompile in Compile := true
 
+scalafmtTestOnCompile in Compile := true
