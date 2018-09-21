@@ -5,7 +5,10 @@ val commonSettings = Seq(
 )
 
 lazy val domain = (project in file("domain")).settings(commonSettings).settings(
-  name := "spetstore-domain"
+  name := "spetstore-domain",
+  libraryDependencies ++= Seq(
+    "com.github.j5ik2o" %% "scala-ddd-base-core" % "1.0.12"
+  )
 )
 
 lazy val api = (project in file("api")).settings(commonSettings).settings(
@@ -13,7 +16,8 @@ lazy val api = (project in file("api")).settings(commonSettings).settings(
   libraryDependencies ++= Seq(
     guice,
     "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-    "io.swagger" %% "swagger-play2" % "1.6.0"
+    "io.swagger" %% "swagger-play2" % "1.6.0",
+    // "org.webjars" % "swagger-ui" % "2.2.0"
   )
   // Adds additional packages into Twirl
   //TwirlKeys.templateImports += "com.github.j5ik2o.spetstore.controllers._"
