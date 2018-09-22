@@ -1,8 +1,8 @@
 package controllers
 
-import io.swagger.annotations.{Api, ApiOperation}
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import io.swagger.annotations.{ Api, ApiOperation }
+import javax.inject.{ Inject, Singleton }
+import play.api.mvc.{ AbstractController, ControllerComponents }
 
 @Singleton
 @Api(value = "test")

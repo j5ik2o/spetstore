@@ -14,4 +14,3 @@ object ZipCode {
   }
 
 }
-
