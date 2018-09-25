@@ -1,3 +1,5 @@
+import scala.concurrent.duration._
+
 val enumeratumVersion = "1.5.13"
 val circeVersion = "0.9.3"
 
@@ -9,7 +11,8 @@ val commonSettings = Seq(
     "com.beachape" %% "enumeratum" % enumeratumVersion,
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
-    "io.circe" %% "circe-parser" % circeVersion
+    "io.circe" %% "circe-parser" % circeVersion,
+    "org.sisioh" %% "baseunits-scala" % "0.1.21"
   ),
   scalafmtOnCompile in ThisBuild := true,
   scalafmtTestOnCompile in ThisBuild := true,
@@ -32,6 +35,7 @@ lazy val api = (project in file("api")).settings(commonSettings).settings(
     guice,
     "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
     "io.swagger" %% "swagger-play2" % "1.6.0",
+    "org.wvlet.airframe" %% "airframe"                % "0.64",
     // "org.webjars" % "swagger-ui" % "2.2.0"
   )
   // Adds additional packages into Twirl
@@ -39,6 +43,96 @@ lazy val api = (project in file("api")).settings(commonSettings).settings(
   // Adds additional packages into conf/routes
   // play.sbt.routes.RoutesKeys.routesImport += "com.github.j5ik2o.spetstore.binders._"
 ).dependsOn(domain).enablePlugins(PlayScala)
+
+val dbDriver     = "com.mysql.jdbc.Driver"
+val dbName       = "dddbase"
+val dbUser       = "dddbase"
+val dbPassword   = "passwd"
+val dbPort: Int  = Utils.RandomPortSupport.temporaryServerPort()
+val dbUrl        = s"jdbc:mysql://localhost:$dbPort/$dbName?useSSL=false"
+
+lazy val flyway = (project in file("flyway"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "mysql" % "mysql-connector-java" % "5.1.42"
+    ),
+    parallelExecution in Test := false,
+    wixMySQLVersion := com.wix.mysql.distribution.Version.v5_6_21,
+    wixMySQLUserName := Some(dbUser),
+    wixMySQLPassword := Some(dbPassword),
+    wixMySQLSchemaName := dbName,
+    wixMySQLPort := Some(dbPort),
+    wixMySQLDownloadPath := Some(sys.env("HOME") + "/.wixMySQL/downloads"),
+    wixMySQLTimeout := Some(2 minutes),
+    flywayDriver := dbDriver,
+    flywayUrl := dbUrl,
+    flywayUser := dbUser,
+    flywayPassword := dbPassword,
+    flywaySchemas := Seq(dbName),
+    flywayLocations := Seq(
+      s"filesystem:${baseDirectory.value}/src/test/resources/rdb-migration/"
+    ),
+    flywayMigrate := (flywayMigrate dependsOn wixMySQLStart).value
+  )
+  .enablePlugins(FlywayPlugin)
+
+lazy val `db-interface` = (project in file("db-interface"))
+  .settings(commonSettings)
+  .settings(
+      name := "spetstore-db-interface",
+      // JDBCのドライバークラス名を指定します(必須)
+      driverClassName in generator := dbDriver,
+      // JDBCの接続URLを指定します(必須)
+      jdbcUrl in generator := dbUrl,
+      // JDBCの接続ユーザ名を指定します(必須)
+      jdbcUser in generator := dbUser,
+      // JDBCの接続ユーザのパスワードを指定します(必須)
+      jdbcPassword in generator := dbPassword,
+      // カラム型名をどのクラスにマッピングするかを決める関数を記述します(必須)
+      propertyTypeNameMapper in generator := {
+        case "INTEGER" | "INT" | "TINYINT"     => "Int"
+        case "BIGINT"                          => "Long"
+        case "VARCHAR"                         => "String"
+        case "BOOLEAN" | "BIT"                 => "Boolean"
+        case "DATE" | "TIMESTAMP" | "DATETIME" => "java.time.ZonedDateTime"
+        case "DECIMAL"                         => "BigDecimal"
+        case "ENUM"                            => "String"
+      },
+      tableNameFilter in generator := { tableName: String =>
+        (tableName.toUpperCase != "SCHEMA_VERSION") && (tableName
+          .toUpperCase() != "FLYWAY_SCHEMA_HISTORY") && !tableName.toUpperCase
+          .endsWith("ID_SEQUENCE_NUMBER")
+      },
+      outputDirectoryMapper in generator := {
+        case s if s.endsWith("Spec") => (sourceDirectory in Test).value
+        case s =>
+          new java.io.File((scalaSource in Compile).value, "/spetstore/interface/dao")
+      },
+      // モデル名に対してどのテンプレートを利用するか指定できます。
+      templateNameMapper in generator := {
+        case className if className.endsWith("Spec") => "template_spec.ftl"
+        case _                                       => "template.ftl"
+      },
+      generateAll in generator := Def
+        .taskDyn {
+          val ga = (generateAll in generator).value
+          Def
+            .task {
+              (wixMySQLStop in flyway).value
+            }
+            .map(_ => ga)
+        }
+        .dependsOn(flywayMigrate in flyway)
+        .value,
+      compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
+      libraryDependencies ++= Seq(
+        "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.12"
+      ),
+      parallelExecution in Test := false
+  )
+  .dependsOn(flyway)
+  .disablePlugins(WixMySQLPlugin)
 
 lazy val root = (project in file(".")).settings(commonSettings).aggregate(api)
 

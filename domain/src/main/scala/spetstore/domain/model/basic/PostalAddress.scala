@@ -4,4 +4,4 @@ case class PostalAddress(zipCode: ZipCode,
                          pref: Pref,
                          cityName: String,
                          addressName: String,
-                         buildingName: Option[String] = None) {}
+                         buildingName: Option[String] = None)
