@@ -1,6 +1,8 @@
 package spetstore.domain.model.item
 
-import com.github.j5ik2o.dddbase.{Aggregate, AggregateLongId}
+import java.time.ZonedDateTime
+
+import com.github.j5ik2o.dddbase.{ Aggregate, AggregateLongId }
 import spetstore.domain.model.basic.StatusType
 
 import scala.reflect._
@@ -20,7 +22,9 @@ case class Item(id: ItemId,
                 name: ItemName,
                 description: Option[ItemDescription],
                 categories: Categories,
-                price: Price)
+                price: Price,
+                createdAt: ZonedDateTime,
+                updatedAt: Option[ZonedDateTime])
     extends Aggregate {
   override type IdType        = ItemId
   override type AggregateType = Item

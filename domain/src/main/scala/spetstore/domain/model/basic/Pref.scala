@@ -6,7 +6,7 @@ import scala.collection.immutable
 
 sealed trait Pref extends EnumEntry
 
-object Pref extends Enum[Pref] {
+object Pref extends Enum[Pref] with CirceEnum[Pref] {
 
   override def values: immutable.IndexedSeq[Pref] = findValues
 

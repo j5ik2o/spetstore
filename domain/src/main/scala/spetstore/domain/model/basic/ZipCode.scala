@@ -1,6 +1,6 @@
 package spetstore.domain.model.basic
 
-class ZipCode(areaCode: String, cityCode: String) {
+case class ZipCode(areaCode: String, cityCode: String) {
   def asString = s"$areaCode-$cityCode"
 }
 

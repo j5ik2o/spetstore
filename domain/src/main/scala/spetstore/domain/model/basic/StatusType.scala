@@ -6,7 +6,7 @@ import scala.collection.immutable
 
 sealed abstract class StatusType(override val entryName: String) extends EnumEntry
 
-object StatusType extends Enum[StatusType] {
+object StatusType extends Enum[StatusType] with CirceEnum[StatusType] {
   override def values: immutable.IndexedSeq[StatusType] = findValues
 
   case object Enabled extends StatusType("enabled")
