@@ -6,6 +6,7 @@ import monix.eval.Task
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import spetstore.domain.model.item.ItemId
+import spetstore.interface.api.controller.ItemController
 import spetstore.interface.api.{ ApiServer, Routes, SwaggerDocService }
 import spetstore.interface.generator.IdGenerator
 import spetstore.interface.generator.jdbc.ItemIdGeneratorOnJDBC
@@ -26,22 +27,15 @@ object Main {
     parser.parse(args, AppConfig()) match {
       case Some(config) =>
         val design = newDesign
-          .bind[ActorSystem]
-          .toInstance(system)
-          .bind[JdbcProfile]
-          .toInstance(dbConfig.profile)
-          .bind[JdbcProfile#Backend#Database]
-          .toInstance(dbConfig.db)
-          .bind[Routes]
-          .toSingleton
-          .bind[SwaggerDocService]
-          .toInstance(new SwaggerDocService(config.host, config.port, Set.empty))
-          .bind[ApiServer]
-          .toSingleton
-          .bind[ItemRepository[Task]]
-          .to[ItemRepositoryBySlick]
-          .bind[IdGenerator[ItemId]]
-          .to[ItemIdGeneratorOnJDBC]
+          .bind[ActorSystem].toInstance(system)
+          .bind[JdbcProfile#Backend#Database].toInstance(dbConfig.db)
+          .bind[Routes].toSingleton
+          .bind[SwaggerDocService].toInstance(
+            new SwaggerDocService(config.host, config.port, Set(classOf[ItemController]))
+          )
+          .bind[ApiServer].toSingleton
+          .bind[ItemRepository[Task]].to[ItemRepositoryBySlick]
+          .bind[IdGenerator[ItemId]].to[ItemIdGeneratorOnJDBC]
         design.withSession { session =>
           val system = session.build[ActorSystem]
           session.build[ApiServer].start(config.host, config.port, settings = ServerSettings(system))
