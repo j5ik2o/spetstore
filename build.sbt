@@ -1,24 +1,26 @@
-import org.seasar.util.lang.StringUtil
-
+import Dependencies._
 import scala.concurrent.duration._
-
-val enumeratumVersion = "1.5.13"
-val circeVersion = "0.9.3"
 
 val commonSettings = Seq(
   scalaVersion := "2.12.6",
   organization := "com.github.j5ik2o.spetstore",
   version := "1.0.0-SNAPSHOT",
   libraryDependencies ++= Seq(
-    "com.beachape" %% "enumeratum" % enumeratumVersion,
-    "com.beachape" %% "enumeratum-circe" % enumeratumVersion,
-    "io.circe" %% "circe-core" % circeVersion,
-    "io.circe" %% "circe-generic" % circeVersion,
-    "io.circe" %% "circe-parser" % circeVersion,
-    "org.sisioh" %% "baseunits-scala" % "0.1.21"
+    beachape.enumeratum,
+    beachape.enumeratumCirce,
+    typelevel.catsCore,
+    typelevel.catsFree,
+    hashids.hashids,
+    scalatest.scalatest    % Test,
+    j5ik2o.scalaTestPlusDb % Test,
+    airframe.airframe,
+    circe.circeCore,
+    circe.circeGeneric,
+    circe.circeParser,
+    sisioh.baseunitsScala
   ),
   scalafmtOnCompile in ThisBuild := true,
-  scalafmtTestOnCompile in ThisBuild := true,
+  scalafmtTestOnCompile in ThisBuild := true
 )
 
 lazy val infrastructure = (project in file("infrastructure")).settings(commonSettings).settings(
@@ -28,25 +30,19 @@ lazy val infrastructure = (project in file("infrastructure")).settings(commonSet
 lazy val domain = (project in file("domain")).settings(commonSettings).settings(
   name := "spetstore-domain",
   libraryDependencies ++= Seq(
-    "com.github.j5ik2o" %% "scala-ddd-base-core" % "1.0.12"
+    j5ik2o.scalaDDDBaseCore
   )
 ).dependsOn(infrastructure)
 
-lazy val api = (project in file("api")).settings(commonSettings).settings(
-  name := "spetstore-api",
-  libraryDependencies ++= Seq(
-    guice,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-    "io.swagger" %% "swagger-play2" % "1.6.0",
-    "org.wvlet.airframe" %% "airframe"                % "0.64",
-    "com.dripower" %% "play-circe" % "2609.2",
-    // "org.webjars" % "swagger-ui" % "2.2.0"
-  )
-  // Adds additional packages into Twirl
-  //TwirlKeys.templateImports += "com.github.j5ik2o.spetstore.controllers._"
-  // Adds additional packages into conf/routes
-  // play.sbt.routes.RoutesKeys.routesImport += "com.github.j5ik2o.spetstore.binders._"
-).dependsOn(`db-interface`, domain).enablePlugins(PlayScala)
+val boot = (project in file("boot"))
+  .settings(commonSettings)
+  .settings(
+    name := "spetstore-boot",
+    libraryDependencies ++= Seq(
+      "com.github.scopt" %% "scopt"          % "3.7.0",
+      "ch.qos.logback"   % "logback-classic" % "1.2.3"
+    )
+  ).dependsOn(interface)
 
 val dbDriver     = "com.mysql.jdbc.Driver"
 val dbName       = "spetstore"
@@ -59,7 +55,7 @@ lazy val flyway = (project in file("flyway"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "mysql" % "mysql-connector-java" % "5.1.42"
+      mysql.mysqlConnectorJava
     ),
     parallelExecution in Test := false,
     wixMySQLVersion := com.wix.mysql.distribution.Version.v5_6_21,
@@ -81,10 +77,10 @@ lazy val flyway = (project in file("flyway"))
   )
   .enablePlugins(FlywayPlugin)
 
-lazy val `db-interface` = (project in file("db-interface"))
+lazy val interface = (project in file("interface"))
   .settings(commonSettings)
   .settings(
-      name := "spetstore-db-interface",
+      name := "spetstore-interface",
       // JDBCのドライバークラス名を指定します(必須)
       driverClassName in generator := dbDriver,
       // JDBCの接続URLを指定します(必須)
@@ -129,11 +125,19 @@ lazy val `db-interface` = (project in file("db-interface"))
         }
         .dependsOn(flywayMigrate in flyway)
         .value,
-      //compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
+      compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
       libraryDependencies ++= Seq(
-        "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.12",
-        "javax.inject" % "javax.inject" % "1",
-        "com.typesafe.play" %% "play-slick" % "3.0.1"
+        j5ik2o.scalaDDDBaseSlick,
+        javax.rsApi,
+        github.swaggerAkkaHttp,
+        megard.akkaHttpCors,
+        akka.akkaHttp,
+        akka.akkaStream,
+        heikoseeberger.akkaHttpCirce,
+        mysql.mysqlConnectorJava,
+        slick.slick,
+        slick.slickHikaricp,
+        monix.monix
       ),
       parallelExecution in Test := false
   )
@@ -145,7 +149,7 @@ lazy val localMySQL = (project in file("local-mysql"))
   .settings(
     name := "spetstore-local-mysql",
     libraryDependencies ++= Seq(
-      "mysql" % "mysql-connector-java" % "5.1.42"
+      mysql.mysqlConnectorJava
     ),
     wixMySQLVersion := com.wix.mysql.distribution.Version.v5_6_21,
     wixMySQLUserName := Some(dbUser),
@@ -163,14 +167,6 @@ lazy val localMySQL = (project in file("local-mysql"))
       s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/rdb-migration/",
       s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/rdb-migration/test",
       s"filesystem:${baseDirectory.value}/src/main/resources/dummy-migration",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/open-beta-scope-migration",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/open-beta-table-migration",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/AST-434",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/API-81",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/API-80",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/API-318",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/API-344",
-      s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/API-341"
     ),
     flywayPlaceholderReplacement := true,
     flywayPlaceholders := Map(
@@ -181,7 +177,7 @@ lazy val localMySQL = (project in file("local-mysql"))
   )
   .enablePlugins(FlywayPlugin)
 
-lazy val root = (project in file(".")).settings(commonSettings).aggregate(api)
+lazy val root = (project in file(".")).settings(commonSettings).aggregate(boot)
 
 
 
