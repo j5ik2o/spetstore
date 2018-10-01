@@ -23,16 +23,18 @@ val commonSettings = Seq(
   scalafmtTestOnCompile in ThisBuild := true
 )
 
-lazy val infrastructure = (project in file("infrastructure")).settings(commonSettings).settings(
-  name := "spetstore-infrastructure"
-)
-
-lazy val domain = (project in file("domain")).settings(commonSettings).settings(
-  name := "spetstore-domain",
-  libraryDependencies ++= Seq(
-    j5ik2o.scalaDDDBaseCore
+lazy val infrastructure = (project in file("infrastructure"))
+  .settings(commonSettings).settings(
+    name := "spetstore-infrastructure"
   )
-).dependsOn(infrastructure)
+
+lazy val domain = (project in file("domain"))
+  .settings(commonSettings).settings(
+    name := "spetstore-domain",
+    libraryDependencies ++= Seq(
+      j5ik2o.scalaDDDBaseCore
+    )
+  ).dependsOn(infrastructure)
 
 val boot = (project in file("boot"))
   .settings(commonSettings)
@@ -44,12 +46,12 @@ val boot = (project in file("boot"))
     )
   ).dependsOn(interface)
 
-val dbDriver     = "com.mysql.jdbc.Driver"
-val dbName       = "spetstore"
-val dbUser       = "spetstore"
-val dbPassword   = "passwd"
-val dbPort: Int  = Utils.RandomPortSupport.temporaryServerPort()
-val dbUrl        = s"jdbc:mysql://localhost:$dbPort/$dbName?useSSL=false"
+val dbDriver    = "com.mysql.jdbc.Driver"
+val dbName      = "spetstore"
+val dbUser      = "spetstore"
+val dbPassword  = "passwd"
+val dbPort: Int = Utils.RandomPortSupport.temporaryServerPort()
+val dbUrl       = s"jdbc:mysql://localhost:$dbPort/$dbName?useSSL=false"
 
 lazy val flyway = (project in file("flyway"))
   .settings(commonSettings)
@@ -80,66 +82,67 @@ lazy val flyway = (project in file("flyway"))
 lazy val interface = (project in file("interface"))
   .settings(commonSettings)
   .settings(
-      name := "spetstore-interface",
-      // JDBCのドライバークラス名を指定します(必須)
-      driverClassName in generator := dbDriver,
-      // JDBCの接続URLを指定します(必須)
-      jdbcUrl in generator := dbUrl,
-      // JDBCの接続ユーザ名を指定します(必須)
-      jdbcUser in generator := dbUser,
-      // JDBCの接続ユーザのパスワードを指定します(必須)
-      jdbcPassword in generator := dbPassword,
-      // カラム型名をどのクラスにマッピングするかを決める関数を記述します(必須)
-      propertyTypeNameMapper in generator := {
-        case "INTEGER" | "INT" | "TINYINT"     => "Int"
-        case "BIGINT"                          => "Long"
-        case "VARCHAR"                         => "String"
-        case "BOOLEAN" | "BIT"                 => "Boolean"
-        case "DATE" | "TIMESTAMP" | "DATETIME" => "java.time.ZonedDateTime"
-        case "DECIMAL"                         => "BigDecimal"
-        case "ENUM"                            => "String"
-      },
-      tableNameFilter in generator := { tableName: String =>
-        (tableName.toUpperCase != "SCHEMA_VERSION") && (tableName
-          .toUpperCase() != "FLYWAY_SCHEMA_HISTORY") && !tableName.toUpperCase
-          .endsWith("ID_SEQUENCE_NUMBER")
-      },
-      outputDirectoryMapper in generator := {
-        case s if s.endsWith("Spec") => (sourceDirectory in Test).value
-        case s =>
-          new java.io.File((scalaSource in Compile).value, "/spetstore/interface/dao")
-      },
-      // モデル名に対してどのテンプレートを利用するか指定できます。
-      templateNameMapper in generator := {
-        case className if className.endsWith("Spec") => "template_spec.ftl"
-        case _                                       => "template.ftl"
-      },
-      generateAll in generator := Def
-        .taskDyn {
-          val ga = (generateAll in generator).value
-          Def
-            .task {
-              (wixMySQLStop in flyway).value
-            }
-            .map(_ => ga)
-        }
-        .dependsOn(flywayMigrate in flyway)
-        .value,
-      compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
-      libraryDependencies ++= Seq(
-        j5ik2o.scalaDDDBaseSlick,
-        javax.rsApi,
-        github.swaggerAkkaHttp,
-        megard.akkaHttpCors,
-        akka.akkaHttp,
-        akka.akkaStream,
-        heikoseeberger.akkaHttpCirce,
-        mysql.mysqlConnectorJava,
-        slick.slick,
-        slick.slickHikaricp,
-        monix.monix
-      ),
-      parallelExecution in Test := false
+    name := "spetstore-interface",
+    // JDBCのドライバークラス名を指定します(必須)
+    driverClassName in generator := dbDriver,
+    // JDBCの接続URLを指定します(必須)
+    jdbcUrl in generator := dbUrl,
+    // JDBCの接続ユーザ名を指定します(必須)
+    jdbcUser in generator := dbUser,
+    // JDBCの接続ユーザのパスワードを指定します(必須)
+    jdbcPassword in generator := dbPassword,
+    // カラム型名をどのクラスにマッピングするかを決める関数を記述します(必須)
+    propertyTypeNameMapper in generator := {
+      case "INTEGER" | "INT" | "TINYINT"     => "Int"
+      case "BIGINT"                          => "Long"
+      case "VARCHAR"                         => "String"
+      case "BOOLEAN" | "BIT"                 => "Boolean"
+      case "DATE" | "TIMESTAMP" | "DATETIME" => "java.time.ZonedDateTime"
+      case "DECIMAL"                         => "BigDecimal"
+      case "ENUM"                            => "String"
+    },
+    tableNameFilter in generator := { tableName: String =>
+      (tableName.toUpperCase != "SCHEMA_VERSION") && (tableName
+        .toUpperCase() != "FLYWAY_SCHEMA_HISTORY") && !tableName.toUpperCase
+        .endsWith("ID_SEQUENCE_NUMBER")
+    },
+    outputDirectoryMapper in generator := {
+      case s if s.endsWith("Spec") => (sourceDirectory in Test).value
+      case s =>
+        new java.io.File((scalaSource in Compile).value, "/spetstore/interface/dao")
+    },
+    // モデル名に対してどのテンプレートを利用するか指定できます。
+    templateNameMapper in generator := {
+      case className if className.endsWith("Spec") => "template_spec.ftl"
+      case _                                       => "template.ftl"
+    },
+    generateAll in generator := Def
+      .taskDyn {
+        val ga = (generateAll in generator).value
+        Def
+          .task {
+            (wixMySQLStop in flyway).value
+          }
+          .map(_ => ga)
+      }
+      .dependsOn(flywayMigrate in flyway)
+      .value,
+    compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
+    libraryDependencies ++= Seq(
+      j5ik2o.scalaDDDBaseSlick,
+      javax.rsApi,
+      github.swaggerAkkaHttp,
+      megard.akkaHttpCors,
+      akka.akkaHttp,
+      akka.akkaStream,
+      heikoseeberger.akkaHttpCirce,
+      mysql.mysqlConnectorJava,
+      slick.slick,
+      slick.slickHikaricp,
+      monix.monix,
+      sisioh.baseunitsScala
+    ),
+    parallelExecution in Test := false
   )
   .dependsOn(domain, flyway)
   .disablePlugins(WixMySQLPlugin)
@@ -166,11 +169,11 @@ lazy val localMySQL = (project in file("local-mysql"))
     flywayLocations := Seq(
       s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/rdb-migration/",
       s"filesystem:${(baseDirectory in flyway).value}/src/test/resources/rdb-migration/test",
-      s"filesystem:${baseDirectory.value}/src/main/resources/dummy-migration",
+      s"filesystem:${baseDirectory.value}/src/main/resources/dummy-migration"
     ),
     flywayPlaceholderReplacement := true,
     flywayPlaceholders := Map(
-      "engineName" -> "InnoDB",
+      "engineName"                 -> "InnoDB",
       "idSequenceNumberEngineName" -> "MyISAM"
     ),
     run := (flywayMigrate dependsOn wixMySQLStart).value
@@ -178,6 +181,3 @@ lazy val localMySQL = (project in file("local-mysql"))
   .enablePlugins(FlywayPlugin)
 
 lazy val root = (project in file(".")).settings(commonSettings).aggregate(boot)
-
-
-

@@ -9,10 +9,10 @@ sealed abstract class StatusType(override val entryName: String) extends EnumEnt
 object StatusType extends Enum[StatusType] with CirceEnum[StatusType] {
   override def values: immutable.IndexedSeq[StatusType] = findValues
 
-  case object Enabled extends StatusType("enabled")
+  case object Active extends StatusType("active")
 
   case object Suspended extends StatusType("suspended")
 
-  case object Disabled extends StatusType("disabled")
+  case object Deleted extends StatusType("deleted")
 
 }

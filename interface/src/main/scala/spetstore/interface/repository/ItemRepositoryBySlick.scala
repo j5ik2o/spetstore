@@ -6,8 +6,9 @@ import io.circe.parser._
 import io.circe.syntax._
 import monix.eval.Task
 import org.sisioh.baseunits.scala.money.Money
+import org.sisioh.baseunits.scala.time.TimePoint
 import slick.jdbc.JdbcProfile
-import spetstore.domain.model.basic.StatusType
+import spetstore.domain.model.basic.{Price, StatusType}
 import spetstore.domain.model.item._
 import spetstore.interface.dao.ItemComponent
 
@@ -39,8 +40,8 @@ class ItemRepositoryBySlick(val profile: JdbcProfile, val db: JdbcProfile#Backen
           description = record.description.map(ItemDescription),
           categories = Categories(categoryValues),
           price = Price(Money.yens(BigDecimal(record.price))),
-          createdAt = record.createdAt,
-          updatedAt = record.updatedAt
+          createdAt = TimePoint.from(record.createdAt.toInstant),
+          updatedAt = record.updatedAt.map(v => TimePoint.from(v))
         )
       )
     } yield result
@@ -55,8 +56,8 @@ class ItemRepositoryBySlick(val profile: JdbcProfile, val db: JdbcProfile#Backen
         description = aggregate.description.map(_.breachEncapsulationOfValue),
         categories = aggregate.categories.breachEncapsulationOfValues.asJson.noSpaces,
         price = aggregate.price.breachEncapsulationOfValue.amount.toLong,
-        createdAt = aggregate.createdAt,
-        updatedAt = aggregate.updatedAt
+        createdAt = aggregate.createdAt.asJavaZonedDateTime(),
+        updatedAt = aggregate.updatedAt.map(_.asJavaZonedDateTime())
       )
     )
   }

@@ -20,7 +20,7 @@ object Dependencies {
     val circeParser = "io.circe" %% "circe-parser" % circeVersion
   }
   object akka {
-    val akkaHttpVersion = "10.1.3"
+    val akkaHttpVersion = "10.1.5"
     val akkaVersion = "2.5.12"
     val akkaHttp   = "com.typesafe.akka" %% "akka-http"   % akkaHttpVersion
     val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
