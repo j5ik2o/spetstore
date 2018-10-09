@@ -21,6 +21,7 @@ lazy val commonSettings = Seq(
     circe.circeParser,
     sisioh.baseunitsScala,
     akka.akkaStream,
+    akka.akkaSlf4j,
     monix.monix
   ),
   scalafmtOnCompile in ThisBuild := true,
@@ -78,7 +79,8 @@ lazy val `use-case` = (project in file("use-case"))
   .settings(commonSettings).settings(
     name := "spetstore-use-case",
     libraryDependencies ++= Seq(
-      )
+      j5ik2o.scalaDDDBaseRedis
+    )
   ).dependsOn(domain)
 
 lazy val interface = (project in file("interface"))

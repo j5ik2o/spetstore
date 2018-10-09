@@ -1,0 +1,35 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                [%level] [%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ}] [%X{sourceThread}] [%logger{36}] - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <appender name="AKKA" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                [%level] [%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ}] [%X{sourceThread}] [%logger{36}] [%X{akkaSource}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <appender name="ASYNCAKKA" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="AKKA" />
+    </appender>
+
+    <logger name="spetstore" level="DEBUG">
+
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNCSTDOUT" />
+    </root>
+
+</configuration>

@@ -26,7 +26,7 @@ trait ItemController extends BaseController {
 
   private val itemUseCase = bind[ItemUseCase]
 
-  def route: Route = handleRejections(rejectionHandler) {
+  override def route: Route = handleRejections(rejectionHandler) {
     handleExceptions(exceptionHandler) {
       create ~ resolveById
     }
@@ -49,7 +49,7 @@ trait ItemController extends BaseController {
       new ApiResponse(
         responseCode = "200",
         description = "Get response",
-        content = Array(new Content(schema = new Schema(implementation = classOf[ResolveUserAccountResponseJson])))
+        content = Array(new Content(schema = new Schema(implementation = classOf[ResolveItemResponseJson])))
       ),
       new ApiResponse(responseCode = "400", description = "Bad request"),
       new ApiResponse(responseCode = "500", description = "Internal server error")
@@ -110,7 +110,7 @@ trait ItemController extends BaseController {
               .single(request).map { request =>
                 CreateItemRequest(request.name, request.description, request.categories, request.price)
               }.via(itemUseCase.create).map { response =>
-                CreateItemResponseJson(Right(CreateItemResponseBody(hashids.encode(response.id))))
+                CreateItemResponseJson(Right(CreateItemResponseBody(hashids.encode(response.id.value))))
               }.runWith(Sink.head)
             onSuccess(future) { result =>
               complete(result)

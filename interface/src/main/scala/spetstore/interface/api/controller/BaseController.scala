@@ -4,8 +4,10 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{ Directive1, ExceptionHandler, RejectionHandler, Route }
 import com.github.j5ik2o.dddbase.AggregateNotFoundException
+import com.github.j5ik2o.reactive.redis.RedisConnectionPool
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
+import monix.eval.Task
 import monix.execution.Scheduler
 import org.hashids.Hashids
 import spetstore.interface.api.model.{ ErrorResponseBody, ResolveUserAccountResponseJson }
@@ -17,6 +19,8 @@ trait BaseController {
   def route: Route
 
   protected val hashids = bind[Hashids]
+
+  protected val connectionPool = bind[RedisConnectionPool[Task]]
 
   protected def exceptionHandler: ExceptionHandler =
     ExceptionHandler({

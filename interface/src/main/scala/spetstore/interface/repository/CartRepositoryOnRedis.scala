@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import cats.data.ReaderT
 import com.github.j5ik2o.dddbase.redis.AggregateIOBaseFeature.RIO
 import com.github.j5ik2o.dddbase.redis._
-import com.github.j5ik2o.reactive.redis.RedisConnection
 import monix.eval.Task
 import org.sisioh.baseunits.scala.time.TimePoint
 import spetstore.domain.model.UserAccountId
@@ -12,14 +11,10 @@ import spetstore.domain.model.basic.{ Quantity, StatusType }
 import spetstore.domain.model.item.ItemId
 import spetstore.domain.model.purchase._
 import spetstore.interface.dao.CartComponent
-import spetstore.interface.repository.CartRepositoryOnRedis.OnRedis
 import spetstore.useCase.port.repository.CartRepository
+import spetstore.useCase.port.repository.CartRepository.OnRedis
 
 import scala.concurrent.duration.Duration
-
-object CartRepositoryOnRedis {
-  type OnRedis[A] = ReaderT[Task, RedisConnection, A]
-}
 
 class CartRepositoryOnRedis(val expireDuration: Duration)(implicit system: ActorSystem)
     extends CartRepository[OnRedis]

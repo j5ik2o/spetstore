@@ -34,7 +34,7 @@ trait ItemUseCase {
             None
           )
         )
-      } yield CreateItemResponse(id.value)).runAsync
+      } yield CreateItemResponse(id)).runAsync
     }
 
   def resolveById(id: ItemId)(implicit scheduler: Scheduler): Source[Item, NotUsed] =

@@ -33,7 +33,7 @@ trait UserAccountUseCase {
             None
           )
         )
-      } yield CreateUserAccountResponse(id.value)).runAsync
+      } yield CreateUserAccountResponse(id)).runAsync
     }
 
   def resolveById(id: UserAccountId)(implicit scheduler: Scheduler): Source[UserAccount, NotUsed] =

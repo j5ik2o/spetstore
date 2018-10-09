@@ -1,3 +1,5 @@
 package spetstore.useCase.model
 
-case class CreateItemResponse(id: Long)
+import spetstore.domain.model.item.ItemId
+
+case class CreateItemResponse(id: ItemId)

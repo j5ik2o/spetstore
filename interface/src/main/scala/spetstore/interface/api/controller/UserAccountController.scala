@@ -110,7 +110,7 @@ trait UserAccountController extends BaseController {
               .single(request).map { request =>
                 CreateUserAccountRequest(request.emailAddress, request.password, request.firstName, request.lastName)
               }.via(userAccountUseCase.create).map { response =>
-                CreateUserAccountResponseJson(Right(CreateUserAccountResponseBody(hashids.encode(response.id))))
+                CreateUserAccountResponseJson(Right(CreateUserAccountResponseBody(hashids.encode(response.id.value))))
               }.runWith(Sink.head)
             onSuccess(future) { result =>
               complete(result)
