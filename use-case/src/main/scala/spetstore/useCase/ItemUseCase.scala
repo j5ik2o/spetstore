@@ -22,7 +22,7 @@ trait ItemUseCase {
     Flow[CreateItemRequest].mapAsync(1) { item =>
       (for {
         id <- itemIdGenerator.generateId()
-        result <- itemRepository.store(
+        _ <- itemRepository.store(
           Item(
             id,
             StatusType.Active,

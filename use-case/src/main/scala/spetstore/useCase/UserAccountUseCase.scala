@@ -21,7 +21,7 @@ trait UserAccountUseCase {
     Flow[CreateUserAccountRequest].mapAsync(1) { userAccount =>
       (for {
         id <- userIdGenerator.generateId()
-        result <- userRepository.store(
+        _ <- userRepository.store(
           UserAccount(
             id,
             StatusType.Active,
