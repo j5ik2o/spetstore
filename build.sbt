@@ -132,6 +132,7 @@ lazy val interface = (project in file("interface"))
     compile in Compile := ((compile in Compile) dependsOn (generateAll in generator)).value,
     libraryDependencies ++= Seq(
       j5ik2o.scalaDDDBaseSlick,
+      j5ik2o.scalaDDDBaseRedis,
       javax.rsApi,
       github.swaggerAkkaHttp,
       megard.akkaHttpCors,

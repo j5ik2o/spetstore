@@ -5,7 +5,7 @@ import akka.http.scaladsl.settings.ServerSettings
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import spetstore.interface.api.ApiServer
-import spetstore.interface.api.controller.{ ItemController, UserAccountController }
+import spetstore.interface.api.controller.{ CartController, ItemController, UserAccountController }
 import wvlet.airframe._
 
 object Boot {
@@ -27,10 +27,12 @@ object Boot {
           .bind[JdbcProfile].toInstance(dbConfig.profile)
           .bind[JdbcProfile#Backend#Database].toInstance(dbConfig.db)
           .add(
-            interface.createInterfaceDesign(config.host,
-                                            config.port,
-                                            salt,
-                                            Set(classOf[UserAccountController], classOf[ItemController]))
+            interface.createInterfaceDesign(
+              config.host,
+              config.port,
+              salt,
+              Set(classOf[UserAccountController], classOf[ItemController], classOf[CartController])
+            )
           )
 
         design.withSession { session =>
