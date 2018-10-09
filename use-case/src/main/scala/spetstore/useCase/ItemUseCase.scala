@@ -18,7 +18,7 @@ trait ItemUseCase {
   private val itemIdGenerator = bind[IdGenerator[ItemId]]
   private val itemRepository  = bind[ItemRepository[Task]]
 
-  def store(implicit scheduler: Scheduler): Flow[CreateItemRequest, CreateItemResponse, NotUsed] =
+  def create(implicit scheduler: Scheduler): Flow[CreateItemRequest, CreateItemResponse, NotUsed] =
     Flow[CreateItemRequest].mapAsync(1) { item =>
       (for {
         id <- itemIdGenerator.generateId()

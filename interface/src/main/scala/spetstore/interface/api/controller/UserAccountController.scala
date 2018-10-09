@@ -109,7 +109,7 @@ trait UserAccountController extends BaseController {
             val future: Future[CreateUserAccountResponseJson] = Source
               .single(request).map { request =>
                 CreateUserAccountRequest(request.emailAddress, request.password, request.firstName, request.lastName)
-              }.via(userAccountUseCase.store).map { response =>
+              }.via(userAccountUseCase.create).map { response =>
                 CreateUserAccountResponseJson(Right(CreateUserAccountResponseBody(hashids.encode(response.id))))
               }.runWith(Sink.head)
             onSuccess(future) { result =>

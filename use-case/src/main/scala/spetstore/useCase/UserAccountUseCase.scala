@@ -17,7 +17,7 @@ trait UserAccountUseCase {
   private val userIdGenerator = bind[IdGenerator[UserAccountId]]
   private val userRepository  = bind[UserAccountRepository[Task]]
 
-  def store(implicit scheduler: Scheduler): Flow[CreateUserAccountRequest, CreateUserAccountResponse, NotUsed] =
+  def create(implicit scheduler: Scheduler): Flow[CreateUserAccountRequest, CreateUserAccountResponse, NotUsed] =
     Flow[CreateUserAccountRequest].mapAsync(1) { userAccount =>
       (for {
         id <- userIdGenerator.generateId()

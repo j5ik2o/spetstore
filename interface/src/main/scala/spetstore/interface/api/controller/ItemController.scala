@@ -109,7 +109,7 @@ trait ItemController extends BaseController {
             val future: Future[CreateItemResponseJson] = Source
               .single(request).map { request =>
                 CreateItemRequest(request.name, request.description, request.categories, request.price)
-              }.via(itemUseCase.store).map { response =>
+              }.via(itemUseCase.create).map { response =>
                 CreateItemResponseJson(Right(CreateItemResponseBody(hashids.encode(response.id))))
               }.runWith(Sink.head)
             onSuccess(future) { result =>
