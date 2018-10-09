@@ -2,10 +2,10 @@ package spetstore
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.settings.ServerSettings
-import spetstore.interface.api.ApiServer
-import spetstore.interface.api.controller.{ ItemController, UserAccountController }
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
+import spetstore.interface.api.ApiServer
+import spetstore.interface.api.controller.{ ItemController, UserAccountController }
 import wvlet.airframe._
 
 object Boot {

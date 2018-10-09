@@ -1,7 +1,7 @@
 package spetstore.domain.model
 
-import org.sisioh.baseunits.scala.time.TimePoint
 import com.github.j5ik2o.dddbase.{ Aggregate, AggregateLongId }
+import org.sisioh.baseunits.scala.time.TimePoint
 import spetstore.domain.model.basic.StatusType
 
 import scala.reflect._

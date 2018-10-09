@@ -2,9 +2,9 @@ package spetstore.interface.api
 
 import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
 import akka.http.scaladsl.server.{ Directives, Route, StandardRoute }
-import wvlet.airframe._
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import spetstore.interface.api.controller.{ ItemController, UserAccountController }
+import wvlet.airframe._
 
 trait Routes extends Directives {
 

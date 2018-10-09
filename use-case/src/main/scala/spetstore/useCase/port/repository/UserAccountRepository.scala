@@ -1,7 +1,7 @@
 package spetstore.useCase.port.repository
 
-import spetstore.domain.model.{ UserAccount, UserAccountId }
 import com.github.j5ik2o.dddbase._
+import spetstore.domain.model.{ UserAccount, UserAccountId }
 
 trait UserAccountRepository[M[_]]
     extends AggregateSingleReader[M]

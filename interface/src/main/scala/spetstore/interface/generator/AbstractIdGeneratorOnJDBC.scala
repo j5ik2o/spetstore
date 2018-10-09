@@ -1,8 +1,8 @@
 package spetstore.interface.generator
 
 import monix.eval.Task
-import spetstore.useCase.port.generator.IdGenerator
 import slick.jdbc.JdbcProfile
+import spetstore.useCase.port.generator.IdGenerator
 
 abstract class AbstractIdGeneratorOnJDBC[ID](val profile: JdbcProfile,
                                              val db: JdbcProfile#Backend#Database,

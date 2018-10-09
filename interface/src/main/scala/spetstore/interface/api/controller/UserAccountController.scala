@@ -11,10 +11,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.{ Operation, Parameter }
 import javax.ws.rs._
-import org.hashids.Hashids
 import spetstore.domain.model.UserAccountId
 import spetstore.interface.api.model.{ ResolveUserAccountResponseJson, _ }
-import spetstore.interface.api.rejection.MalformedPathRejection
 import spetstore.useCase.UserAccountUseCase
 import spetstore.useCase.model.CreateUserAccountRequest
 import wvlet.airframe._
@@ -28,25 +26,11 @@ trait UserAccountController extends BaseController {
 
   private val userAccountUseCase = bind[UserAccountUseCase]
 
-  private val hashids = bind[Hashids]
-
-  def route: Route = handleRejections(rejectionHandler) {
+  override def route: Route = handleRejections(rejectionHandler) {
     handleExceptions(exceptionHandler) {
       create ~ resolveById
     }
   }
-
-  private def extractUserAccountId(id: String): Directive1[UserAccountId] =
-    try {
-      val result = hashids.decode(id)
-      if (result.isEmpty)
-        reject(MalformedPathRejection("id", "The Path is malformed"))
-      else
-        provide(UserAccountId(result(0)))
-    } catch {
-      case ex: IllegalArgumentException =>
-        reject(MalformedPathRejection("id", "The Path is malformed", Some(ex)))
-    }
 
   @GET
   @Path("{id}")
@@ -75,7 +59,7 @@ trait UserAccountController extends BaseController {
     get {
       extractMaterializer { implicit mat =>
         extractScheduler { implicit scheduler =>
-          extractUserAccountId(id) { userAccountId =>
+          extractAggregateId(UserAccountId)(id) { userAccountId =>
             val future = userAccountUseCase
               .resolveById(userAccountId).map { response =>
                 ResolveUserAccountResponseJson(
