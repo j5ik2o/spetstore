@@ -2,7 +2,7 @@ package spetstore.domain.model.purchase
 
 import cats.Monoid
 import cats.implicits._
-import spetstore.domain.model.basic.{Price, Quantity}
+import spetstore.domain.model.basic.{ Price, Quantity }
 import spetstore.domain.model.item.ItemId
 
 case class CartItems(breachEncapsulationOfValues: Seq[CartItem]) {

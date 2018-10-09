@@ -1,11 +1,11 @@
 package spetstore.domain.model.purchase
 
 import com.github.j5ik2o.dddbase.Aggregate
-import org.sisioh.baseunits.scala.time.{CalendarDate, TimePoint}
-import spetstore.domain.model.basic.{Contact, PostalAddress, StatusType}
-import spetstore.domain.model.customer.{CustomerId, CustomerName}
+import org.sisioh.baseunits.scala.time.{ CalendarDate, TimePoint }
+import spetstore.domain.model.basic.{ Contact, PostalAddress, StatusType }
+import spetstore.domain.model.customer.{ CustomerId, CustomerName }
 
-import scala.reflect.{ClassTag, classTag}
+import scala.reflect.{ classTag, ClassTag }
 
 case class Order(id: OrderId,
                  status: StatusType,

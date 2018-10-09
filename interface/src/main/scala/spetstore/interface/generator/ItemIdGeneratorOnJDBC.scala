@@ -1,4 +1,4 @@
-package spetstore.interface.generator.jdbc
+package spetstore.interface.generator
 
 import monix.eval.Task
 import slick.jdbc.JdbcProfile

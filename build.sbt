@@ -1,9 +1,10 @@
 import Dependencies._
+import Utils._
 import scala.concurrent.duration._
 
-val commonSettings = Seq(
-  scalaVersion := "2.12.6",
-  organization := "com.github.j5ik2o.spetstore",
+lazy val commonSettings = Seq(
+  scalaVersion := "2.12.7",
+  organization := "spetstore",
   version := "1.0.0-SNAPSHOT",
   libraryDependencies ++= Seq(
     beachape.enumeratum,
@@ -17,10 +18,13 @@ val commonSettings = Seq(
     circe.circeCore,
     circe.circeGeneric,
     circe.circeParser,
-    sisioh.baseunitsScala
+    sisioh.baseunitsScala,
+    akka.akkaStream,
+    monix.monix
   ),
   scalafmtOnCompile in ThisBuild := true,
-  scalafmtTestOnCompile in ThisBuild := true
+  scalafmtTestOnCompile in ThisBuild := true,
+  parallelExecution in Test := false
 )
 
 lazy val infrastructure = (project in file("infrastructure"))
@@ -36,24 +40,14 @@ lazy val domain = (project in file("domain"))
     )
   ).dependsOn(infrastructure)
 
-val boot = (project in file("boot"))
-  .settings(commonSettings)
-  .settings(
-    name := "spetstore-boot",
-    libraryDependencies ++= Seq(
-      "com.github.scopt" %% "scopt"          % "3.7.0",
-      "ch.qos.logback"   % "logback-classic" % "1.2.3"
-    )
-  ).dependsOn(interface)
-
 val dbDriver    = "com.mysql.jdbc.Driver"
 val dbName      = "spetstore"
 val dbUser      = "spetstore"
 val dbPassword  = "passwd"
-val dbPort: Int = Utils.RandomPortSupport.temporaryServerPort()
+val dbPort: Int = RandomPortSupport.temporaryServerPort()
 val dbUrl       = s"jdbc:mysql://localhost:$dbPort/$dbName?useSSL=false"
 
-lazy val flyway = (project in file("flyway"))
+lazy val flyway = (project in file("tools/flyway"))
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
@@ -78,6 +72,13 @@ lazy val flyway = (project in file("flyway"))
     flywayMigrate := (flywayMigrate dependsOn wixMySQLStart).value
   )
   .enablePlugins(FlywayPlugin)
+
+lazy val `use-case` = (project in file("use-case"))
+  .settings(commonSettings).settings(
+    name := "spetstore-use-case",
+    libraryDependencies ++= Seq(
+      )
+  ).dependsOn(domain)
 
 lazy val interface = (project in file("interface"))
   .settings(commonSettings)
@@ -134,20 +135,17 @@ lazy val interface = (project in file("interface"))
       github.swaggerAkkaHttp,
       megard.akkaHttpCors,
       akka.akkaHttp,
-      akka.akkaStream,
       heikoseeberger.akkaHttpCirce,
       mysql.mysqlConnectorJava,
       slick.slick,
       slick.slickHikaricp,
-      monix.monix,
       sisioh.baseunitsScala
-    ),
-    parallelExecution in Test := false
+    )
   )
-  .dependsOn(domain, flyway)
+  .dependsOn(`use-case`, flyway)
   .disablePlugins(WixMySQLPlugin)
 
-lazy val localMySQL = (project in file("local-mysql"))
+lazy val localMySQL = (project in file("tools/local-mysql"))
   .settings(commonSettings)
   .settings(
     name := "spetstore-local-mysql",
@@ -180,4 +178,18 @@ lazy val localMySQL = (project in file("local-mysql"))
   )
   .enablePlugins(FlywayPlugin)
 
-lazy val root = (project in file(".")).settings(commonSettings).aggregate(boot)
+val boot = (project in file("boot"))
+  .settings(commonSettings)
+  .settings(
+    name := "spetstore-boot",
+    libraryDependencies ++= Seq(
+      "com.github.scopt" %% "scopt"          % "3.7.0",
+      "ch.qos.logback"   % "logback-classic" % "1.2.3"
+    )
+  ).dependsOn(interface)
+
+lazy val root = (project in file("."))
+  .settings(commonSettings).settings(
+    name := "spetstore",
+    version := "1.0.0-SNAPSHOT"
+  ).aggregate(boot)

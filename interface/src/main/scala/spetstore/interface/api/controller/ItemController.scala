@@ -1,12 +1,11 @@
 package spetstore.interface.api.controller
 
-import java.time.ZonedDateTime
-
-import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.{Content, Schema}
+import io.swagger.v3.oas.annotations.media.{ Content, Schema }
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import javax.ws.rs._
@@ -15,11 +14,11 @@ import monix.execution.Scheduler
 import org.hashids.Hashids
 import org.sisioh.baseunits.scala.money.Money
 import org.sisioh.baseunits.scala.timeutil.Clock
-import spetstore.domain.model.basic.{Price, StatusType}
+import spetstore.domain.model.basic.{ Price, StatusType }
 import spetstore.domain.model.item._
-import spetstore.interface.api.model.{CreateItemRequest, CreateItemResponse, CreateItemResponseBody}
-import spetstore.interface.generator.jdbc.ItemIdGeneratorOnJDBC
-import spetstore.interface.repository.ItemRepository
+import spetstore.interface.api.model.{ CreateItemRequest, CreateItemResponse, CreateItemResponseBody }
+import spetstore.interface.generator.ItemIdGeneratorOnJDBC
+import spetstore.useCase.port.repository.ItemRepository
 import wvlet.airframe._
 
 import scala.concurrent.Future
@@ -27,7 +26,7 @@ import scala.concurrent.Future
 @Path("/items")
 @Consumes(Array("application/json"))
 @Produces(Array("application/json"))
-trait ItemController extends Directives {
+trait ItemController extends BaseController {
 
   private val itemRepository: ItemRepository[Task] = bind[ItemRepository[Task]]
 
@@ -35,7 +34,11 @@ trait ItemController extends Directives {
 
   private val hashids = bind[Hashids]
 
-  def route: Route = create
+  def route: Route = handleRejections(rejectionHandler) {
+    handleExceptions(exceptionHandler) {
+      create
+    }
+  }
 
   private def convertToAggregate(id: ItemId, request: CreateItemRequest): Item = Item(
     id = id,
@@ -50,8 +53,8 @@ trait ItemController extends Directives {
 
   @POST
   @Operation(
-    summary = "Create item",
-    description = "Create item",
+    summary = "Create Item",
+    description = "Create Item",
     requestBody =
       new RequestBody(content = Array(new Content(schema = new Schema(implementation = classOf[CreateItemRequest])))),
     responses = Array(

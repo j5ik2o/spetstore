@@ -1,7 +1,7 @@
 package spetstore.domain.model.purchase
 
 import cats.implicits._
-import spetstore.domain.model.basic.{Price, Quantity}
+import spetstore.domain.model.basic.{ Price, Quantity }
 import spetstore.domain.model.item.ItemId
 
 case class CartItem(id: CartItemId, no: Int, itemId: ItemId, quantity: Quantity, inStock: Boolean) {

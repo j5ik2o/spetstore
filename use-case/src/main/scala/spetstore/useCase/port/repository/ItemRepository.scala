@@ -1,4 +1,4 @@
-package spetstore.interface.repository
+package spetstore.useCase.port.repository
 
 import com.github.j5ik2o.dddbase._
 import spetstore.domain.model.item.{ Item, ItemId }

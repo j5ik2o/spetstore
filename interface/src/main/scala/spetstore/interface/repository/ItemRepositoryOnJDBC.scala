@@ -8,11 +8,12 @@ import monix.eval.Task
 import org.sisioh.baseunits.scala.money.Money
 import org.sisioh.baseunits.scala.time.TimePoint
 import slick.jdbc.JdbcProfile
-import spetstore.domain.model.basic.{Price, StatusType}
+import spetstore.domain.model.basic.{ Price, StatusType }
 import spetstore.domain.model.item._
 import spetstore.interface.dao.ItemComponent
+import spetstore.useCase.port.repository.ItemRepository
 
-class ItemRepositoryBySlick(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
+class ItemRepositoryOnJDBC(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
     extends ItemRepository[Task]
     with AggregateSingleReadFeature
     with AggregateAllReadFeature
