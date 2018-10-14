@@ -26,7 +26,11 @@ lazy val commonSettings = Seq(
   ),
   scalafmtOnCompile in ThisBuild := true,
   scalafmtTestOnCompile in ThisBuild := true,
-  parallelExecution in Test := false
+  parallelExecution in Test := false,
+  resolvers ++= Seq(
+    "Sonatype OSS Snapshot Repository" at "https://oss.sonatype.org/content/repositories/snapshots/",
+    "Sonatype OSS Release Repository" at "https://oss.sonatype.org/content/repositories/releases/"
+  )
 )
 
 lazy val infrastructure = (project in file("infrastructure"))
