@@ -46,9 +46,9 @@ object Dependencies {
   }
   object j5ik2o {
     val scalaTestPlusDb = "com.github.j5ik2o" %% "scalatestplus-db" % "1.0.5"
-    val scalaDDDBaseCore = "com.github.j5ik2o" %% "scala-ddd-base-core"  % "1.0.12"
-    val scalaDDDBaseSlick = "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.12"
-    val scalaDDDBaseRedis = "com.github.j5ik2o" %% "scala-ddd-base-redis" % "1.0.12"
+    val scalaDDDBaseCore = "com.github.j5ik2o" %% "scala-ddd-base-core"  % "1.0.13"
+    val scalaDDDBaseSlick = "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.13"
+    val scalaDDDBaseRedis = "com.github.j5ik2o" %% "scala-ddd-base-redis" % "1.0.13"
   }
   object sisioh {
     val baseunitsScala = "org.sisioh" %% "baseunits-scala" % "0.1.21"
