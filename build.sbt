@@ -149,8 +149,9 @@ lazy val interface = (project in file("interface"))
       slick.slick,
       slick.slickHikaricp,
       sisioh.baseunitsScala,
-      akka.akkaHttpTestKit % Test,
-      "ch.qos.logback"     % "logback-classic" % "1.2.3" % Test
+      akka.akkaHttpTestKit     % Test,
+      j5ik2o.reactiveRedisTest % Test,
+      "ch.qos.logback"         % "logback-classic" % "1.2.3" % Test
     )
   )
   .dependsOn(`use-case`, flyway)

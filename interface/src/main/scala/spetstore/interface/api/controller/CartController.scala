@@ -71,7 +71,7 @@ trait CartController extends BaseController {
                           userAccountId = hashids.encode(response.userAccountId.value),
                           cartItems = null,
                           createdAt = response.createdAt.millisecondsFromEpoc,
-                          updatedAt = response.updatedAt.map(_.millisecondsFromEpoc)
+                          updatedAt = response.updatedAt.millisecondsFromEpoc
                         )
                       )
                     )

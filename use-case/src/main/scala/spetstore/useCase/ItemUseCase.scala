@@ -20,6 +20,7 @@ trait ItemUseCase {
 
   def create(implicit scheduler: Scheduler): Flow[CreateItemRequest, CreateItemResponse, NotUsed] =
     Flow[CreateItemRequest].mapAsync(1) { item =>
+      val now = Clock.now
       (for {
         id <- itemIdGenerator.generateId()
         _ <- itemRepository.store(
@@ -30,8 +31,8 @@ trait ItemUseCase {
             item.description.map(ItemDescription),
             Categories(item.categories),
             Price(Money.yens(item.price)),
-            Clock.now,
-            None
+            now,
+            now
           )
         )
       } yield CreateItemResponse(id)).runToFuture

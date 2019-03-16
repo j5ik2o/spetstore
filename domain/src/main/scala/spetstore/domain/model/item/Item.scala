@@ -13,7 +13,7 @@ case class Item(id: ItemId,
                 categories: Categories,
                 price: Price,
                 createdAt: TimePoint,
-                updatedAt: Option[TimePoint])
+                updatedAt: TimePoint)
     extends Aggregate {
   override type IdType        = ItemId
   override type AggregateType = Item

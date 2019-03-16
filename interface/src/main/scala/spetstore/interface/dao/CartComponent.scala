@@ -29,7 +29,7 @@ trait CartComponent extends RedisDaoSupport {
                         userAccountId: Long,
                         cartItems: Seq[CartItemRecord],
                         createdAt: java.time.ZonedDateTime,
-                        updatedAt: Option[java.time.ZonedDateTime])
+                        updatedAt: java.time.ZonedDateTime)
       extends SoftDeletableRecord {
     override type This = CartRecord
 

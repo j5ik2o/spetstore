@@ -54,7 +54,7 @@ abstract class AbstractItemRepositoryOnJDBC(val profile: JdbcProfile, val db: Jd
           categories = Categories(categoryValues),
           price = Price(Money.yens(BigDecimal(record.price))),
           createdAt = TimePoint.from(record.createdAt.toInstant),
-          updatedAt = record.updatedAt.map(v => TimePoint.from(v))
+          updatedAt = TimePoint.from(record.createdAt.toInstant)
         )
       )
     } yield result
@@ -70,7 +70,7 @@ abstract class AbstractItemRepositoryOnJDBC(val profile: JdbcProfile, val db: Jd
         categories = aggregate.categories.breachEncapsulationOfValues.asJson.noSpaces,
         price = aggregate.price.breachEncapsulationOfValue.amount.toLong,
         createdAt = aggregate.createdAt.asJavaZonedDateTime(),
-        updatedAt = aggregate.updatedAt.map(_.asJavaZonedDateTime())
+        updatedAt = aggregate.updatedAt.asJavaZonedDateTime()
       )
     )
   }

@@ -46,7 +46,7 @@ abstract class AbstractUserAccountRepositoryOnJDBC(val profile: JdbcProfile, val
         firstName = record.firstName,
         lastName = record.lastName,
         createdAt = TimePoint.from(record.createdAt.toInstant),
-        updatedAt = record.updatedAt.map(v => TimePoint.from(v))
+        updatedAt = TimePoint.from(record.updatedAt.toInstant)
       )
     }
   }
@@ -61,7 +61,7 @@ abstract class AbstractUserAccountRepositoryOnJDBC(val profile: JdbcProfile, val
         firstName = aggregate.firstName,
         lastName = aggregate.lastName,
         createdAt = aggregate.createdAt.asJavaZonedDateTime(),
-        updatedAt = aggregate.updatedAt.map(_.asJavaZonedDateTime())
+        updatedAt = aggregate.updatedAt.asJavaZonedDateTime()
       )
     }
   }

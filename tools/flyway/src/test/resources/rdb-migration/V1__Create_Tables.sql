@@ -6,7 +6,7 @@ CREATE TABLE `user_account` (
   `last_name`       varchar(255) NOT NULL,
   `hashed_password` varchar(255) NOT NULL,
   `created_at`      datetime(6)  NOT NULL,
-  `updated_at`      datetime(6),
+  `updated_at`      datetime(6)  NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -21,10 +21,10 @@ CREATE TABLE `item` (
   `categories`  varchar(255) NOT NULL,
   `price`       bigint NOT NULL,
   `created_at`  datetime(6) NOT NULL,
-  `updated_at`  datetime(6),
+  `updated_at`  datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE `item_id_sequence_number`(id bigint unsigned NOT NULL) ENGINE=MyISAM;
 INSERT INTO `item_id_sequence_number` VALUES (100);
+

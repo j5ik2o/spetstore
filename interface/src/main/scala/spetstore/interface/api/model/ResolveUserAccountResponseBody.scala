@@ -5,4 +5,4 @@ case class ResolveUserAccountResponseBody(id: String,
                                           firstName: String,
                                           lastName: String,
                                           createdAt: Long,
-                                          updatedAt: Option[Long])
+                                          updatedAt: Long)

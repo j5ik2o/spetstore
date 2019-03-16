@@ -6,4 +6,4 @@ case class ResolveCartResponseBody(id: String,
                                    userAccountId: String,
                                    cartItems: Seq[CartItemBody],
                                    createdAt: Long,
-                                   updatedAt: Option[Long])
+                                   updatedAt: Long)

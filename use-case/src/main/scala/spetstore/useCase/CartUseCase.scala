@@ -22,6 +22,7 @@ trait CartUseCase {
   def create(implicit scheduler: Scheduler,
              conn: RedisConnection): Flow[CreateCartRequest, CreateCartResponse, NotUsed] =
     Flow[CreateCartRequest].mapAsync(1) { cart =>
+      val now = Clock.now
       (for {
         id <- Task.pure(CartId(UUID.randomUUID().toString))
         _ <- cartRepository
@@ -31,8 +32,8 @@ trait CartUseCase {
               status = StatusType.Active,
               userAccountId = cart.userAccountId,
               cartItems = CartItems.ZERO,
-              createdAt = Clock.now,
-              updatedAt = None
+              createdAt = now,
+              updatedAt = now
             )
           ).run(conn)
       } yield CreateCartResponse(id.value)).runToFuture

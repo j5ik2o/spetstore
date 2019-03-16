@@ -72,7 +72,7 @@ trait ItemController extends BaseController {
                       categories = response.categories.breachEncapsulationOfValues,
                       price = response.price.breachEncapsulationOfValue.amount.toLong,
                       createdAt = response.createdAt.millisecondsFromEpoc,
-                      updatedAt = response.updatedAt.map(_.millisecondsFromEpoc)
+                      updatedAt = response.updatedAt.millisecondsFromEpoc
                     )
                   )
                 )

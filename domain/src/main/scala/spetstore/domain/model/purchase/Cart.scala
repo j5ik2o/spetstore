@@ -14,7 +14,7 @@ case class Cart(id: CartId,
                 userAccountId: UserAccountId,
                 cartItems: CartItems,
                 createdAt: TimePoint,
-                updatedAt: Option[TimePoint])
+                updatedAt: TimePoint)
     extends Aggregate {
 
   override type IdType        = CartId

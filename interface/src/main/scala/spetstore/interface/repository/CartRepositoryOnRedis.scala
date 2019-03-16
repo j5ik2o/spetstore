@@ -47,7 +47,7 @@ class CartRepositoryOnRedis(val expireDuration: Duration)(implicit system: Actor
             )
           }),
           createdAt = TimePoint.from(record.createdAt.toInstant),
-          updatedAt = record.updatedAt.map(TimePoint.from)
+          updatedAt = TimePoint.from(record.createdAt.toInstant)
         )
       )
     }
@@ -71,7 +71,7 @@ class CartRepositoryOnRedis(val expireDuration: Duration)(implicit system: Actor
             )
           },
           createdAt = aggregate.createdAt.asJavaZonedDateTime(),
-          updatedAt = aggregate.updatedAt.map(_.asJavaZonedDateTime())
+          updatedAt = aggregate.updatedAt.asJavaZonedDateTime()
         )
       )
     }

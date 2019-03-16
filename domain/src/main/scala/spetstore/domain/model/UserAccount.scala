@@ -19,7 +19,7 @@ case class UserAccount(id: UserAccountId,
                        firstName: String,
                        lastName: String,
                        createdAt: TimePoint,
-                       updatedAt: Option[TimePoint])
+                       updatedAt: TimePoint)
     extends Aggregate {
   override type AggregateType = UserAccount
   override type IdType        = UserAccountId

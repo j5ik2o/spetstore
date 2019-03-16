@@ -70,7 +70,7 @@ trait UserAccountController extends BaseController {
                       firstName = response.firstName,
                       lastName = response.lastName,
                       createdAt = response.createdAt.millisecondsFromEpoc,
-                      updatedAt = response.updatedAt.map(_.millisecondsFromEpoc)
+                      updatedAt = response.updatedAt.millisecondsFromEpoc
                     )
                   )
                 )

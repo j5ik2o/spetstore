@@ -19,6 +19,7 @@ trait UserAccountUseCase {
 
   def create(implicit scheduler: Scheduler): Flow[CreateUserAccountRequest, CreateUserAccountResponse, NotUsed] =
     Flow[CreateUserAccountRequest].mapAsync(1) { userAccount =>
+      val now = Clock.now
       (for {
         id <- userIdGenerator.generateId()
         _ <- userRepository.store(
@@ -29,8 +30,8 @@ trait UserAccountUseCase {
             HashedPassword(userAccount.password),
             userAccount.firstName,
             userAccount.lastName,
-            Clock.now,
-            None
+            now,
+            now
           )
         )
       } yield CreateUserAccountResponse(id)).runToFuture

@@ -6,4 +6,4 @@ case class ResolveItemResponseBody(id: String,
                                    categories: Set[String],
                                    price: Long,
                                    createdAt: Long,
-                                   updatedAt: Option[Long])
+                                   updatedAt: Long)
