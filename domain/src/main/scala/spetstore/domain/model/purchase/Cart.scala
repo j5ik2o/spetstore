@@ -4,14 +4,14 @@ import com.github.j5ik2o.dddbase.Aggregate
 import org.sisioh.baseunits.scala.time.TimePoint
 import org.sisioh.baseunits.scala.timeutil.Clock
 import spetstore.domain.model.basic.{ Price, Quantity, StatusType }
-import spetstore.domain.model.customer.{ Customer, CustomerId }
 import spetstore.domain.model.item.ItemId
+import spetstore.domain.model.{ UserAccount, UserAccountId }
 
 import scala.reflect.{ classTag, ClassTag }
 
 case class Cart(id: CartId,
                 status: StatusType,
-                customerId: CustomerId,
+                userAccountId: UserAccountId,
                 cartItems: CartItems,
                 createdAt: TimePoint,
                 updatedAt: Option[TimePoint])
@@ -41,16 +41,16 @@ case class Cart(id: CartId,
   def updateQuantityByItemId(itemId: ItemId, quantity: Quantity): Cart =
     copy(cartItems = cartItems.updateQuantityByItemId(itemId, quantity))
 
-  def cleanUp(orderId: OrderId, customerResolver: CustomerId => Customer): Order = {
-    val customer = customerResolver(customerId)
+  def cleanUp(orderId: OrderId, userAccountResolver: UserAccountId => UserAccount): Order = {
+    val customer = userAccountResolver(userAccountId)
     Order(
       id = orderId,
       status,
       Clock.now.asCalendarDate(),
-      customerId,
-      customer.name,
-      customer.postalAddress,
-      customer.contact,
+      userAccountId,
+      null,
+      null,
+      null,
       Clock.now,
       None
     )

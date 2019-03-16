@@ -56,6 +56,8 @@ case class CartItems(breachEncapsulationOfValues: Seq[CartItem]) {
 
 object CartItems {
 
+  final val ZERO = CartItems(Seq.empty)
+
   implicit val monoid = new Monoid[CartItems] {
     override def empty: CartItems = CartItems(Seq.empty)
 
