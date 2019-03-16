@@ -28,6 +28,7 @@ trait UserAccountComponent extends SlickDaoSupport {
     def hashedPassword: Rep[String]                     = column[String]("hashed_password")
     def createdAt: Rep[java.time.ZonedDateTime]         = column[java.time.ZonedDateTime]("created_at")
     def updatedAt: Rep[Option[java.time.ZonedDateTime]] = column[Option[java.time.ZonedDateTime]]("updated_at")
+    def pk                                              = primaryKey("pk", (id))
     override def * =
       (id, status, emailAddress, firstName, lastName, hashedPassword, createdAt, updatedAt) <> (UserAccountRecord.tupled, UserAccountRecord.unapply)
   }

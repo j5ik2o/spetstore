@@ -148,7 +148,9 @@ lazy val interface = (project in file("interface"))
       mysql.mysqlConnectorJava,
       slick.slick,
       slick.slickHikaricp,
-      sisioh.baseunitsScala
+      sisioh.baseunitsScala,
+      akka.akkaHttpTestKit % Test,
+      "ch.qos.logback"     % "logback-classic" % "1.2.3" % Test
     )
   )
   .dependsOn(`use-case`, flyway)
@@ -201,4 +203,4 @@ lazy val root = (project in file("."))
   .settings(commonSettings).settings(
     name := "spetstore",
     version := "1.0.0-SNAPSHOT"
-  ).aggregate(boot)
+  ).aggregate(boot, interface)

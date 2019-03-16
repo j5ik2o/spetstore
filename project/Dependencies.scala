@@ -23,6 +23,9 @@ object Dependencies {
     val akkaHttpVersion = "10.1.5"
     val akkaVersion = "2.5.12"
     val akkaHttp   = "com.typesafe.akka" %% "akka-http"   % akkaHttpVersion
+    val akkaHttpTestKit   = "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion
+    val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+    val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
     val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaVersion
     val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
 

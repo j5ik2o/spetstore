@@ -26,6 +26,7 @@ trait ItemComponent extends SlickDaoSupport {
     def price: Rep[Long]                                = column[Long]("price")
     def createdAt: Rep[java.time.ZonedDateTime]         = column[java.time.ZonedDateTime]("created_at")
     def updatedAt: Rep[Option[java.time.ZonedDateTime]] = column[Option[java.time.ZonedDateTime]]("updated_at")
+    def pk                                              = primaryKey("pk", (id))
     override def * =
       (id, status, name, description, categories, price, createdAt, updatedAt) <> (ItemRecord.tupled, ItemRecord.unapply)
   }
