@@ -37,7 +37,9 @@ trait CartComponent extends RedisDaoSupport {
       copy(status = value)
   }
 
-  case class CartDao()(implicit val system: ActorSystem) extends Dao[CartRecord] with DaoSoftDeletable[CartRecord] {
+  case class CartDao()(implicit val system: ActorSystem)
+      extends Dao[ReaderT[Task, RedisConnection, ?], CartRecord]
+      with DaoSoftDeletable[ReaderT[Task, RedisConnection, ?], CartRecord] {
     val DELETED = "deleted"
 
     private def internalSet(record: CartRecord, expire: Duration): ReaderT[Task, RedisConnection, Result[Unit]] = {

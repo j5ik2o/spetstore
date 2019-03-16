@@ -30,7 +30,8 @@ lazy val commonSettings = Seq(
   resolvers ++= Seq(
     "Sonatype OSS Snapshot Repository" at "https://oss.sonatype.org/content/repositories/snapshots/",
     "Sonatype OSS Release Repository" at "https://oss.sonatype.org/content/repositories/releases/"
-  )
+  ),
+  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.9" cross CrossVersion.binary)
 )
 
 lazy val infrastructure = (project in file("infrastructure"))

@@ -1,6 +1,5 @@
 package spetstore.interface.repository
 
-import com.github.j5ik2o.dddbase.slick.AggregateIOBaseFeature.RIO
 import com.github.j5ik2o.dddbase.slick._
 import monix.eval.Task
 import org.sisioh.baseunits.scala.time.TimePoint
@@ -10,21 +9,34 @@ import spetstore.domain.model.basic.StatusType
 import spetstore.interface.dao.UserAccountComponent
 import spetstore.useCase.port.repository.UserAccountRepository
 
-class UserAccountRepositoryOnJDBC(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
+class UserAccountRepositoryOnJDBC(override val profile: JdbcProfile, override val db: JdbcProfile#Backend#Database)
+    extends AbstractUserAccountRepositoryOnJDBC(profile, db)
+    with AggregateSingleSoftDeleteFeature
+    with AggregateMultiSoftDeleteFeature
+
+abstract class AbstractUserAccountRepositoryOnJDBC(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
     extends UserAccountRepository[Task]
     with AggregateSingleReadFeature
     with AggregateMultiReadFeature
     with AggregateSingleWriteFeature
     with AggregateMultiWriteFeature
-    with AggregateSingleSoftDeleteFeature
-    with AggregateMultiSoftDeleteFeature
     with UserAccountComponent {
 
   override type RecordType = UserAccountRecord
   override type TableType  = UserAccounts
   override protected val dao = UserAccountDao
 
-  override protected def convertToAggregate: UserAccountRecord => RIO[UserAccount] = { record =>
+  import profile.api._
+
+  override protected def byCondition(id: IdType): TableType => Rep[Boolean] = {
+    _.id === id.value
+  }
+
+  override protected def byConditions(ids: Seq[IdType]): TableType => Rep[Boolean] = {
+    _.id.inSet(ids.map(_.value))
+  }
+
+  override protected def convertToAggregate: UserAccountRecord => Task[UserAccount] = { record =>
     Task.pure {
       UserAccount(
         id = UserAccountId(record.id),
@@ -39,7 +51,7 @@ class UserAccountRepositoryOnJDBC(val profile: JdbcProfile, val db: JdbcProfile#
     }
   }
 
-  override protected def convertToRecord: UserAccount => RIO[UserAccountRecord] = { aggregate =>
+  override protected def convertToRecord: UserAccount => Task[UserAccountRecord] = { aggregate =>
     Task.pure {
       UserAccountRecord(
         id = aggregate.id.value,

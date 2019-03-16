@@ -18,11 +18,7 @@ trait ItemComponent extends SlickDaoSupport {
   ) extends SoftDeletableRecord
 
   case class Items(tag: Tag) extends TableBase[ItemRecord](tag, "item") with SoftDeletableTableSupport[ItemRecord] {
-<<<<<<< HEAD
     def id: Rep[Long]                                   = column[Long]("id")
-=======
-    // def id = column[Long]("id", O.PrimaryKey)
->>>>>>> 76d011b54580d55b7b01d08dfbd2406b6d02f826
     def status: Rep[String]                             = column[String]("status")
     def name: Rep[String]                               = column[String]("name")
     def description: Rep[Option[String]]                = column[Option[String]]("description")

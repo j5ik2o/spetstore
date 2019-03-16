@@ -78,7 +78,7 @@ trait CartController extends BaseController {
                   }.runWith(Sink.head)
               }
             }
-            onSuccess(task.runAsync) { result =>
+            onSuccess(task.runToFuture) { result =>
               complete(result)
             }
           }
@@ -118,7 +118,7 @@ trait CartController extends BaseController {
                       }.runWith(Sink.head)
                   }
                 }
-                onSuccess(task.runAsync) { result =>
+                onSuccess(task.runToFuture) { result =>
                   complete(result)
                 }
               }

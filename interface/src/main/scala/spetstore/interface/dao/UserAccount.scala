@@ -20,7 +20,7 @@ trait UserAccountComponent extends SlickDaoSupport {
   case class UserAccounts(tag: Tag)
       extends TableBase[UserAccountRecord](tag, "user_account")
       with SoftDeletableTableSupport[UserAccountRecord] {
-    // def id = column[Long]("id", O.PrimaryKey)
+    def id: Rep[Long]                                   = column[Long]("id")
     def status: Rep[String]                             = column[String]("status")
     def emailAddress: Rep[String]                       = column[String]("email_address")
     def firstName: Rep[String]                          = column[String]("first_name")

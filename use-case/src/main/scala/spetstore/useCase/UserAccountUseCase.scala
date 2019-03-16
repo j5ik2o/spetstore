@@ -33,12 +33,12 @@ trait UserAccountUseCase {
             None
           )
         )
-      } yield CreateUserAccountResponse(id)).runAsync
+      } yield CreateUserAccountResponse(id)).runToFuture
     }
 
   def resolveById(id: UserAccountId)(implicit scheduler: Scheduler): Source[UserAccount, NotUsed] =
     Source.fromFuture {
-      userRepository.resolveById(id).runAsync
+      userRepository.resolveById(id).runToFuture
     }
 
 }

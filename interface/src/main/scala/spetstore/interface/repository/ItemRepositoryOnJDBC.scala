@@ -10,8 +10,9 @@ import slick.jdbc.JdbcProfile
 import spetstore.domain.model.basic.{ Price, StatusType }
 import spetstore.domain.model.item._
 import spetstore.interface.dao.ItemComponent
+import spetstore.useCase.port.repository.ItemRepository
 
-class ItemRepositoryBySlick(override val profile: JdbcProfile, override val db: JdbcProfile#Backend#Database)
+class ItemRepositoryOnJDBC(override val profile: JdbcProfile, override val db: JdbcProfile#Backend#Database)
     extends AbstractItemRepositoryBySlick(profile, db)
     with AggregateSingleSoftDeleteFeature
     with AggregateMultiSoftDeleteFeature

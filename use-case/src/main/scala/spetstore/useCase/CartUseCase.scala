@@ -35,11 +35,11 @@ trait CartUseCase {
               updatedAt = None
             )
           ).run(conn)
-      } yield CreateCartResponse(id.value)).runAsync
+      } yield CreateCartResponse(id.value)).runToFuture
     }
 
   def resolveById(id: CartId)(implicit scheduler: Scheduler, conn: RedisConnection): Source[Cart, NotUsed] =
     Source.fromFuture {
-      cartRepository.resolveById(id).run(conn).runAsync
+      cartRepository.resolveById(id).run(conn).runToFuture
     }
 }

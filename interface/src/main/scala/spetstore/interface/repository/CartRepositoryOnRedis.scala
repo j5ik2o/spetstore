@@ -2,8 +2,8 @@ package spetstore.interface.repository
 
 import akka.actor.ActorSystem
 import cats.data.ReaderT
-import com.github.j5ik2o.dddbase.redis.AggregateIOBaseFeature.RIO
 import com.github.j5ik2o.dddbase.redis._
+import com.github.j5ik2o.reactive.redis.RedisConnection
 import monix.eval.Task
 import org.sisioh.baseunits.scala.time.TimePoint
 import spetstore.domain.model.UserAccountId
@@ -30,7 +30,7 @@ class CartRepositoryOnRedis(val expireDuration: Duration)(implicit system: Actor
   override type DaoType    = CartDao
   override protected val dao = CartDao()
 
-  override protected def convertToAggregate: CartRecord => RIO[Cart] = { record =>
+  override protected def convertToAggregate: CartRecord => ReaderT[Task, RedisConnection, Cart] = { record =>
     ReaderT { _ =>
       Task.pure(
         Cart(
@@ -54,7 +54,7 @@ class CartRepositoryOnRedis(val expireDuration: Duration)(implicit system: Actor
 
   }
 
-  override protected def convertToRecord: Cart => RIO[CartRecord] = { aggregate =>
+  override protected def convertToRecord: Cart => ReaderT[Task, RedisConnection, CartRecord] = { aggregate =>
     ReaderT { _ =>
       Task.pure(
         CartRecord(

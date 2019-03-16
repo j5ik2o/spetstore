@@ -9,7 +9,7 @@ case class Quantity(breachEncapsulationOfValue: Long) extends Ordered[Quantity] 
 
 object Quantity {
 
-  val One: Quantity  = Quantity(1L)
+  val One: Quantity = Quantity(1L)
 
   implicit val semigroupQuantity: Semigroup[Quantity] = new Semigroup[Quantity] {
 
