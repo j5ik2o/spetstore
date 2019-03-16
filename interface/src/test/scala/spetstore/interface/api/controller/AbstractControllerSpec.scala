@@ -5,6 +5,7 @@ import akka.http.scaladsl.model.{ HttpEntity, MediaTypes }
 import akka.http.scaladsl.testkit.{ RouteTestTimeout, ScalatestRouteTest }
 import akka.testkit.TestKit
 import akka.util.ByteString
+import com.github.j5ik2o.reactive.redis.RedisSpecSupport
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
 import io.circe.Encoder
 import io.circe.syntax._
@@ -15,29 +16,25 @@ import spetstore.interface.util.{ FlywayWithMySQLSpecSupport, Slick3SpecSupport 
 import wvlet.airframe.{ newDesign, Design, Session }
 
 import scala.concurrent.duration._
-
-class AbstractControllerSpec
+abstract class AbstractControllerSpec
     extends FreeSpec
     with FlywayWithMySQLSpecSupport
     with Slick3SpecSupport
     with ScalatestRouteTest
     with Matchers
-    with FailFastCirceSupport {
+    with FailFastCirceSupport
+    with RedisSpecSupport {
   implicit def timeout: RouteTestTimeout = RouteTestTimeout(5 seconds)
-  override val tables: Seq[String]       = Seq("user_account")
-
-  private var _session: Session     = _
-  private var _scheduler: Scheduler = _
-
   implicit class ToHttpEntityOps[A: Encoder](json: A) {
     def toHttpEntity: HttpEntity.Strict = {
       val jsonAsByteString = ByteString(json.asJson.noSpaces)
       HttpEntity(MediaTypes.`application/json`, jsonAsByteString)
     }
   }
+  private var _session: Session     = _
+  private var _scheduler: Scheduler = _
 
   def session: Session = _session
-
   override protected def beforeAll(): Unit = {
     super.beforeAll()
     _scheduler = Scheduler(system.dispatcher)
@@ -50,12 +47,13 @@ class AbstractControllerSpec
             8080,
             "abc",
             Set(classOf[UserAccountController], classOf[ItemController], classOf[CartController]),
-            dbConfig
+            dbConfig,
+            "127.0.0.1",
+            redisMasterServer.getPort
           )(system)
         )
     _session = design.newSession
     _session.start
-
   }
 
   override protected def afterAll(): Unit = {

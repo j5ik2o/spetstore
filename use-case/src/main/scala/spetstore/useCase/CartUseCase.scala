@@ -28,7 +28,7 @@ trait CartUseCase {
         _ <- cartRepository
           .store(
             Cart(
-              id = CartId(UUID.randomUUID().toString),
+              id,
               status = StatusType.Active,
               userAccountId = cart.userAccountId,
               cartItems = CartItems.ZERO,

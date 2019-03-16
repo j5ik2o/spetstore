@@ -3,6 +3,7 @@ package spetstore.interface.api.controller
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.scaladsl.{ Sink, Source }
+import com.github.j5ik2o.dddbase.AggregateNotFoundException
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -69,7 +70,15 @@ trait CartController extends BaseController {
                         ResolveCartResponseBody(
                           id = response.id.value,
                           userAccountId = hashids.encode(response.userAccountId.value),
-                          cartItems = null,
+                          cartItems = response.cartItems.breachEncapsulationOfValues.map { cartItem =>
+                            CartItemBody(
+                              id = hashids.encode(cartItem.id.value),
+                              no = cartItem.no,
+                              itemId = hashids.encode(cartItem.itemId.value),
+                              quantity = cartItem.quantity.breachEncapsulationOfValue,
+                              inStock = cartItem.inStock
+                            )
+                          },
                           createdAt = response.createdAt.millisecondsFromEpoc,
                           updatedAt = response.updatedAt.millisecondsFromEpoc
                         )
@@ -114,7 +123,7 @@ trait CartController extends BaseController {
                   Task.deferFuture {
                     Source
                       .single(uaid).map(CreateCartRequest).via(cartUseCase.create).map { response =>
-                        CreateItemResponseJson(Right(CreateItemResponseBody(response.cartId)))
+                        CreateCartResponseJson(Right(CreateCartResponseBody(response.cartId)))
                       }.runWith(Sink.head)
                   }
                 }

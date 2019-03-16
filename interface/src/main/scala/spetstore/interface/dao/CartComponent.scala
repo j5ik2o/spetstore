@@ -12,6 +12,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{ Decoder, Encoder }
 import monix.eval.Task
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
@@ -40,6 +41,8 @@ trait CartComponent extends RedisDaoSupport {
   case class CartDao()(implicit val system: ActorSystem)
       extends Dao[ReaderT[Task, RedisConnection, ?], CartRecord]
       with DaoSoftDeletable[ReaderT[Task, RedisConnection, ?], CartRecord] {
+    val logger = LoggerFactory.getLogger(getClass)
+
     val DELETED = "deleted"
 
     private def internalSet(record: CartRecord, expire: Duration): ReaderT[Task, RedisConnection, Result[Unit]] = {
@@ -71,7 +74,9 @@ trait CartComponent extends RedisDaoSupport {
         .get(id)
         .map {
           _.value.flatMap { v =>
+            logger.debug(s"internalGet: $v")
             val r = parse(v).leftMap(error => new Exception(error.message)).flatMap { json =>
+              logger.debug(s"internalGet: parse: $json")
               json.as[CartRecord].leftMap(error => new Exception(error.message)).map { v =>
                 if (v.status == DELETED)
                   None

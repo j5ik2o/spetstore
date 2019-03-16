@@ -9,6 +9,7 @@ import spetstore.interface.api.model.{
 }
 
 class UserAccountControllerSpec extends AbstractControllerSpec {
+  override val tables: Seq[String] = Seq("user_account")
 
   private var controller: UserAccountController = _
 

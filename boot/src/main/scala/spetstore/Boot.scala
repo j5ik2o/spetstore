@@ -16,8 +16,6 @@ object Boot {
       opt[Int]('p', "port").action((x, c) => c.copy(port = x)).text("port")
     }
     val system = ActorSystem("spetstore")
-    val salt   = system.settings.config.getString("spetstore.interface.hashids.salt")
-
     parser.parse(args, AppConfig()) match {
       case Some(config) =>
         val design = newDesign
@@ -26,9 +24,11 @@ object Boot {
             interface.createInterfaceDesign(
               config.host,
               config.port,
-              salt,
+              system.settings.config.getString("spetstore.interface.hashids.salt"),
               Set(classOf[UserAccountController], classOf[ItemController], classOf[CartController]),
-              DatabaseConfig.forConfig[JdbcProfile](path = "spetstore.interface.storage.jdbc", system.settings.config)
+              DatabaseConfig.forConfig[JdbcProfile](path = "spetstore.interface.storage.jdbc", system.settings.config),
+              system.settings.config.getString("spetstore.interface.storage.redis.host"),
+              system.settings.config.getInt("spetstore.interface.storage.redis.port")
             )(system)
           )
 

@@ -1,12 +1,13 @@
 package spetstore.interface.api.controller
 
-import java.time.Instant
-
 import akka.http.scaladsl.model.StatusCodes
 import io.circe.generic.auto._
 import spetstore.interface.api.model.{ CreateItemRequestJson, CreateItemResponseJson, ResolveItemResponseJson }
 
 class ItemControllerSpec extends AbstractControllerSpec {
+
+  override val tables: Seq[String] = Seq("item")
+
   private var controller: ItemController = _
 
   override protected def beforeAll(): Unit = {
@@ -19,9 +20,11 @@ class ItemControllerSpec extends AbstractControllerSpec {
       val request = CreateItemRequestJson("cat", None, Set.empty, 100)
       Post("/items").withEntity(request.toHttpEntity) ~> controller.create ~> check {
         status shouldBe StatusCodes.OK
+        val response = responseAs[CreateItemResponseJson]
+        response.body.right.get.id.nonEmpty shouldBe true
       }
     }
-    "resolveByID" in {
+    "resolveById" in {
       val request = CreateItemRequestJson("cat", None, Set.empty, 100)
       Post("/items").withEntity(request.toHttpEntity) ~> controller.create ~> check {
         status shouldBe StatusCodes.OK

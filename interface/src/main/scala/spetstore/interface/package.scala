@@ -38,19 +38,22 @@ package object interface {
                             port: Int,
                             hashidsSalt: String,
                             apiClasses: Set[Class[_]],
-                            dbConfig: DatabaseConfig[JdbcProfile])(implicit system: ActorSystem): Design =
-    createInterfaceDesign(host, port, hashidsSalt, apiClasses, dbConfig.profile, dbConfig.db)
+                            dbConfig: DatabaseConfig[JdbcProfile],
+                            redisHost: String,
+                            redisPort: Int)(implicit system: ActorSystem): Design =
+    createInterfaceDesign(host, port, hashidsSalt, apiClasses, dbConfig.profile, dbConfig.db, redisHost, redisPort)
 
   def createInterfaceDesign(host: String,
                             port: Int,
                             hashidsSalt: String,
                             apiClasses: Set[Class[_]],
                             profile: JdbcProfile,
-                            db: JdbcProfile#Backend#Database)(
+                            db: JdbcProfile#Backend#Database,
+                            redisHost: String,
+                            redisPort: Int)(
       implicit system: ActorSystem
   ): Design = {
-    val redisHost           = system.settings.config.getString("spetstore.interface.storage.redis.host")
-    val redisPort           = system.settings.config.getInt("spetstore.interface.storage.redis.port")
+
     val redisExpireDuration = system.settings.config.getDuration("spetstore.interface.storage.redis.expire")
     implicit val scheduler  = Scheduler(system.dispatcher)
     newDesign
