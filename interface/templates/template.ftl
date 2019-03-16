@@ -22,7 +22,8 @@ trait ${className}Component extends SlickDaoSupport {
 
   case class ${className}s(tag: Tag) extends TableBase[${className}Record](tag, "${tableName}")<#if softDelete == true> with SoftDeletableTableSupport[${className}Record]</#if> {
 <#list primaryKeys as primaryKey>
-    // def ${primaryKey.propertyName} = column[${primaryKey.propertyTypeName}]("${primaryKey.columnName}", O.PrimaryKey)</#list>
+    def ${primaryKey.propertyName}: Rep[${primaryKey.propertyTypeName}] = column[${primaryKey.propertyTypeName}]("${primaryKey.columnName}")
+</#list>
 <#list columns as column>
     <#if column.nullable>
     def ${column.propertyName}: Rep[Option[${column.propertyTypeName}]] = column[Option[${column.propertyTypeName}]]("${column.columnName}")

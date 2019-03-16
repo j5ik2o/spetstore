@@ -40,12 +40,12 @@ object Dependencies {
     val enumeratumCirce = "com.beachape" %% "enumeratum-circe" % version
   }
   object monix {
-    val monix = "io.monix" %% "monix" % "3.0.0-RC1"
+    val monix = "io.monix" %% "monix" % "3.0.0-RC2"
   }
   object j5ik2o {
     val scalaTestPlusDb = "com.github.j5ik2o" %% "scalatestplus-db" % "1.0.5"
-    val scalaDDDBaseCore = "com.github.j5ik2o" %% "scala-ddd-base-core"  % "1.0.11"
-    val scalaDDDBaseSlick = "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.11"
+    val scalaDDDBaseCore = "com.github.j5ik2o" %% "scala-ddd-base-core"  % "1.0.25"
+    val scalaDDDBaseSlick = "com.github.j5ik2o" %% "scala-ddd-base-slick" % "1.0.25"
   }
   object sisioh {
     val baseunitsScala = "org.sisioh" %% "baseunits-scala" % "0.1.21"

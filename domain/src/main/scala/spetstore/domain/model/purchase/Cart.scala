@@ -3,11 +3,11 @@ package spetstore.domain.model.purchase
 import com.github.j5ik2o.dddbase.Aggregate
 import org.sisioh.baseunits.scala.time.TimePoint
 import org.sisioh.baseunits.scala.timeutil.Clock
-import spetstore.domain.model.basic.{Price, Quantity, StatusType}
-import spetstore.domain.model.customer.{Customer, CustomerId}
+import spetstore.domain.model.basic.{ Price, Quantity, StatusType }
+import spetstore.domain.model.customer.{ Customer, CustomerId }
 import spetstore.domain.model.item.ItemId
 
-import scala.reflect.{ClassTag, classTag}
+import scala.reflect.{ classTag, ClassTag }
 
 case class Cart(id: CartId,
                 status: StatusType,

@@ -2,11 +2,11 @@ package spetstore.interface.api.controller
 
 import java.time.ZonedDateTime
 
-import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.server.{ Directives, Route }
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.{Content, Schema}
+import io.swagger.v3.oas.annotations.media.{ Content, Schema }
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import javax.ws.rs._
@@ -15,9 +15,9 @@ import monix.execution.Scheduler
 import org.hashids.Hashids
 import org.sisioh.baseunits.scala.money.Money
 import org.sisioh.baseunits.scala.timeutil.Clock
-import spetstore.domain.model.basic.{Price, StatusType}
+import spetstore.domain.model.basic.{ Price, StatusType }
 import spetstore.domain.model.item._
-import spetstore.interface.api.model.{CreateItemRequest, CreateItemResponse, CreateItemResponseBody}
+import spetstore.interface.api.model.{ CreateItemRequest, CreateItemResponse, CreateItemResponseBody }
 import spetstore.interface.generator.jdbc.ItemIdGeneratorOnJDBC
 import spetstore.interface.repository.ItemRepository
 import wvlet.airframe._
@@ -70,7 +70,7 @@ trait ItemController extends Directives {
           val future: Future[CreateItemResponse] = (for {
             itemId <- itemIdGeneratorOnJDBC.generateId()
             _      <- itemRepository.store(convertToAggregate(itemId, request))
-          } yield CreateItemResponse(Right(CreateItemResponseBody(hashids.encode(itemId.value))))).runAsync
+          } yield CreateItemResponse(Right(CreateItemResponseBody(hashids.encode(itemId.value))))).runToFuture
           onSuccess(future) { result =>
             complete(result)
           }
