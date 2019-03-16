@@ -34,11 +34,21 @@ package object interface {
       newConnection = RedisConnection.apply
     )
 
-  def createInterfaceDesign(host: String, port: Int, hashidsSalt: String, apiClasses: Set[Class[_]])(
+  def createInterfaceDesign(host: String,
+                            port: Int,
+                            hashidsSalt: String,
+                            apiClasses: Set[Class[_]],
+                            dbConfig: DatabaseConfig[JdbcProfile])(implicit system: ActorSystem): Design =
+    createInterfaceDesign(host, port, hashidsSalt, apiClasses, dbConfig.profile, dbConfig.db)
+
+  def createInterfaceDesign(host: String,
+                            port: Int,
+                            hashidsSalt: String,
+                            apiClasses: Set[Class[_]],
+                            profile: JdbcProfile,
+                            db: JdbcProfile#Backend#Database)(
       implicit system: ActorSystem
   ): Design = {
-    val dbConfig: DatabaseConfig[JdbcProfile] =
-      DatabaseConfig.forConfig[JdbcProfile](path = "spetstore.interface.storage.jdbc", system.settings.config)
     val redisHost           = system.settings.config.getString("spetstore.interface.storage.redis.host")
     val redisPort           = system.settings.config.getInt("spetstore.interface.storage.redis.port")
     val redisExpireDuration = system.settings.config.getDuration("spetstore.interface.storage.redis.expire")
@@ -46,8 +56,8 @@ package object interface {
     newDesign
       .bind[RedisConnectionPool[Task]].toInstance(connectionPool(2, redisHost, redisPort))
       .bind[Hashids].toInstance(new Hashids(hashidsSalt))
-      .bind[JdbcProfile].toInstance(dbConfig.profile)
-      .bind[JdbcProfile#Backend#Database].toInstance(dbConfig.db)
+      .bind[JdbcProfile].toInstance(profile)
+      .bind[JdbcProfile#Backend#Database].toInstance(db)
       .bind[Routes].toSingleton
       .bind[SwaggerDocService].toInstance(new SwaggerDocService(host, port, apiClasses))
       .bind[ApiServer].toSingleton

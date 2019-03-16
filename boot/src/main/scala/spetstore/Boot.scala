@@ -2,6 +2,8 @@ package spetstore
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.settings.ServerSettings
+import slick.basic.DatabaseConfig
+import slick.jdbc.JdbcProfile
 import spetstore.interface.api.ApiServer
 import spetstore.interface.api.controller.{ CartController, ItemController, UserAccountController }
 import wvlet.airframe._
@@ -25,7 +27,8 @@ object Boot {
               config.host,
               config.port,
               salt,
-              Set(classOf[UserAccountController], classOf[ItemController], classOf[CartController])
+              Set(classOf[UserAccountController], classOf[ItemController], classOf[CartController]),
+              DatabaseConfig.forConfig[JdbcProfile](path = "spetstore.interface.storage.jdbc", system.settings.config)
             )(system)
           )
 
