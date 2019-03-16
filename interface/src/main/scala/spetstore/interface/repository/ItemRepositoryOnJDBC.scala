@@ -13,11 +13,11 @@ import spetstore.interface.dao.ItemComponent
 import spetstore.useCase.port.repository.ItemRepository
 
 class ItemRepositoryOnJDBC(override val profile: JdbcProfile, override val db: JdbcProfile#Backend#Database)
-    extends AbstractItemRepositoryBySlick(profile, db)
+    extends AbstractItemRepositoryOnJDBC(profile, db)
     with AggregateSingleSoftDeleteFeature
     with AggregateMultiSoftDeleteFeature
 
-abstract class AbstractItemRepositoryBySlick(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
+abstract class AbstractItemRepositoryOnJDBC(val profile: JdbcProfile, val db: JdbcProfile#Backend#Database)
     extends ItemRepository[Task]
     with AggregateSingleReadFeature
     with AggregateAllReadFeature

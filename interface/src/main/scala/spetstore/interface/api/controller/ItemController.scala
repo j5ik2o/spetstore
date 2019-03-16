@@ -15,7 +15,7 @@ import monix.execution.Scheduler
 import spetstore.domain.model.item.ItemId
 import spetstore.interface.api.model.{ CreateItemResponseBody, _ }
 import spetstore.useCase.ItemUseCase
-import spetstore.useCase.model.{ CreateItemRequest, CreateItemResponse }
+import spetstore.useCase.model.CreateItemRequest
 import wvlet.airframe._
 
 import scala.concurrent.Future
